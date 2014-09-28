@@ -19,6 +19,7 @@ gem 'less-rails'
 gem 'libv8'
 gem 'twitter-bootstrap-rails'
 
+gem 'rails_12factor', group: :production
 
 
 # Use jquery as the JavaScript library
