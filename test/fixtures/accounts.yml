@@ -3,11 +3,7 @@
 one:
   username: MyString
   password: MyString
-  email: MyString
-  dob: 2014-09-28
 
 two:
   username: MyString
   password: MyString
-  email: MyString
-  dob: 2014-09-28

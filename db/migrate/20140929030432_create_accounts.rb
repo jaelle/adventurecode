@@ -3,8 +3,6 @@ class CreateAccounts < ActiveRecord::Migration
     create_table :accounts do |t|
       t.string :username
       t.string :password
-      t.string :email
-      t.date :dob
 
       t.timestamps
     end
