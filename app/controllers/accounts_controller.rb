@@ -35,6 +35,12 @@ class AccountsController < ApplicationController
 
 	def destroy
 		@account = Account.find(params[:id])
+		if (params[:id] == session[:user_id])
+			# destroy the session too
+			session[:user_id] = nil
+			@logged_in_account = nil
+		end
+
   		@account.destroy
  
   		redirect_to accounts_path
