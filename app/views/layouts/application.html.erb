@@ -50,7 +50,7 @@
 		<div class="col-lg-3">
       <ul class="nav nav-pills nav-justified">
         <% if session[:user_id] %>
-            <li><%= link_to 'Welcome ' + @account.username, accounts_path %></li>
+            <li><%= link_to 'Welcome ' + @logged_in_account.username, accounts_path %></li>
             <li><%= link_to 'Logout', logout_accounts_path %></li>
         <% else %>
             <li><a href="#login" data-toggle="modal">Login</a></li>

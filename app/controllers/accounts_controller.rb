@@ -1,11 +1,14 @@
 class AccountsController < ApplicationController
 	
-	def new
-		@account = Account.new
-	end
+	# def new
+	# 	@account = Account.new
+	# end
 
 	def edit  
 		@account = Account.find(params[:id])
+		if @account.save
+			redirect_to @account;
+		end
 	end
 
 	def update
@@ -24,8 +27,8 @@ class AccountsController < ApplicationController
 		if @account.save
 			session[:user_id] = @account.id
 			redirect_to @account;
-		else
-			render 'new'
+		# else
+			# render 'new'
 		end
 
 	end
@@ -38,14 +41,14 @@ class AccountsController < ApplicationController
   	end
 
 	def show
-		@account = Account.find(session[:user_id])
+		@logged_in_account = Account.find(session[:user_id])
 
 	end
 
 	def index
 		@accounts = Account.all
 		if (session[:user_id])
-			@account = Account.find(session[:user_id])
+			@logged_in_account = Account.find(session[:user_id])
 		end
 	end
 
@@ -59,7 +62,7 @@ class AccountsController < ApplicationController
 
 	def logout
 		session[:user_id] = nil
-		@account = nil
+		@logged_in_account = nil
 
 		redirect_to '/'
 	end
