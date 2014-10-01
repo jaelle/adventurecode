@@ -6,8 +6,10 @@ class ApplicationController < ActionController::Base
   before_filter :set_user_id
 
 	private
+	
 		def account_params
-			params.require(:account).permit(:username,:password,:password_confirmation)
+			params.require(:account).permit(:username,
+				:password,:password_confirmation,:email,:birthday)
 		end
 
 		def set_user_id
