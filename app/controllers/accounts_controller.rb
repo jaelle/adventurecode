@@ -27,8 +27,8 @@ class AccountsController < ApplicationController
 		if @account.save
 			session[:user_id] = @account.id
 			redirect_to @account;
-		# else
-			# render 'new'
+		else
+			redirect_to '/'
 		end
 
 	end
@@ -59,10 +59,16 @@ class AccountsController < ApplicationController
 	end
 
 	def login
-		@account = Account.where(account_params).take!
-		session[:user_id] = @account.id
-		if(@account)
+		begin
+			@account = Account.where(account_params).take!
+		rescue ActiveRecord::RecordNotFound
+		end
+		
+		if !@account.nil?
+			session[:user_id] = @account.id
 			redirect_to accounts_path
+		else 
+			redirect_to '/'
 		end
 	end
 
