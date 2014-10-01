@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  layout: MyString
+  start: MyString
+  end: MyString
+  setting: 
+  main_character: 
+  goal: 
+  puzzle_id: 
+
+two:
+  title: MyString
+  layout: MyString
+  start: MyString
+  end: MyString
+  setting: 
+  main_character: 
+  goal: 
+  puzzle_id: 

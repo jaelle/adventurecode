@@ -1,0 +1,29 @@
+<h1>Listing main_characters</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Image</th>
+      <th>Maze</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @main_characters.each do |main_character| %>
+      <tr>
+        <td><%= main_character.title %></td>
+        <td><%= main_character.image %></td>
+        <td><%= main_character.maze %></td>
+        <td><%= link_to 'Show', main_character %></td>
+        <td><%= link_to 'Edit', edit_main_character_path(main_character) %></td>
+        <td><%= link_to 'Destroy', main_character, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Main character', new_main_character_path %>

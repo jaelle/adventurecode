@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140929030432) do
+ActiveRecord::Schema.define(version: 20141001043343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,5 +24,35 @@ ActiveRecord::Schema.define(version: 20140929030432) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "goals", force: true do |t|
+    t.string   "title"
+    t.string   "image"
+    t.integer  "maze_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "goals", ["maze_id"], name: "index_goals_on_maze_id", using: :btree
+
+  create_table "main_characters", force: true do |t|
+    t.string   "title"
+    t.string   "image"
+    t.integer  "maze_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "main_characters", ["maze_id"], name: "index_main_characters_on_maze_id", using: :btree
+
+  create_table "settings", force: true do |t|
+    t.string   "title"
+    t.string   "image"
+    t.integer  "maze_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "settings", ["maze_id"], name: "index_settings_on_maze_id", using: :btree
 
 end

@@ -1,5 +1,16 @@
 Rails.application.routes.draw do
-  get 'site/index'
+
+  resources :puzzles
+
+  resources :mazes
+
+  resources :settings
+
+  resources :main_characters
+
+  resources :goals
+
+  # get 'site/index'
 
   resources :accounts do
     collection do 
@@ -7,6 +18,10 @@ Rails.application.routes.draw do
       get 'logout'
     end
   end
+
+  resources :puzzles do 
+    resource :maze 
+  end 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

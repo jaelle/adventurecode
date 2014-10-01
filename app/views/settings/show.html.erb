@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @setting.title %>
+</p>
+
+<p>
+  <strong>Image:</strong>
+  <%= @setting.image %>
+</p>
+
+<p>
+  <strong>Maze:</strong>
+  <%= @setting.maze %>
+</p>
+
+<%= link_to 'Edit', edit_setting_path(@setting) %> |
+<%= link_to 'Back', settings_path %>

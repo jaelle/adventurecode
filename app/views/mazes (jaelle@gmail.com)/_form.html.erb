@@ -1,0 +1,49 @@
+<%= form_for(@maze) do |f| %>
+  <% if @maze.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@maze.errors.count, "error") %> prohibited this maze from being saved:</h2>
+
+      <ul>
+      <% @maze.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :layout %><br>
+    <%= f.text_field :layout %>
+  </div>
+  <div class="field">
+    <%= f.label :start %><br>
+    <%= f.text_field :start %>
+  </div>
+  <div class="field">
+    <%= f.label :end %><br>
+    <%= f.text_field :end %>
+  </div>
+  <div class="field">
+    <%= f.label :setting %><br>
+    <%= f.text_field :setting %>
+  </div>
+  <div class="field">
+    <%= f.label :main_character %><br>
+    <%= f.text_field :main_character %>
+  </div>
+  <div class="field">
+    <%= f.label :goal %><br>
+    <%= f.text_field :goal %>
+  </div>
+  <div class="field">
+    <%= f.label :puzzle_id %><br>
+    <%= f.text_field :puzzle_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
