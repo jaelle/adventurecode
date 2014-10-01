@@ -45,12 +45,13 @@ class AccountsController < ApplicationController
 	def index
 		@accounts = Account.all
 		if (session[:user_id])
-			@logged_in_account = Account.find(session[:user_id])
+			@account = Account.find(session[:user_id])
 		end
 	end
 
 	def login
-		@account = Account.where(account_params)
+		@account = Account.where(account_params).take!
+		session[:user_id] = @account.id
 		if(@account)
 			redirect_to accounts_path
 		end
