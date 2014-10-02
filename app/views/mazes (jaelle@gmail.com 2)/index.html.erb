@@ -1,0 +1,37 @@
+<h1>Listing mazes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Layout</th>
+      <th>Start</th>
+      <th>End</th>
+      <th>Setting</th>
+      <th>Main character</th>
+      <th>Goal</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @mazes.each do |maze| %>
+      <tr>
+        <td><%= maze.title %></td>
+        <td><%= maze.layout %></td>
+        <td><%= maze.start %></td>
+        <td><%= maze.end %></td>
+        <td><%= maze.setting %></td>
+        <td><%= maze.main_character %></td>
+        <td><%= maze.goal %></td>
+        <td><%= link_to 'Show', maze %></td>
+        <td><%= link_to 'Edit', edit_maze_path(maze) %></td>
+        <td><%= link_to 'Destroy', maze, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Maze', new_maze_path %>

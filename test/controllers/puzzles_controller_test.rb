@@ -18,7 +18,7 @@ class PuzzlesControllerTest < ActionController::TestCase
 
   test "should create puzzle" do
     assert_difference('Puzzle.count') do
-      post :create, puzzle: { account: @puzzle.account, maze: @puzzle.maze, unique_link: @puzzle.unique_link }
+      post :create, puzzle: { account_id: @puzzle.account_id, maze_id: @puzzle.maze_id, unique_link: @puzzle.unique_link }
     end
 
     assert_redirected_to puzzle_path(assigns(:puzzle))
@@ -35,7 +35,7 @@ class PuzzlesControllerTest < ActionController::TestCase
   end
 
   test "should update puzzle" do
-    patch :update, id: @puzzle, puzzle: { account: @puzzle.account, maze: @puzzle.maze, unique_link: @puzzle.unique_link }
+    patch :update, id: @puzzle, puzzle: { account_id: @puzzle.account_id, maze_id: @puzzle.maze_id, unique_link: @puzzle.unique_link }
     assert_redirected_to puzzle_path(assigns(:puzzle))
   end
 

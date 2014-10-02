@@ -69,6 +69,6 @@ class MainCharactersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def main_character_params
-      params.require(:main_character).permit(:title, :image, :maze_id)
+      params.require(:main_character).permit(:title, :image)
     end
 end

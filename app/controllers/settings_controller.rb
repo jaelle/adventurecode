@@ -24,15 +24,16 @@ class SettingsController < ApplicationController
   # POST /settings
   # POST /settings.json
   def create
+
     @setting = Setting.new(setting_params)
 
     respond_to do |format|
       if @setting.save
-        format.html { redirect_to @setting, notice: 'Setting was successfully created.' }
-        format.json { render :show, status: :created, location: @setting }
+       format.html { redirect_to @setting, notice: 'Setting was successfully created.' }
+       format.json { render :show, status: :created, location: @setting }
       else
-        format.html { render :new }
-        format.json { render json: @setting.errors, status: :unprocessable_entity }
+       format.html { render :new }
+       format.json { render json: @setting.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,6 +55,8 @@ class SettingsController < ApplicationController
   # DELETE /settings/1
   # DELETE /settings/1.json
   def destroy
+    @setting.image = nil
+    @setting.save
     @setting.destroy
     respond_to do |format|
       format.html { redirect_to settings_url, notice: 'Setting was successfully destroyed.' }
@@ -69,6 +72,6 @@ class SettingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def setting_params
-      params.require(:setting).permit(:title, :image, :maze_id)
+      params.require(:setting).permit(:title, :image)
     end
 end

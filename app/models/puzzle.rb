@@ -1,4 +1,4 @@
 class Puzzle < ActiveRecord::Base
-	has_one :maze
-	has_one :account
+  belongs_to :account
+  belongs_to :maze
 end

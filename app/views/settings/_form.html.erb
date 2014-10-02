@@ -1,4 +1,4 @@
-<%= form_for(@setting) do |f| %>
+<%= form_for @setting, :url => settings_path, :html => { :multipart => true } do |f| %>
   <% if @setting.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@setting.errors.count, "error") %> prohibited this setting from being saved:</h2>
@@ -15,14 +15,12 @@
     <%= f.label :title %><br>
     <%= f.text_field :title %>
   </div>
-  <div class="field">
-    <%= f.label :image %><br>
-    <%= f.text_field :image %>
+  <div class="form-group">
+    <%= f.label :image %>
+    <%= f.file_field :image, id:"image" %>
+    <p class="help-block">Example block-level help text here.</p>
   </div>
-  <div class="field">
-    <%= f.label :maze_id %><br>
-    <%= f.text_field :maze_id %>
-  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>

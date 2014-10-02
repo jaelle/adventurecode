@@ -7,12 +7,7 @@
 
 <p>
   <strong>Image:</strong>
-  <%= @setting.image %>
-</p>
-
-<p>
-  <strong>Maze:</strong>
-  <%= @setting.maze %>
+  <%= image_tag @setting.image.url(:thumb) %>
 </p>
 
 <%= link_to 'Edit', edit_setting_path(@setting) %> |

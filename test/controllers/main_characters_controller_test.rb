@@ -18,7 +18,7 @@ class MainCharactersControllerTest < ActionController::TestCase
 
   test "should create main_character" do
     assert_difference('MainCharacter.count') do
-      post :create, main_character: { image: @main_character.image, maze_id: @main_character.maze_id, title: @main_character.title }
+      post :create, main_character: { image: @main_character.image, title: @main_character.title }
     end
 
     assert_redirected_to main_character_path(assigns(:main_character))
@@ -35,7 +35,7 @@ class MainCharactersControllerTest < ActionController::TestCase
   end
 
   test "should update main_character" do
-    patch :update, id: @main_character, main_character: { image: @main_character.image, maze_id: @main_character.maze_id, title: @main_character.title }
+    patch :update, id: @main_character, main_character: { image: @main_character.image, title: @main_character.title }
     assert_redirected_to main_character_path(assigns(:main_character))
   end
 

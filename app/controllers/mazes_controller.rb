@@ -69,6 +69,6 @@ class MazesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def maze_params
-      params.require(:maze).permit(:title, :layout, :start, :end, :setting, :main_character, :goal, :puzzle_id)
+      params.require(:maze).permit(:title, :layout, :start, :end, :setting_id, :main_character_id, :goal_id)
     end
 end

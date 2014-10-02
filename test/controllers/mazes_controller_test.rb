@@ -18,7 +18,7 @@ class MazesControllerTest < ActionController::TestCase
 
   test "should create maze" do
     assert_difference('Maze.count') do
-      post :create, maze: { end: @maze.end, goal: @maze.goal, layout: @maze.layout, main_character: @maze.main_character, puzzle_id: @maze.puzzle_id, setting: @maze.setting, start: @maze.start, title: @maze.title }
+      post :create, maze: { end: @maze.end, goal_id: @maze.goal_id, layout: @maze.layout, main_character_id: @maze.main_character_id, setting_id: @maze.setting_id, start: @maze.start, title: @maze.title }
     end
 
     assert_redirected_to maze_path(assigns(:maze))
@@ -35,7 +35,7 @@ class MazesControllerTest < ActionController::TestCase
   end
 
   test "should update maze" do
-    patch :update, id: @maze, maze: { end: @maze.end, goal: @maze.goal, layout: @maze.layout, main_character: @maze.main_character, puzzle_id: @maze.puzzle_id, setting: @maze.setting, start: @maze.start, title: @maze.title }
+    patch :update, id: @maze, maze: { end: @maze.end, goal_id: @maze.goal_id, layout: @maze.layout, main_character_id: @maze.main_character_id, setting_id: @maze.setting_id, start: @maze.start, title: @maze.title }
     assert_redirected_to maze_path(assigns(:maze))
   end
 

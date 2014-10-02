@@ -18,7 +18,7 @@ class SettingsControllerTest < ActionController::TestCase
 
   test "should create setting" do
     assert_difference('Setting.count') do
-      post :create, setting: { image: @setting.image, maze_id: @setting.maze_id, title: @setting.title }
+      post :create, setting: { image: @setting.image, title: @setting.title }
     end
 
     assert_redirected_to setting_path(assigns(:setting))
@@ -35,7 +35,7 @@ class SettingsControllerTest < ActionController::TestCase
   end
 
   test "should update setting" do
-    patch :update, id: @setting, setting: { image: @setting.image, maze_id: @setting.maze_id, title: @setting.title }
+    patch :update, id: @setting, setting: { image: @setting.image, title: @setting.title }
     assert_redirected_to setting_path(assigns(:setting))
   end
 

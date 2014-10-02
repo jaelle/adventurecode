@@ -3,7 +3,6 @@ class CreateGoals < ActiveRecord::Migration
     create_table :goals do |t|
       t.string :title
       t.string :image
-      t.belongs_to :maze, index: true
 
       t.timestamps
     end

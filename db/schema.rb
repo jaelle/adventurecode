@@ -11,48 +11,61 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141001043343) do
+ActiveRecord::Schema.define(version: 20141002180514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "accounts", force: true do |t|
-    t.string   "username"
-    t.string   "password"
-    t.date     "birthday"
-    t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "goals", force: true do |t|
     t.string   "title"
     t.string   "image"
-    t.integer  "maze_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "goals", ["maze_id"], name: "index_goals_on_maze_id", using: :btree
 
   create_table "main_characters", force: true do |t|
     t.string   "title"
     t.string   "image"
-    t.integer  "maze_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "main_characters", ["maze_id"], name: "index_main_characters_on_maze_id", using: :btree
+  create_table "mazes", force: true do |t|
+    t.string   "title"
+    t.string   "layout"
+    t.string   "start"
+    t.string   "end"
+    t.integer  "setting_id"
+    t.integer  "main_character_id"
+    t.integer  "goal_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mazes", ["goal_id"], name: "index_mazes_on_goal_id", using: :btree
+  add_index "mazes", ["main_character_id"], name: "index_mazes_on_main_character_id", using: :btree
+  add_index "mazes", ["setting_id"], name: "index_mazes_on_setting_id", using: :btree
+
+  create_table "puzzles", force: true do |t|
+    t.integer  "account_id"
+    t.integer  "maze_id"
+    t.string   "unique_link"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "puzzles", ["account_id"], name: "index_puzzles_on_account_id", using: :btree
+  add_index "puzzles", ["maze_id"], name: "index_puzzles_on_maze_id", using: :btree
 
   create_table "settings", force: true do |t|
     t.string   "title"
     t.string   "image"
-    t.integer  "maze_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
   end
-
-  add_index "settings", ["maze_id"], name: "index_settings_on_maze_id", using: :btree
 
 end

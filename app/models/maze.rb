@@ -1,6 +1,5 @@
 class Maze < ActiveRecord::Base
-  belongs_to :puzzle
-  has_one :goal
-  has_one :setting
-  has_one :main_character
+  belongs_to :setting
+  belongs_to :main_character
+  belongs_to :goal
 end

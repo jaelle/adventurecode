@@ -54,6 +54,9 @@ class GoalsController < ApplicationController
   # DELETE /goals/1
   # DELETE /goals/1.json
   def destroy
+    @goal.avatar = nil
+    @goal.save
+    
     @goal.destroy
     respond_to do |format|
       format.html { redirect_to goals_url, notice: 'Goal was successfully destroyed.' }
@@ -69,6 +72,6 @@ class GoalsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def goal_params
-      params.require(:goal).permit(:title, :image, :maze_id)
+      params.require(:goal).permit(:title, :image)
     end
 end

@@ -5,17 +5,15 @@ one:
   layout: MyString
   start: MyString
   end: MyString
-  setting: 
-  main_character: 
-  goal: 
-  puzzle_id: 
+  setting_id: 
+  main_character_id: 
+  goal_id: 
 
 two:
   title: MyString
   layout: MyString
   start: MyString
   end: MyString
-  setting: 
-  main_character: 
-  goal: 
-  puzzle_id: 
+  setting_id: 
+  main_character_id: 
+  goal_id: 

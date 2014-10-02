@@ -69,6 +69,6 @@ class PuzzlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def puzzle_params
-      params.require(:puzzle).permit(:account, :maze, :unique_link)
+      params.require(:puzzle).permit(:account_id, :maze_id, :unique_link)
     end
 end

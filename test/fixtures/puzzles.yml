@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  account: 
-  maze: 
+  account_id: 
+  maze_id: 
   unique_link: MyString
 
 two:
-  account: 
-  maze: 
+  account_id: 
+  maze_id: 
   unique_link: MyString

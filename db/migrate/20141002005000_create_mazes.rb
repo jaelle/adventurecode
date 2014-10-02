@@ -5,10 +5,9 @@ class CreateMazes < ActiveRecord::Migration
       t.string :layout
       t.string :start
       t.string :end
-      t.has_one :setting
-      t.has_one :main_character
-      t.has_one :goal
-      t.belongs_to :puzzle, index: true
+      t.references :setting, index: true
+      t.references :main_character, index: true
+      t.references :goal, index: true
 
       t.timestamps
     end

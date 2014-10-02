@@ -1,8 +1,8 @@
 class CreatePuzzles < ActiveRecord::Migration
   def change
     create_table :puzzles do |t|
-      t.has_one :account
-      t.has_one :maze
+      t.references :account, index: true
+      t.references :maze, index: true
       t.string :unique_link
 
       t.timestamps
