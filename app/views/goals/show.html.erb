@@ -7,7 +7,7 @@
 
 <p>
   <strong>Image:</strong>
-  <%= @goal.image.url(:thumb) %>
+  <%= image_tag @goal.image.url(:thumb) %>
 </p>
 
 <%= link_to 'Edit', edit_goal_path(@goal) %> |

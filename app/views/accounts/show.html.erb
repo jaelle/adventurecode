@@ -1,6 +1,24 @@
+<p id="notice"><%= notice %></p>
+
 <p>
-  Welcome <%= @logged_in_account.username %>
+  <strong>Username:</strong>
+  <%= @account.username %>
 </p>
 
+<p>
+  <strong>Password:</strong>
+  <%= @account.password %>
+</p>
+
+<p>
+  <strong>Birthday:</strong>
+  <%= @account.birthday %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @account.email %>
+</p>
+
+<%= link_to 'Edit', edit_account_path(@account) %> |
 <%= link_to 'Back', accounts_path %>
-<%= link_to 'Edit', edit_account_path(session[:user_id]) %>

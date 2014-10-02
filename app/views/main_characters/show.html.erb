@@ -7,7 +7,7 @@
 
 <p>
   <strong>Image:</strong>
-  <%= @main_character.image %>
+  <%= image_tag @main_character.image.url(:thumb) %>
 </p>
 
 <%= link_to 'Edit', edit_main_character_path(@main_character) %> |

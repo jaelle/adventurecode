@@ -54,7 +54,7 @@ class GoalsController < ApplicationController
   # DELETE /goals/1
   # DELETE /goals/1.json
   def destroy
-    @goal.avatar = nil
+    @goal.image = nil
     @goal.save
     
     @goal.destroy
