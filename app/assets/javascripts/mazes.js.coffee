@@ -5,7 +5,11 @@ $(document).ready ->
 	@myMaze = new Maze
 
 	$(document).on 'touchstart', @myMaze.canvas, (event) ->
+		alert("test2")
+		@myMaze.toggleColor(event)
 
+	@myMaze.canvas.addEventListener 'touchstart', (event) ->
+		alert("test1")
 		@myMaze.toggleColor(event)
 
 	$(document).on 'click', @myMaze.canvas, (event) ->
