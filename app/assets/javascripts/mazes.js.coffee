@@ -4,7 +4,7 @@
 $(document).ready ->
 	@myMaze = new Maze
 
-	$(document).on 'click', @myMaze.canvas, (event) ->
+	$(document).on 'click touchstart', @myMaze.canvas, (event) ->
 		rect = @myMaze.canvas.getBoundingClientRect()
 		x = event.clientX - rect.left
 		y = event.clientY - rect.top

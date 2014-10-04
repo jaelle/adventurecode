@@ -14,6 +14,7 @@ class MazesController < ApplicationController
 
   # GET /mazes/new
   def new
+    @title = "Step 1: Draw your maze"
     @maze = Maze.new
   end
 
@@ -59,6 +60,22 @@ class MazesController < ApplicationController
       format.html { redirect_to mazes_url, notice: 'Maze was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def draw
+
+  end
+
+  def setup
+
+  end
+
+  def preview
+
+  end
+
+  def share
+
   end
 
   private
