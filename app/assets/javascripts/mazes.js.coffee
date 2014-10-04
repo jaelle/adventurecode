@@ -4,17 +4,17 @@
 $(document).ready ->
 	@myMaze = new Maze
 
-	$(document).on 'touchstart', @myMaze.canvas, (event) ->
-		alert("test2")
-		@myMaze.toggleColor(event)
+	$(document).on 'touchstart click', @myMaze.canvas, (event) ->
+		
+		console.log event
+		
+		if event.type == "touchstart"
+			@myMaze.touchToggleColor(event)
+		else
+			@myMaze.toggleColor(event)
 
-	@myMaze.canvas.addEventListener 'touchstart', (event) ->
-		alert("test1")
-		@myMaze.toggleColor(event)
-
-	$(document).on 'click', @myMaze.canvas, (event) ->
-
-		@myMaze.toggleColor(event)
+	#$(document).on 'click', @myMaze.canvas, (event) ->
+	#	@myMaze.toggleColor(event)
 
 		
 	
@@ -72,9 +72,19 @@ class Maze
 
 	toggleColor: (event) ->
 
+		@toggle(event.clientX, event.clientY)
+
+	touchToggleColor: (event) ->
+
+		touch = event.originalEvent.targetTouches[0];
+
+		@toggle(touch.pageX,touch.pageY)
+
+	toggle: (clientX,clientY) ->
+
 		rect = @canvas.getBoundingClientRect()
-		x = event.clientX - rect.left
-		y = event.clientY - rect.top
+		x = clientX - rect.left
+		y = clientY - rect.top
 	
 		#which cell is this?
 		col = Math.floor(x / 50)
