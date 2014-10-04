@@ -4,24 +4,15 @@
 $(document).ready ->
 	@myMaze = new Maze
 
-	$(document).on 'click touchstart', @myMaze.canvas, (event) ->
-		rect = @myMaze.canvas.getBoundingClientRect()
-		x = event.clientX - rect.left
-		y = event.clientY - rect.top
-	
-		#which cell is this?
-		col = Math.floor(x / 50)
-		row = Math.floor(y / 50)
+	$(document).on 'touchstart', @myMaze.canvas, (event) ->
+
+		@myMaze.toggleColor(event)
+
+	$(document).on 'click', @myMaze.canvas, (event) ->
+
+		@myMaze.toggleColor(event)
+
 		
-		cell = @myMaze.currentCell[row][col]
-		
-		if cell.color == "black"
-			cell.color = "white"
-		else
-			cell.color = "black"
-		
-		# cell = @myMaze.createCell(row,col)
-		@myMaze.drawCell(cell)
 	
 class Maze
 	currentCell: null
@@ -74,3 +65,23 @@ class Maze
 		row: row 
 		col: col
 		color: color
+
+	toggleColor: (event) ->
+
+		rect = @canvas.getBoundingClientRect()
+		x = event.clientX - rect.left
+		y = event.clientY - rect.top
+	
+		#which cell is this?
+		col = Math.floor(x / 50)
+		row = Math.floor(y / 50)
+		
+		cell = @currentCell[row][col]
+		
+		if cell.color == "black"
+			cell.color = "white"
+		else
+			cell.color = "black"
+		
+		# cell = @myMaze.createCell(row,col)
+		@drawCell(cell)
