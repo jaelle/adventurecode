@@ -4,27 +4,43 @@
 
 $(document).ready ->
 
-	if ($("#action").val() != "new")
-
-		@JSONMap = $("#layoutstring").val()
-		@map = JSON.parse(@JSONMap)
-
-		@myMazeLayout = new MazeLayout(@map)
-
-	else 
-
-		@myMazeLayout = new MazeLayout("")
+	@myMazeLayout = new MazeLayout('mazebuilder',"",50,5,5,"new")
 
 	$(document).on 'click', @myMazeLayout.canvas, (event) ->
 
 		if event.type == "touchstart"
 			@myMazeLayout.touchToggleColor(event)
 		else
-			@myMazeLayout.toggleColor(event)
+			# @myMazeLayout.toggleColor(event)
+			map = JSON.parse($("#layoutstring").val())
+
+			rect = $("#mazebuilder .maze")[0].getBoundingClientRect()
+			x = event.clientX - rect.left
+			y = event.clientY - rect.top
+		
+			#which cell is this?
+			col = Math.floor(x / 50)
+			row = Math.floor(y / 50)
+
+			console.log(col + " " + row + " " + map[0][1])
 			
-		@myMazeLayout.updateJSON("#layoutstring")
+			if map[row][col] == 1
+				map[row][col] = 0
+			else
+				map[row][col] = 1
+
+			$("#layoutstring").val(JSON.stringify(map))
+			$("#mazebuilder .maze").remove()
+			@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#layoutstring").val()),50,5,5,"new")
+			
+
+	$(".mazelayout").on 'click', (event) ->
+		#console.log()
+		$("#layoutstring").val(this.children[0].value)
+		$("#mazebuilder .maze").remove()
+		@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#layoutstring").val()),50,5,5,"new")
 	
-class MazeLayout
+class @MazeLayout
 	currentCell: null
 	numCols: 5
 	numRows: 5
@@ -32,20 +48,25 @@ class MazeLayout
 	canvas: null
 	drawingContext: null
 	layoutmap: null
+	containerID: null
 
 
-	constructor: (@map) ->
+	constructor: (containerID,map,cellSize,nrows,ncols,type) ->
 
-		if @map != "" 
+		if map != "" 
 			# import existing map
-			@numCols = @map.length
-			@numRows = @map[0].length
+			@numCols = map.length
+			@numRows = map[0].length
 
-			@layoutmap = @map
+			@layoutmap = map
 		else 
 			@layoutmap = []
 
-		# alert(@numCols + " " + @numRows)
+		@numRows = nrows;
+		@numCols = ncols;
+		@cellSize = cellSize;
+
+		@containerID = containerID;
 
 		@createCanvas()
 		@createDrawingContext()
@@ -56,14 +77,14 @@ class MazeLayout
 		for row in [0..(@numRows-1)] by 1
 			@currentCell[row] = [] 
 			
-			if @map == ""
+			if map == ""
 				@layoutmap[row] = []
 
 			for col in [0..(@numCols-1)] by 1
 
 				# alert(@map[row][col] + " " + row + ", " + col)
-				if @map != ""
-					if @map[row][col] == 1
+				if map != ""
+					if map[row][col] == 1
 						color = "white"
 					else
 						color = "black"
@@ -76,10 +97,10 @@ class MazeLayout
 	
 	createCanvas: ->
 		@canvas = document.createElement 'canvas'
-		@canvas.id = 'maze'
+		@canvas.className = 'maze'
 		@canvas.height = @cellSize * @numRows
 		@canvas.width = @cellSize * @numCols
-		document.getElementById('mazebuilder').appendChild @canvas
+		document.getElementById(@containerID).appendChild @canvas
 
 	createDrawingContext: ->
 		@drawingContext = @canvas.getContext '2d'
