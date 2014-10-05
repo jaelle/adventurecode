@@ -15,6 +15,10 @@
  *= require bootstrap_and_overrides
  */
 
-#mazebuilder canvas {
+canvas {
 	border:1px solid #000;
+}
+
+.mazelayout {
+	padding-right:25px;
 }

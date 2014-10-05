@@ -1,0 +1,27 @@
+<h1>Listing mazemaps</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Maze</th>
+      <th>Layout</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @mazemaps.each do |mazemap| %>
+      <tr>
+        <td><%= mazemap.maze %></td>
+        <td><%= mazemap.layout %></td>
+        <td><%= link_to 'Show', mazemap %></td>
+        <td><%= link_to 'Edit', edit_mazemap_path(mazemap) %></td>
+        <td><%= link_to 'Destroy', mazemap, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Mazemap', new_mazemap_path %>
