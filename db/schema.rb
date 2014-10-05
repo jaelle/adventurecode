@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141005030604) do
+ActiveRecord::Schema.define(version: 20141005163830) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,16 @@ ActiveRecord::Schema.define(version: 20141005030604) do
     t.datetime "image_updated_at"
   end
 
+  create_table "mazelayouts", force: true do |t|
+    t.integer  "maze_id"
+    t.integer  "layout_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mazelayouts", ["layout_id"], name: "index_mazelayouts_on_layout_id", using: :btree
+  add_index "mazelayouts", ["maze_id"], name: "index_mazelayouts_on_maze_id", using: :btree
+
   create_table "mazes", force: true do |t|
     t.string   "title"
     t.string   "layout"
@@ -63,9 +73,11 @@ ActiveRecord::Schema.define(version: 20141005030604) do
     t.integer  "goal_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "layout_id"
   end
 
   add_index "mazes", ["goal_id"], name: "index_mazes_on_goal_id", using: :btree
+  add_index "mazes", ["layout_id"], name: "index_mazes_on_layout_id", using: :btree
   add_index "mazes", ["main_character_id"], name: "index_mazes_on_main_character_id", using: :btree
   add_index "mazes", ["setting_id"], name: "index_mazes_on_setting_id", using: :btree
 

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :mazelayouts, only: [:create]
+
   resources :layouts
 
   resources :puzzles

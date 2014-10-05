@@ -11,7 +11,7 @@ class LayoutsController < ApplicationController
   # GET /layouts/1
   # GET /layouts/1.json
   def show
-    @title = "Viewing Layout \#:  #{@layout.id}"
+    @title = "Viewing Layout \  #:  #{@layout.id}"
     
   end
 
