@@ -1,7 +1,12 @@
 <!--iframe id='maze' style='width:350px;height:400px;'></iframe//-->
-<div id="mazebuilder">
-</div>
-<!--
+
+
+
+    <!-- Display list of maze bases to choose from //-->
+    <!-- This should be the generated list display of a maze base view //-->
+
+
+<div class="col-lg-6">
 <%= form_for(@maze) do |f| %>
   <% if @maze.errors.any? %>
     <div id="error_explanation">
@@ -15,7 +20,15 @@
     </div>
   <% end %>
 
-  <div class="field">
+
+  <%= render 'layouts/buildmaze' %>
+
+</div>
+<div class="col-lg-6">
+
+  <div class="layouts">
+    <h3>Choose one:</h3>
+  <!--div class="field">
     <%= f.label :title %><br>
     <%= f.text_field :title %>
   </div>
@@ -42,9 +55,7 @@
   <div class="field">
     <%= f.label :goal_id %><br>
     <%= f.text_field :goal_id %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-
   </div//-->
+    </div>
+</div>
 <% end %>

@@ -1,0 +1,8 @@
+<%= render 'layouts/panel_header' %>
+
+<div id="mazebuilder"></div>
+<input type="hidden" name="layoutstring" id="layoutstring" value="<%= render plain: @layout.layoutstring %>" />
+
+<%= link_to 'Edit', edit_layout_path(@layout) %>
+
+<%= render 'layouts/panel_footer' %>
