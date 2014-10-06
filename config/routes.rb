@@ -1,9 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :mazelayouts, only: [:create]
-
-  resources :layouts
-
   resources :puzzles
 
   resources :mazes
@@ -26,15 +22,6 @@ Rails.application.routes.draw do
   resources :puzzles do 
     resource :maze 
   end 
-
-  resources :mazes do
-    collection do
-      get 'draw'
-      get 'setup'
-      get 'preview'
-      get 'share'
-    end
-  end
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

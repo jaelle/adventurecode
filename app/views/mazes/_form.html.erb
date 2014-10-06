@@ -1,35 +1,30 @@
-<!--iframe id='maze' style='width:350px;height:400px;'></iframe//-->
+
+<% form_for(@maze) do |f|%>
+  <div class="panel-heading"><%= render plain: @title %></div>
+    <div class="panel-body">  
+
+      <div class="col-lg-6">
+        <% if @maze.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@maze.errors.count, "error") %> prohibited this maze from being saved:</h2>
+
+              <ul>
+                <% @maze.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+        <% end %>
 
 
+        <%= render 'layouts/buildmaze' %>
+      </div>
+      <div class="col-lg-6">
 
-    <!-- Display list of maze bases to choose from //-->
-    <!-- This should be the generated list display of a maze base view //-->
+      <div class="layouts">
+        <h3>Choose one to start:</h3>
 
-
-<div class="col-lg-6">
-<%= form_for(@maze) do |f| %>
-  <% if @maze.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@maze.errors.count, "error") %> prohibited this maze from being saved:</h2>
-
-      <ul>
-      <% @maze.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-
-  <%= render 'layouts/buildmaze' %>
-
-</div>
-<div class="col-lg-6">
-
-  <div class="layouts">
-    <h3>Choose one to start:</h3>
-
-    <%= render 'layouts/list_for_mazes' %>
+        <%= render 'layouts/list_for_mazes' %>
 
   <!--div class="field">
     <%= f.label :title %><br>
@@ -59,6 +54,27 @@
     <%= f.label :goal_id %><br>
     <%= f.text_field :goal_id %>
   </div//-->
+      </div>
     </div>
+  </div>
+</div>
+<div class="panel-footer">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="btn-group">
+        <button type="button" class="btn btn-default">
+          Reset
+        </button>
+        <button type="button" class="btn btn-default">
+          Get Help
+        </button>
+      </div>
+    </div>
+    <div class="col-lg-6" style="text-align:right">
+      <button type="button" class="btn btn-default">
+        Next Step
+      </button>
+    </div>  
+  </div>
 </div>
 <% end %>

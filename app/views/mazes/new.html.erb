@@ -1,7 +1,40 @@
-<%= render 'layouts/panel_header' %>
 
-<%= render 'form' %>
+  	<div class="panel-heading"><%= render plain: @title %></div>
 
-<div id="debug"></div>
+	<%= form_for @maze do |f|%>
+	<div class="panel-body">  
 
-<%= render 'layouts/panel_footer' %>
+		<div class="col-lg-6">
+			<% if @maze.errors.any? %>
+			    <div id="error_explanation">
+			      <h2><%= pluralize(@maze.errors.count, "error") %> prohibited this maze from being saved:</h2>
+
+			      <ul>
+			        <% @maze.errors.full_messages.each do |message| %>
+			        <li><%= message %></li>
+			        <% end %>
+			      </ul>
+			    </div>
+			<% end %>
+
+  			<%= render "#{@maze.current_step}_step", :f => f %>
+  	</div>
+  	<div class="panel-footer">
+		<div class="row">
+    		<div class="col-lg-6">
+      			<div class="btn-group">
+        			<button type="button" class="btn btn-default">
+          			Reset
+        			</button>
+        			<button type="button" class="btn btn-default">
+         			Get Help
+        			</button>
+      			</div>
+    		</div>
+    		<div class="col-lg-6" style="text-align:right">
+    			<%= f.submit "Back", class: "btn btn-default", :name => "back_button" unless @maze.first_step? %>
+    			<%= f.submit "Next Step", class: "btn btn-default" %>
+   			</div>  
+  		</div>
+	<% end %>
+	</div>

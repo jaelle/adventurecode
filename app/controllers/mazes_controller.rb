@@ -14,8 +14,11 @@ class MazesController < ApplicationController
 
   # GET /mazes/new
   def new
-    @title = "Step 1: Draw your maze"
-    @maze = Maze.new
+    @title = "Step 1 - Draw your maze."
+    session[:maze_params] ||= {}
+    @maze = Maze.new(session[:maze_params])
+    @maze.current_step = session[:maze_step]
+    # @maze = Maze.new
   end
 
   # GET /mazes/1/edit
@@ -25,16 +28,26 @@ class MazesController < ApplicationController
   # POST /mazes
   # POST /mazes.json
   def create
-    @maze = Maze.new(maze_params)
-
-    respond_to do |format|
-      if @maze.save
-        format.html { redirect_to @maze, notice: 'Maze was successfully created.' }
-        format.json { render :show, status: :created, location: @maze }
+    @title = "Step 2 - Choose the settings."
+    session[:maze_params].deep_merge!(params[:maze]) if params[:maze]
+    @maze = Maze.new(session[:maze_params])
+    @maze.current_step = session[:maze_step]
+    if @maze.valid?
+      if params[:back_button]
+        @maze.previous_step
+      elsif @maze.last_step?
+        @maze.save if @maze.all_valid?
       else
-        format.html { render :new }
-        format.json { render json: @maze.errors, status: :unprocessable_entity }
+        @maze.next_step
       end
+      session[:maze_step] = @maze.current_step
+    end
+    if @maze.new_record?
+      render "new"
+    else
+      session[:maze_step] = session[:maze_step] = nil
+      flash[:notice] = "Maze saved!"
+      redirect_to @maze
     end
   end
 
