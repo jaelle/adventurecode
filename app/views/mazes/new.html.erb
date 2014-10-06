@@ -1,40 +1,44 @@
 
-  	<div class="panel-heading"><%= render plain: @title %></div>
+  <div class="panel-heading"><%= render plain: @title %></div>
 
 	<%= form_for @maze do |f|%>
 	<div class="panel-body">  
+    <div class="row">
+      <div class="col-lg-12">
 
-		<div class="col-lg-6">
-			<% if @maze.errors.any? %>
-			    <div id="error_explanation">
-			      <h2><%= pluralize(@maze.errors.count, "error") %> prohibited this maze from being saved:</h2>
+        <% if @maze.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@maze.errors.count, "error") %> prohibited this maze from being saved:</h2>
 
-			      <ul>
-			        <% @maze.errors.full_messages.each do |message| %>
-			        <li><%= message %></li>
-			        <% end %>
-			      </ul>
-			    </div>
-			<% end %>
+              <ul>
+                <% @maze.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  		
 
-  			<%= render "#{@maze.current_step}_step", :f => f %>
-  	</div>
-  	<div class="panel-footer">
-		<div class="row">
-    		<div class="col-lg-6">
-      			<div class="btn-group">
-        			<button type="button" class="btn btn-default">
-          			Reset
-        			</button>
-        			<button type="button" class="btn btn-default">
-         			Get Help
-        			</button>
-      			</div>
-    		</div>
-    		<div class="col-lg-6" style="text-align:right">
-    			<%= f.submit "Back", class: "btn btn-default", :name => "back_button" unless @maze.first_step? %>
-    			<%= f.submit "Next Step", class: "btn btn-default" %>
-   			</div>  
-  		</div>
-	<% end %>
-	</div>
+    <%= render "#{@maze.current_step}_step", :f => f %>
+  </div>
+  <div class="panel-footer">
+  	<div class="row">
+      <div class="col-lg-6">
+        <div class="btn-group">
+    			<button type="button" class="btn btn-default">
+      			Reset
+    			</button>
+    			<button type="button" class="btn btn-default">
+     			Get Help
+    			</button>
+        </div>
+      </div>
+      <div class="col-lg-6" style="text-align:right">
+      	<%= f.submit "Back", class: "btn btn-default", :name => "back_button" unless @maze.first_step? %>
+      	<%= f.submit "Next Step", class: "btn btn-default" %>
+     	</div>  
+    </div>
+  </div>
+  <% end %>
