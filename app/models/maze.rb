@@ -10,7 +10,7 @@ class Maze < ActiveRecord::Base
 	end
 
 	def steps
-	  %w[draw setting]
+	  %w[setting draw]
 	end
 
 	def next_step
