@@ -22,3 +22,9 @@ canvas {
 .mazelayout {
 	padding-right:25px;
 }
+
+iframe .blockly {
+	border-style: solid;
+	border-color: #ddd;
+	border-width: 0 1px 1px 0;
+}
