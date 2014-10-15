@@ -13,6 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
+//= require blockly/blockly_compressed
+//= require blockly/javascript_compressed
+//= require blockly/blocks/mazebuilder
+//= require blockly/blocks/javascript
 //= require_tree .
 
 $(function(){

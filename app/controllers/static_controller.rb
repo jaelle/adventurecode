@@ -1,5 +1,5 @@
 class StaticController < ApplicationController
 	def blockly
-		render layout: false
+		render layout: "blockly"
 	end
 end
