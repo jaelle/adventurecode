@@ -15,8 +15,8 @@
 //= require twitter/bootstrap
 //= require blockly/blockly_compressed
 //= require blockly/javascript_compressed
-//= require blockly/blocks/mazebuilder
-//= require blockly/blocks/javascript
+//= require mazebuilder
+//= require javascript
 //= require_tree .
 
 $(function(){

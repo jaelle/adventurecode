@@ -1,0 +1,148 @@
+'use strict';
+
+goog.provide('Blockly.Blocks.maze');
+
+goog.require('Blockly.Blocks');
+
+/*
+Blockly.Blocks['mazebuilder_settings'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(120);
+    this.appendValueInput("title")
+        .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("Title:");
+    this.appendValueInput("maincharacter")
+        .setCheck("character")
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField(new Blockly.FieldImage("http://iconbug.com/data/af/64/11ec71f4b5adce762099c3c0e7d5489b.png", 45, 45, "Main Character"));
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField("Main Character");
+    this.appendDummyInput();
+    this.appendValueInput("setting")
+        .setCheck("setting")
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField(new Blockly.FieldImage("http://findicons.com/files/icons/1273/jolly_roger_vol_2/128/island.png", 45, 45, "Setting"));
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField("Setting:");
+    this.appendDummyInput();
+    this.appendValueInput("goal")
+        .setCheck("goal")
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField(new Blockly.FieldImage("http://www.ciniguru.com/images/yellow_star.png", 45, 45, "Goal"));
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField("Goal:");
+    this.setTooltip('');
+  }
+};*/
+
+Blockly.Blocks['mazebuilder_settings'] = {
+  init: function() {
+    this.setColour(100);
+    this.appendValueInput("title")
+        .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField(new Blockly.FieldImage("<%= asset_path('title_text.png') %>", 200, 50, "Title"));
+    this.appendValueInput("maincharacter")
+        .setCheck("maincharacter")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField(new Blockly.FieldImage("<%= asset_path('maincharacter_text.png') %>", 200, 50, "Main Character"));
+    this.appendValueInput("setting")
+        .setCheck("setting")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField(new Blockly.FieldImage("<%= asset_path('setting_text.png') %>", 200, 50, "Setting"));
+    this.appendValueInput("goal")
+        .setCheck("goal")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField(new Blockly.FieldImage("<%= asset_path('goal_text.png') %>", 200, 50, "Goal"));
+    this.setTooltip('');
+  }
+};
+
+/*Blockly.Blocks['mazebuilder_settings'] = {
+  init: function() {
+    this.setColour(100);
+    this.appendValueInput("title")
+        .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("Title");
+    this.appendValueInput("maincharacter")
+        .setCheck("maincharacter")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("Main");
+    this.appendValueInput("setting")
+        .setCheck("setting")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("Setting");
+    this.appendValueInput("goal")
+        .setCheck("goal")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("Goal");
+    this.setTooltip('');
+  }
+};*/
+
+Blockly.Blocks['mazebuilder_title'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(165);
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("Name your maze"), "title");
+    this.setOutput(true);
+    this.setTooltip('');
+  }
+};
+
+
+Blockly.Blocks['maincharacter_dog'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(225);
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField("Dog");
+    this.appendDummyInput() 
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField(new Blockly.FieldImage("http://en.icône.com/images/icones/1/3/animals-dog.png", 45, 45, "Dog"));
+    this.setOutput(true,'maincharacter');
+    this.setTooltip('');
+  }
+};
+
+
+Blockly.Blocks['setting_cornfield'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(285);
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField("Corn Field");
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField(new Blockly.FieldImage("http://pbskids.org/writerscontest/themes/pbs/mashup_themes/farm/farm_corn_stalk.png", 45, 45, "*"));
+    this.setOutput(true,'setting');
+    this.setTooltip('');
+  }
+};
+
+
+
+
+Blockly.Blocks['goal_dogbowl'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(345);
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField("Dog Bowl");
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField(new Blockly.FieldImage("http://www.dogheavenboarding.com/wp-content/uploads/2013/02/dog-bowl.png", 45, 45, "Dog Bowl"));
+    this.setOutput(true,'goal');
+    this.setTooltip('');
+  }
+};
