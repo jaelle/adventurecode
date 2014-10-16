@@ -51,7 +51,9 @@ Blockly.Blocks['mazebuilder_settings'] = {
 
     titleBlock.setAlign(Blockly.ALIGN_RIGHT)
     console.log("aligned");
-    titleBlock.appendField(new Blockly.FieldImage("<%= asset_path('title_text.png') %>", 200, 50, "Title"));
+    var fieldImage = new Blockly.FieldImage("<%= asset_path('title_text.png') %>", 200, 50, "Title");
+    console.log("added image");
+    titleBlock.appendField(fieldImage);
     console.log("field appended");
 
     this.appendValueInput("maincharacter")
