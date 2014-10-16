@@ -44,11 +44,16 @@ Blockly.Blocks['mazebuilder_settings'] = {
   init: function() {
     this.setColour(100);
     console.log("set color");
-    this.appendValueInput("title")
-        .setCheck("String")
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField(new Blockly.FieldImage("<%= asset_path('title_text.png') %>", 200, 50, "Title"));
-    console.log("title added")
+    var titleBlock = this.appendValueInput("title");
+    console.log("appended input");
+    titleBlock.setCheck("String");
+    console.log("checking for string");
+
+    titleBlock.setAlign(Blockly.ALIGN_RIGHT)
+    console.log("aligned");
+    titleBlock.appendField(new Blockly.FieldImage("<%= asset_path('title_text.png') %>", 200, 50, "Title"));
+    console.log("field appended");
+
     this.appendValueInput("maincharacter")
         .setCheck("maincharacter")
         .setAlign(Blockly.ALIGN_RIGHT)
