@@ -72,12 +72,12 @@ Blockly.JavaScript['goal_dogbowl'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-setTitle = function(title)
+function setTitle(title)
 {
   $("#maze_title").val(title);
-}
+};
 
-setMainCharacter = function(maincharacter)
+function setMainCharacter(maincharacter)
 {
   switch(maincharacter) {
     case "dog":
@@ -89,9 +89,9 @@ setMainCharacter = function(maincharacter)
 
 
   $("#maze_main_character_id").val(maincharacter_id);
-}
+};
 
-setSetting = function(setting)
+function setSetting(setting)
 {
   switch(setting) {
     case "cornfield":
@@ -102,9 +102,9 @@ setSetting = function(setting)
   }
 
   $("#maze_setting_id").val(setting_id);
-}
+};
 
-setGoal = function(goal)
+function setGoal(goal)
 {
   switch(goal) {
     case "dogbowl":
@@ -115,4 +115,4 @@ setGoal = function(goal)
   }
 
   $("#maze_goal_id").val(goal_id);
-}
+};
