@@ -13,6 +13,7 @@
 //= require blockly/blockly_compressed
 //= require blockly/javascript_compressed
 //= require jquery
+//= require jquery-ui
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require mazebuilder

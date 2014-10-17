@@ -2,26 +2,40 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-$(document).ready ->
+$(window).load ->
 
 	if $("#maze_layout").val() == ""
 		@myMazeLayout = new MazeLayout('mazebuilder',"",50,5,5,"new")
 		@myMazeLayout.updateJSON('#maze_layout')
 	else 
+		setting_img = $("#setting")[0];
+		goal_img = $("#goal")[0];
+		maincharacter_img = $("#maincharacter")[0];
+		console.log("num images loaded: " + $(".preloader").length);
+		if $("#maze_layout")[0] && ($(".preloader").length > 0)?
 
-		image = new Image()
-		image.src = "<%= asset_path('cornstalk.png') %>"
-		image.onload = ->
+			$("#setting").hide()
 
-			if $("#maze_layout")[0]?
-				@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#maze_layout").val()),50,5,5,"new")
+			@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#maze_layout").val()),50,5,5,"new")
+			@myMazeLayout.updateSetting(setting_img)
 
-				if $("#maze_setting_id")[0]?
-					setting_id = $("#maze_setting_id").val()
-					console.log("setting id:" + setting_id)
+			if $("#maze_start").val()?
+				coordinates = eval($("#maze_start").val())
+				col = coordinates[0]
+				row = coordinates[1]
 
-					if setting_id == "1"
-						@myMazeLayout.updateSetting(this)
+				@myMazeLayout.updateEndpoint(maincharacter_img,col,row)
+
+
+			if $("#maze_end").val()?
+				coordinates = eval($("#maze_end").val())
+				col = coordinates[0]
+				row = coordinates[1]
+
+				@myMazeLayout.updateEndpoint(goal_img,col,row)
+
+			# @myMazeLayout.placeEndpoints(maincharacter_img,goal_img)
+
 
 	$(document).on 'click', '',  (event) ->
 
@@ -124,7 +138,6 @@ class @MazeLayout
 
 				@currentCell[row][col] = @createCell(row,col,color,null)
 				@drawCell @currentCell[row][col]
-		console.log(@layoutmap)
 
 	
 	createCanvas: ->
@@ -145,7 +158,7 @@ class @MazeLayout
 		@drawingContext.strokeStyle = 'rgba(0, 0, 0, 1)'
 		@drawingContext.strokeRect x, y, @cellSize, @cellSize
 		
-		if !cell.image? || color == "white"
+		if !cell.image?
 			if color == "white"
 				fillStyle = 'rgb(255,255,255)'
 			else
@@ -154,7 +167,6 @@ class @MazeLayout
 			@drawingContext.fillStyle = fillStyle
 			@drawingContext.fillRect x, y, @cellSize, @cellSize
 		else 
-			console.log(@drawingContext)
 			pattern = @drawingContext.createPattern(cell.image, "repeat")
 			@drawingContext.fillStyle = pattern
 			@drawingContext.fillRect x, y, @cellSize, @cellSize
@@ -207,15 +219,22 @@ class @MazeLayout
 		console.log($(map_id).val())
 
 	updateSetting: (image) ->
-		console.log("Updating setting")
+		console.log("Updating setting to " + image)
 
 		for row in [0..(@numRows-1)] by 1
 
 			for col in [0..(@numCols-1)] by 1
 				if @layoutmap[row][col] == 1
 					color = "white"
+					setting_img = null
 				else
 					color = "black"
+					setting_img = image
 
-				@currentCell[row][col] = @createCell(row,col,color,image)
+				@currentCell[row][col] = @createCell(row,col,color,setting_img)
 				@drawCell @currentCell[row][col]
+
+	updateEndpoint: (maincharacter,col,row) ->
+		# find the first white cell and place main character
+		@startCell = @createCell(row,col,"white",maincharacter)
+		@drawCell @startCell

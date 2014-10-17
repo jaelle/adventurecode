@@ -1,12 +1,69 @@
 
 		<div class="col-lg-6">
+			<h4>Drag the character and goal to an empty space</h4>
 			<div class="field">
-				<div id="mazebuilder"></div>
-				<%= f.hidden_field :layout%>
+				<div id="mazebuilder">
+				</div>
+				<%= f.hidden_field :layout, :value => @maze.layout %>
+				<%= f.hidden_field :setting_id, :value => @maze.setting_id %>
+				<%= f.hidden_field :main_character_id, :value => @maze.main_character_id %>
+				<%= f.hidden_field :goal_id, :value => @maze.goal_id %>
+				<%= f.hidden_field :start %>
+				<%= f.hidden_field :end %>
 				<!--input type="hidden" name="layout" id="layout" value="<%= render plain: @layout %>" ///-->
 			</div>
 		</div>
-      	<div class="col-lg-6">
+		<div class="col-lg-6">
 
-			
-    	</div>
+		</div>
+
+	    	
+		<div style="display:none">
+			<%= image_tag('cornstalk.png', {:id => 'setting', :onload => "console.log('loaded')"}) %>
+				<%= image_tag('dog.png', {:id =>'maincharacter', :class => 'draggable'}) %>
+				<%= image_tag('dog-bowl.png', {:id => 'goal', :class =>'draggable'}) %>
+		</div>
+		<script type="text/javascript">
+			function preload(arrayOfImages) {
+				$(arrayOfImages).each(function () {
+			        $('<img />').attr('src',this).appendTo('body').css('display','none');
+			    });
+			}
+
+			// Usage:
+			preload(['<%= asset_path('dog.png') %>'],['<%= asset_path('cornstalk.png') %>'],['<%= asset_path('dog-bowl.png') %>']);
+
+			function setStartCoordinates()
+			{
+				var coordinates = eval($("#maze_start").val());
+				console.log(coordinates);
+
+				var col = coordinates[0];
+				var row = coordinates[1];
+
+				rect = $("#mazebuilder .maze").offset()
+
+				var x = rect.left + (col-1) * 50
+				var y = rect.top + (row-1) * 50
+
+				console.log("start coordinates: ")
+				console.log($("#maincharacter").position())
+				$("#maincharacter").parent().css({position: 'relative'});
+				$("#maincharacter").css({
+					top: x,
+					left: y,
+					position:'absolute'
+				})
+				console.log($("#maincharacter").position())
+
+			}
+
+			$("#goal").draggable();
+
+			$("#mazebuilder").droppable({
+				drop: function( event, ui ) {
+		        saveCoordinates(this,event,ui)
+		      }
+			});
+
+	    	</script>
