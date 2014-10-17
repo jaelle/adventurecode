@@ -1,0 +1,28 @@
+
+		<div class="col-lg-6">
+			<div class="field">
+				<div id="mazebuilder"></div>
+				<%= f.hidden_field :layout, :value => @maze.layout %>
+				<%= f.hidden_field :setting_id, :value => @maze.setting_id %>
+				<%= f.hidden_field :main_character_id, :value => @maze.main_character_id %>
+				<%= f.hidden_field :goal_id, :value => @maze.goal_id %>
+				<%= f.hidden_field :start %>
+				<%= f.hidden_field :end %>
+				<!--input type="hidden" name="layout" id="layout" value="<%= render plain: @layout %>" ///-->
+			</div>
+		</div>
+      	<div class="col-lg-3">
+      		Main Character:<br />
+			<%= image_tag('dog.png', id:'maincharacter') %>
+		</div>
+
+      	<div class="col-lg-3">
+			Goal:<br />
+			<%= image_tag('dog-bowl.png', id:'goal') %>
+    	</div>
+
+    	<script type="text/javascript">
+    		$("#maincharacter").draggable();
+		    $("#goal").draggable();
+		  
+    	</script>

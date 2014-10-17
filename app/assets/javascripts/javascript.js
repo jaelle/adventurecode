@@ -30,7 +30,11 @@ Blockly.JavaScript['mazebuilder_settings'] = function(block) {
   var value_setting = Blockly.JavaScript.valueToCode(block, 'setting', Blockly.JavaScript.ORDER_ATOMIC);
   var value_goal = Blockly.JavaScript.valueToCode(block, 'goal', Blockly.JavaScript.ORDER_ATOMIC);
   // TODO: Assemble JavaScript into code variable.
-  var code = '...';
+
+  var code = 'setTitle("' + value_title + '");\n';
+  code += 'setMainCharacter("' + value_maincharacter + '");\n';
+  code += 'setSetting("' + value_setting + '");\n';
+  code += 'setGoal("' + value_goal + '");\n';
   return code;
 };
 
@@ -39,14 +43,14 @@ Blockly.JavaScript['mazebuilder_settings'] = function(block) {
 Blockly.JavaScript['mazebuilder_title'] = function(block) {
   var text_title = block.getFieldValue('title');
   // TODO: Assemble JavaScript into code variable.
-  var code = '...';
+  var code = text_title;
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 Blockly.JavaScript['maincharacter_dog'] = function(block) {
   // TODO: Assemble JavaScript into code variable.
-  var code = '...';
+  var code = 'dog';
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -55,7 +59,7 @@ Blockly.JavaScript['maincharacter_dog'] = function(block) {
 
 Blockly.JavaScript['setting_cornfield'] = function(block) {
   // TODO: Assemble JavaScript into code variable.
-  var code = '...';
+  var code = 'cornfield';
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -63,8 +67,52 @@ Blockly.JavaScript['setting_cornfield'] = function(block) {
 
 Blockly.JavaScript['goal_dogbowl'] = function(block) {
   // TODO: Assemble JavaScript into code variable.
-  var code = '...';
+  var code = 'dogbowl';
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
+setTitle = function(title)
+{
+  $("#maze_title").val(title);
+}
+
+setMainCharacter = function(maincharacter)
+{
+  switch(maincharacter) {
+    case "dog":
+      maincharacter_id = 1
+      break;
+    default:
+      maincharacter_id = 0
+  }
+
+
+  $("#maze_main_character_id").val(maincharacter_id);
+}
+
+setSetting = function(setting)
+{
+  switch(setting) {
+    case "cornfield":
+      setting_id = 1
+      break;
+    default:
+      setting_id = 0
+  }
+
+  $("#maze_setting_id").val(setting_id);
+}
+
+setGoal = function(goal)
+{
+  switch(goal) {
+    case "dogbowl":
+      goal_id = 1
+      break;
+    default:
+      goal_id = 0
+  }
+
+  $("#maze_goal_id").val(goal_id);
+}

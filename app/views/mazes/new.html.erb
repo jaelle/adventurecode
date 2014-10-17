@@ -37,7 +37,12 @@
       </div>
       <div class="col-lg-6" style="text-align:right">
       	<%= f.submit "Back", class: "btn btn-default", :name => "back_button" unless @maze.first_step? %>
-      	<%= f.submit "Next Step", class: "btn btn-default" %>
+        <% if @maze.current_step == "setting" %>
+      	 <%= f.submit "Next Step", class: "btn btn-default", :onclick => "updateForm()" %>
+        <% elsif %>
+         <%= f.submit "Next Step", class: "btn btn-default" %>
+        <% end %>
+
      	</div>  
     </div>
   </div>

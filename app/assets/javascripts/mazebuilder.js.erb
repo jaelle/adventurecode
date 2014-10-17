@@ -119,7 +119,7 @@ Blockly.Blocks['maincharacter_dog'] = {
         .appendField("Dog");
     this.appendDummyInput() 
         .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldImage("http://en.icône.com/images/icones/1/3/animals-dog.png", 45, 45, "Dog"));
+        .appendField(new Blockly.FieldImage("<%= asset_path('dog.png') %>", 45, 45, "Dog"));
     this.setOutput(true,'maincharacter');
     this.setTooltip('');
   }
@@ -135,7 +135,7 @@ Blockly.Blocks['setting_cornfield'] = {
         .appendField("Corn Field");
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldImage("http://pbskids.org/writerscontest/themes/pbs/mashup_themes/farm/farm_corn_stalk.png", 45, 45, "*"));
+        .appendField(new Blockly.FieldImage("<%= asset_path('cornstalk.png') %>", 45, 45, "Corn Field"));
     this.setOutput(true,'setting');
     this.setTooltip('');
   }
@@ -153,7 +153,7 @@ Blockly.Blocks['goal_dogbowl'] = {
         .appendField("Dog Bowl");
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldImage("http://www.dogheavenboarding.com/wp-content/uploads/2013/02/dog-bowl.png", 45, 45, "Dog Bowl"));
+        .appendField(new Blockly.FieldImage("<%= asset_path('dog-bowl.png') %>", 45, 45, "Dog Bowl"));
     this.setOutput(true,'goal');
     this.setTooltip('');
   }

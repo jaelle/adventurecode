@@ -4,35 +4,57 @@
 
 $(document).ready ->
 
-	@myMazeLayout = new MazeLayout('mazebuilder',"",50,5,5,"new")
-	@myMazeLayout.updateJSON('#maze_layout')
+	if $("#maze_layout").val() == ""
+		@myMazeLayout = new MazeLayout('mazebuilder',"",50,5,5,"new")
+		@myMazeLayout.updateJSON('#maze_layout')
+	else 
 
-	$(document).on 'click', @myMazeLayout.canvas, (event) ->
+		image = new Image()
+		image.src = "<%= asset_path('cornstalk.png') %>"
+		image.onload = ->
+
+			if $("#maze_layout")[0]?
+				@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#maze_layout").val()),50,5,5,"new")
+
+				if $("#maze_setting_id")[0]?
+					setting_id = $("#maze_setting_id").val()
+					console.log("setting id:" + setting_id)
+
+					if setting_id == "1"
+						@myMazeLayout.updateSetting(this)
+
+	$(document).on 'click', '',  (event) ->
 
 		if event.type == "touchstart"
 			@myMazeLayout.touchToggleColor(event)
 		else
-			# @myMazeLayout.toggleColor(event)
-			map = JSON.parse($("#maze_layout").val())
 
-			rect = $("#mazebuilder .maze")[0].getBoundingClientRect()
-			x = event.clientX - rect.left
-			y = event.clientY - rect.top
-		
-			#which cell is this?
-			col = Math.floor(x / 50)
-			row = Math.floor(y / 50)
+			if (!$("#maze_start")[0]?)
+				# @myMazeLayout.toggleColor(event)
+				map = JSON.parse($("#maze_layout").val())
 
-			console.log(col + " " + row + " " + map[0][1])
+				rect = $("#mazebuilder .maze")[0].getBoundingClientRect()
+				x = event.clientX - rect.left
+				y = event.clientY - rect.top
 			
-			if map[row][col] == 1
-				map[row][col] = 0
-			else
-				map[row][col] = 1
+				#which cell is this?
+				col = Math.floor(x / 50)
+				row = Math.floor(y / 50)
 
-			$("#maze_layout").val(JSON.stringify(map))
-			$("#mazebuilder .maze").remove()
-			@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#maze_layout").val()),50,5,5,"new")
+				console.log("col:" + col + " " + "row:" + row + " " + map[0][1])
+
+				# we aren't clicking on the right thing
+				if col <= 5 && row <= 5
+					console.log("huh...")
+					
+					if map[row][col] == 1
+						map[row][col] = 0
+					else
+						map[row][col] = 1
+
+					$("#maze_layout").val(JSON.stringify(map))
+					$("#mazebuilder .maze").remove()
+					@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#maze_layout").val()),50,5,5,"new")
 			
 
 	$(".mazelayout").on 'click', (event) ->
@@ -50,7 +72,7 @@ class @MazeLayout
 	drawingContext: null
 	layoutmap: null
 	containerID: null
-
+	type: null
 
 	constructor: (containerID,map,cellSize,nrows,ncols,type) ->
 
@@ -60,11 +82,13 @@ class @MazeLayout
 			@numRows = map[0].length
 
 			@layoutmap = map
+
 		else 
 			@layoutmap = []
 
-		@numRows = nrows;
-		@numCols = ncols;
+			@numRows = nrows;
+			@numCols = ncols;
+
 		@cellSize = cellSize;
 
 		@containerID = containerID;
@@ -74,6 +98,11 @@ class @MazeLayout
 		
 		@drawingContext.fillRect 0, 0, @cellSize, @cellSize
 		@currentCell = []
+
+		@type = type
+
+		console.log("num cols: " + @numCols)
+		console.log("num rows: " + @numRows)
 		
 		for row in [0..(@numRows-1)] by 1
 			@currentCell[row] = [] 
@@ -93,8 +122,10 @@ class @MazeLayout
 					color = "white"
 					@layoutmap[row][col] = 1
 
-				@currentCell[row][col] = @createCell(row,col,color)
+				@currentCell[row][col] = @createCell(row,col,color,null)
 				@drawCell @currentCell[row][col]
+		console.log(@layoutmap)
+
 	
 	createCanvas: ->
 		@canvas = document.createElement 'canvas'
@@ -114,18 +145,26 @@ class @MazeLayout
 		@drawingContext.strokeStyle = 'rgba(0, 0, 0, 1)'
 		@drawingContext.strokeRect x, y, @cellSize, @cellSize
 		
-		if color == "white"
-			fillStyle = 'rgb(255,255,255)'
-		else
-			fillStyle = 'rgb(0,0,0)'
+		if !cell.image? || color == "white"
+			if color == "white"
+				fillStyle = 'rgb(255,255,255)'
+			else
+				fillStyle = 'rgb(0,0,0)'
 			
-		@drawingContext.fillStyle = fillStyle
-		@drawingContext.fillRect x, y, @cellSize, @cellSize
+			@drawingContext.fillStyle = fillStyle
+			@drawingContext.fillRect x, y, @cellSize, @cellSize
+		else 
+			console.log(@drawingContext)
+			pattern = @drawingContext.createPattern(cell.image, "repeat")
+			@drawingContext.fillStyle = pattern
+			@drawingContext.fillRect x, y, @cellSize, @cellSize
 
-	createCell: (row,col,color) ->
+
+	createCell: (row,col,color,image) ->
 		row: row 
 		col: col
 		color: color
+		image: image
 
 	toggleColor: (event) ->
 
@@ -166,3 +205,17 @@ class @MazeLayout
 		console.log("")
 		$(map_id).val(JSON.stringify(@layoutmap))
 		console.log($(map_id).val())
+
+	updateSetting: (image) ->
+		console.log("Updating setting")
+
+		for row in [0..(@numRows-1)] by 1
+
+			for col in [0..(@numCols-1)] by 1
+				if @layoutmap[row][col] == 1
+					color = "white"
+				else
+					color = "black"
+
+				@currentCell[row][col] = @createCell(row,col,color,image)
+				@drawCell @currentCell[row][col]

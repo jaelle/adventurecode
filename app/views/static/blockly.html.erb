@@ -17,7 +17,7 @@
         Blockly.inject(document.body,
             {path: '../../', toolbox: document.getElementById('toolbox')});
         // Let the top-level application know that Blockly is ready.
-        //window.parent.blocklyLoaded(Blockly);
+        window.parent.blocklyLoaded(Blockly);
         var defaultXml =
               '<xml>' +
               '  <block type="mazebuilder_settings" x="70" y="70">' + 

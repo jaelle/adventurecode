@@ -14,7 +14,6 @@ class MazesController < ApplicationController
 
   # GET /mazes/new
   def new
-    @title = "Step 1 - Draw your maze."
     session[:maze_params] ||= {}
     @maze = Maze.new(session[:maze_params])
     @maze.current_step = session[:maze_step]
@@ -28,7 +27,6 @@ class MazesController < ApplicationController
   # POST /mazes
   # POST /mazes.json
   def create
-    @title = "Step 2 - Choose the settings."
     session[:maze_params].deep_merge!(params[:maze]) if params[:maze]
     @maze = Maze.new(session[:maze_params])
     @maze.current_step = session[:maze_step]
@@ -85,6 +83,7 @@ class MazesController < ApplicationController
 
   def preview
 
+    @title = "Step 2 - Preview the maze."
   end
 
   def share
