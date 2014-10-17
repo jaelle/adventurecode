@@ -79,26 +79,30 @@ function setTitle(title)
 
 function setMainCharacter(maincharacter)
 {
+  var maincharacter_id;
+
   switch(maincharacter) {
     case "dog":
-      maincharacter_id = 1
+      maincharacter_id = 1;
       break;
     default:
-      maincharacter_id = 0
+      maincharacter_id = 0;
   }
 
-
+  console.log(maincharacter_id)
   $("#maze_main_character_id").val(maincharacter_id);
 };
 
 function setSetting(setting)
 {
+  var setting_id;
+
   switch(setting) {
     case "cornfield":
-      setting_id = 1
+      setting_id = 1;
       break;
     default:
-      setting_id = 0
+      setting_id = 0;
   }
 
   $("#maze_setting_id").val(setting_id);
@@ -106,12 +110,14 @@ function setSetting(setting)
 
 function setGoal(goal)
 {
+  var goal_id;
+
   switch(goal) {
     case "dogbowl":
-      goal_id = 1
+      goal_id = 1;
       break;
     default:
-      goal_id = 0
+      goal_id = 0;
   }
 
   $("#maze_goal_id").val(goal_id);
