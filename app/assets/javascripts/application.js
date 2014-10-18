@@ -17,7 +17,9 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require mazebuilder
+//= require adventurecode
 //= require javascript
+//= require blocklymaze
 //= require_tree .
 
 $(function(){

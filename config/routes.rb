@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   root 'site#index'
 
   get 'static/blockly'
+  get 'static/blocklymaze'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

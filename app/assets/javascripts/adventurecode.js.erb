@@ -1,0 +1,56 @@
+'use strict';
+
+goog.provide('Blockly.Blocks.maze');
+
+goog.require('Blockly.Blocks');
+
+Blockly.Blocks['move_west'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(330);
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-left.png') %>", 50, 50, "Move West"));
+    this.setPreviousStatement(true, "direction");
+    this.setNextStatement(true, "direction");
+    this.setTooltip('');
+  }
+};
+
+Blockly.Blocks['move_north'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(330);
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-up.png') %>", 50, 50, "Move North"));
+    this.setPreviousStatement(true, "direction");
+    this.setNextStatement(true, "direction");
+    this.setTooltip('');
+  }
+};
+
+Blockly.Blocks['move_east'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(330);
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-right.png') %>", 50, 50, "Move West"));
+    this.setPreviousStatement(true, "direction");
+    this.setNextStatement(true, "direction");
+    this.setTooltip('');
+  }
+};
+
+Blockly.Blocks['move_south'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(330);
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-down.png') %>", 50, 50, "Move South"));
+    this.setPreviousStatement(true, "direction");
+    this.setNextStatement(true, "direction");
+    this.setTooltip('');
+  }
+};
+
+
+

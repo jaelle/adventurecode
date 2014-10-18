@@ -1,6 +1,6 @@
 
 		<div class="col-lg-6">
-			<h4>Drag the character and goal to an empty space</h4>
+			<h4>Solve your maze</h4>
 			<div class="field">
 				<div id="mazebuilder">
 				</div>
@@ -13,9 +13,29 @@
 				<!--input type="hidden" name="layout" id="layout" value="<%= render plain: @layout %>" ///-->
 			</div>
 		</div>
-		<div class="col-lg-6">
+		<script>
+		    function blocklyLoaded(blockly) {
+		      // Called once Blockly is fully loaded.
+		      window.Blockly = blockly;
+		    }
 
-		</div>
+		    function updateForm()
+		    {
+		    	var code = Blockly.JavaScript.workspaceToCode();
+		    	console.log(code);
+
+		    	try {
+				    eval(code);
+				} catch (e) {
+					// Null is thrown for infinite loop.
+					// Otherwise, abnormal termination is a user error.
+					if (e !== Infinity) {
+					  alert(e);
+					}
+				}
+		    }
+		</script>
+		<iframe src="/static/blocklymaze" class="blockly col-lg-6" style="border:0 1px 1px 0;border-style:solid;border-color:#ddd;padding:0;height:500px"></iframe>
 
 	    	
 		<div style="display:none">
