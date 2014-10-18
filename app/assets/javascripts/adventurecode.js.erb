@@ -54,3 +54,30 @@ Blockly.Blocks['move_south'] = {
 
 
 
+Blockly.Blocks['loop_n_times'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(160);
+    this.appendStatementInput("loop")
+        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-repeat.png') %>", 45, 50, "*"));
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("2"), "n")
+        .appendField("times");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+  }
+};
+
+Blockly.Blocks['loop_forever'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(160);
+    this.appendStatementInput("loop")
+        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-repeat.png') %>", 45, 50, "Loop Forever"));
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+  }
+};
+

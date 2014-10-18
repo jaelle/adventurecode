@@ -19,9 +19,8 @@
 		      window.Blockly = blockly;
 		    }
 
-		    function updateForm()
-		    {
-		    	var code = Blockly.JavaScript.workspaceToCode();
+		    function runCode() {
+				var code = Blockly.JavaScript.workspaceToCode();
 		    	console.log(code);
 
 		    	try {
@@ -34,10 +33,22 @@
 					}
 				}
 		    }
-		</script>
-		<iframe src="/static/blocklymaze" class="blockly col-lg-6" style="border:0 1px 1px 0;border-style:solid;border-color:#ddd;padding:0;height:500px"></iframe>
 
-	    	
+		    function resetSolution() {
+				Blockly.mainWorkspace.clear();
+				coordinates = eval($("#maze_start").val());
+				map = eval($("#maze_layout").val());
+				console.log("Map:" + map)
+				myMazeLayout.resetLayout(map,coordinates[0],coordinates[1]);
+		    }
+		</script>
+			<div class="col-lg-6">
+				<button type="button" class="btn btn-primary" style="float:right" onclick="runCode()">Run</button>
+				<button type="button" class="btn btn-default" style="float:right" onclick='resetSolution()'>Reset Solution</button>
+				<br /><br />
+				<iframe src="/static/blocklymaze" class="blockly col-lg-12" style="border:0 1px 1px 0;border-style:solid;border-color:#ddd;padding:0;height:500px;clear:both"></iframe>
+			</div>
+
 		<div style="display:none">
 			<%= image_tag('cornstalk.png', {:id => 'setting', :onload => "console.log('loaded')"}) %>
 				<%= image_tag('dog.png', {:id =>'maincharacter', :class => 'draggable'}) %>
