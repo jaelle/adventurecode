@@ -57,15 +57,15 @@
 
 					if (endpoint == "maincharacter")
 					{
-						$("#maze_start").val("[" + col + "," + row + "]");
+						$("#maze_start").val("[" + row + "," + col + "]");
 					}
 					else if (endpoint == "goal")
 					{
-						$("#maze_end").val("[" + col + "," + row + "]");
+						$("#maze_end").val("[" + row + "," + col + "]");
 					}
 
 					//TODO: snap this element to the grid
 
-					console.log(endpoint + " coordinates:" + col + ", " + row);
+					console.log(endpoint + " coordinates:" + row + ", " + col);
 				}
 	    	</script>

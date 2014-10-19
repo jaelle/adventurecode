@@ -19,9 +19,30 @@
 		      window.Blockly = blockly;
 		    }
 
+			var instructions = [];
+
+			function moveNorth()
+			{
+			  instructions.push('myMazeLayout.move("north")');
+			}
+			function moveEast()
+			{
+			  instructions.push('myMazeLayout.move("east")');
+
+			}
+			function moveSouth()
+			{
+			  instructions.push('myMazeLayout.move("south")');
+
+			}
+			function moveWest()
+			{
+			  instructions.push('myMazeLayout.move("west")');
+
+			}
+
 		    function runCode() {
 				var code = Blockly.JavaScript.workspaceToCode();
-		    	console.log(code);
 
 		    	try {
 				    eval(code);
@@ -32,14 +53,36 @@
 					  alert(e);
 					}
 				}
+
+				console.log("INSTRUCTIONS:");
+				console.log("Length:" + instructions.length);
+
+				for (var i=0;i<instructions.length;i++)
+				{
+					interval = 1000;
+					step = i+1;
+					//console.log(i + ":" + instructions[i]);
+					/*setTimeout(
+						function() {
+							console.log("in timeout function:" + instructions[i])
+						},
+						(interval * step),
+						instructions[i]
+					)*/
+					setTimeout('eval(instructions[' + i + '])',interval*step)
+				}
 		    }
 
 		    function resetSolution() {
 				Blockly.mainWorkspace.clear();
 				coordinates = eval($("#maze_start").val());
+				row = coordinates[0];
+				col = coordinates[1];
+
 				map = eval($("#maze_layout").val());
-				console.log("Map:" + map)
-				myMazeLayout.resetLayout(map,coordinates[0],coordinates[1]);
+				console.log("[" + row + "," + col + "]");
+				myMazeLayout.resetLayout(map,row,col);
+				instructions = [];
 		    }
 		</script>
 			<div class="col-lg-6">
@@ -69,8 +112,8 @@
 				var coordinates = eval($("#maze_start").val());
 				console.log(coordinates);
 
-				var col = coordinates[0];
-				var row = coordinates[1];
+				var row = coordinates[0];
+				var col = coordinates[1];
 
 				rect = $("#mazebuilder .maze").offset()
 
@@ -89,12 +132,12 @@
 
 			}
 
-			$("#goal").draggable();
+			//$("#goal").draggable();
 
-			$("#mazebuilder").droppable({
-				drop: function( event, ui ) {
-		        saveCoordinates(this,event,ui)
-		      }
-			});
+			//$("#mazebuilder").droppable({
+			//	drop: function( event, ui ) {
+		    //    saveCoordinates(this,event,ui)
+		    //  }
+			//});
 
-	    	</script>
+	    </script>

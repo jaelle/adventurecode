@@ -21,18 +21,18 @@ $(window).load ->
 
 			if $("#maze_start").val()?
 				coordinates = eval($("#maze_start").val())
-				col = coordinates[0]
-				row = coordinates[1]
-
-				@myMazeLayout.updateMainCharacter(maincharacter_img,col,row)
+				row = coordinates[0]
+				col = coordinates[1]
+				console.log("updating main character to row: " + row + ", col:" + col)
+				@myMazeLayout.updateMainCharacter(maincharacter_img,row,col)
 
 
 			if $("#maze_end").val()?
 				coordinates = eval($("#maze_end").val())
-				col = coordinates[0]
-				row = coordinates[1]
+				row = coordinates[0]
+				col = coordinates[1]
 
-				@myMazeLayout.updateGoal(goal_img,col,row)
+				@myMazeLayout.updateGoal(goal_img,row,col)
 
 			# @myMazeLayout.placeEndpoints(maincharacter_img,goal_img)
 
@@ -89,10 +89,10 @@ class @MazeLayout
 	type: null
 	maincharacter: null 
 	goal: null
-	maincharacter_x: null
-	maincharacter_y: null
-	goal_x: null
-	goal_y: null
+	maincharacter_row: null
+	maincharacter_col: null
+	goal_row: null
+	goal_col: null
 	setting_img: null
 
 	constructor: (containerID,map,cellSize,nrows,ncols,type) ->
@@ -158,14 +158,15 @@ class @MazeLayout
 		@drawingContext = @canvas.getContext '2d'
 
 	drawCell: (cell) ->
-		x = cell.col * @cellSize
-		y = cell.row * @cellSize
+		startX = cell.col * @cellSize
+		startY = cell.row * @cellSize
 		color = cell.color
 		
 		@drawingContext.strokeStyle = 'rgba(0, 0, 0, 1)'
-		@drawingContext.strokeRect x, y, @cellSize, @cellSize
+		@drawingContext.strokeRect startX, startY, @cellSize, @cellSize
 		
-		#console.log('x:' + x + ', y:' + y + ', image:' + cell.image + ', color:' + color)
+		#console.log('row:' + cell.row + ",col:" + cell.col)
+		#console.log('x:' + startX + ', y:' + startY + ', image:' + cell.image + ', color:' + color)
 		if !cell.image?
 			if color == "white"
 				fillStyle = 'rgb(255,255,255)'
@@ -174,13 +175,13 @@ class @MazeLayout
 			
 			#console.log(fillStyle)
 			@drawingContext.fillStyle = fillStyle
-			@drawingContext.fillRect x, y, @cellSize, @cellSize
+			@drawingContext.fillRect startX, startY, @cellSize, @cellSize
 		else 
 			# pattern = @drawingContext.createPattern(cell.image, "repeat")
 			# @drawingContext.fillStyle = pattern
 			# @drawingContext.fillRect x, y, @cellSize, @cellSize
 
-			@drawingContext.drawImage cell.image, 0, 0, @cellSize, @cellSize, x, y, @cellSize, @cellSize 
+			@drawingContext.drawImage cell.image, 0, 0, @cellSize, @cellSize, startX, startY, @cellSize, @cellSize 
 
 
 
@@ -231,7 +232,7 @@ class @MazeLayout
 		console.log($(map_id).val())
 
 	updateSetting: (image) ->
-		console.log("Updating setting to " + image)
+		#console.log("Updating setting to " + image)
 		@setting_img = image
 
 		for row in [0..(@numRows-1)] by 1
@@ -247,62 +248,69 @@ class @MazeLayout
 				@currentCell[row][col] = @createCell(row,col,color,@setting_img)
 				@drawCell @currentCell[row][col]
 
-	updateMainCharacter: (maincharacter,col,row) ->
+	updateMainCharacter: (maincharacter,row,col) ->
 		# find the first white cell and place main character
-		console.log(@maincharacter)
+		#console.log(@maincharacter)
 
 		if @maincharacter?
-			@clearCell = @createCell(@maincharacter_x,@maincharacter_y,"white",null)
-			console.log("Clearing cell " + @maincharacter_x + "," + @maincharacter_y)
+			@clearCell = @createCell(@maincharacter_row,@maincharacter_col,"white",null)
+			console.log("Clearing cell " + @maincharacter_col + "," + @maincharacter_row)
 			console.log(@clearCell)
 			@drawCell @clearCell
 
 		@maincharacter = maincharacter 
-		@maincharacter_x = col
-		@maincharacter_y = row
+		@maincharacter_row = row
+		@maincharacter_col = col
+
+		console.log("main character at row: " + row + ", col:" + col)
 
 		@startCell = @createCell(row,col,"white",maincharacter)
 		@drawCell @startCell
 
 
-	updateGoal: (goal,col,row) ->
+	updateGoal: (goal,row,col) ->
 		# find the first white cell and place main character
 		@goal = goal 
-		@goal_x = col
-		@goal_y = row
+		@goal_col = col
+		@goal_row = row
 
 		@startCell = @createCell(row,col,"white",goal)
 		@drawCell @startCell
 
 	move: (direction) ->
 		if direction == "north"
-			new_x = @maincharacter_x;
-			new_y = @maincharacter_y - 1
+			new_col = @maincharacter_col;
+			new_row = @maincharacter_row - 1
 		else if direction == "east"
-			new_x = @maincharacter_x + 1
-			new_y = @maincharacter_y;
+			new_col = @maincharacter_col + 1
+			new_row = @maincharacter_row
 		else if direction == "south"
-			new_x = @maincharacter_x;
-			new_y = @maincharacter_y + 1
+			new_col = @maincharacter_col
+			new_row = @maincharacter_row + 1
 		else
-			new_x = @maincharacter_x - 1
-			new_y = @maincharacter_y
+			new_col = @maincharacter_col - 1
+			new_row = @maincharacter_row
 
-		if (new_x == @goal_x && new_y == @goal_y)
+		console.log('maincharacter col:' + @maincharacter_col + ", maincharacter row:" + @maincharacter_row)
+		console.log('new row:' + new_row + ', new col:' + new_col + ', newSquare:' + @layoutmap[new_row][new_col])
+		newSquare = @layoutmap[new_row][new_col]
+		if (newSquare? && newSquare != 0)
+			@maincharacter_row = new_row
+			@maincharacter_col = new_col
+
+			map = eval($("#maze_layout").val())
+			console.log("in move")
+			console.log(new_row + "," + new_col)
+			@resetLayout(map,new_row,new_col)
+		else 
+			alert('cant move ' + direction)
+
+
+		if (new_col == @goal_col && new_row == @goal_row)
 			alert("Success!")
-		else
-			newSquare = @layoutmap[new_x][new_y]
-			if (newSquare? && newSquare != 0)
-				@maincharacter_x = new_x
-				@maincharacter_y = new_y
+			
 
-				map = eval($("#maze_layout").val())
-
-				@resetLayout(map,new_x,new_y)
-			else 
-				alert('cant move ' + direction)
-
-	resetLayout: (map,x,y) ->
+	resetLayout: (map,maincharacter_row,maincharacter_col) ->
 
 		@drawingContext.clearRect(0, 0, @canvas.width, @canvas.height);
 
@@ -336,5 +344,5 @@ class @MazeLayout
 				@drawCell @currentCell[row][col]
 
 		@updateSetting(@setting_img)
-		@updateMainCharacter(@maincharacter,x,y)
-		@updateGoal(@goal,@goal_x,@goal_y)
+		@updateGoal(@goal,@goal_row,@goal_col)
+		@updateMainCharacter(@maincharacter,maincharacter_row,maincharacter_col)
