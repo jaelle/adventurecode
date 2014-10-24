@@ -2,3 +2,6 @@
 .draggable{
 	position:absolute;
 }
+#:1.label {
+	background-color:#f00;
+}

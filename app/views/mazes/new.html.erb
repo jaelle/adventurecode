@@ -20,27 +20,24 @@
       </div>
     </div>
   		
-
     <%= render "#{@maze.current_step}_step", :f => f %>
   </div>
   <div class="panel-footer">
   	<div class="row">
       <div class="col-lg-6">
         <div class="btn-group">
-    			<button type="button" class="btn btn-default">
-      			Reset
-    			</button>
-    			<button type="button" class="btn btn-default">
-     			Get Help
-    			</button>
+          <button class="btn btn-default" type="button" onclick="showHelp()">
+            <%= image_tag "help.png", height:'50', width:'50' %>
+          </button>
         </div>
       </div>
       <div class="col-lg-6" style="text-align:right">
-      	<%= f.submit "Back", class: "btn btn-default", :name => "back_button" unless @maze.first_step? %>
+         <%= f.submit "Back", :type => :image, :src => image_path("back.png"), class: "btn btn-default", :name => "back_button", height:'64',width:'76' unless @maze.first_step?  %>
+
         <% if @maze.current_step == "setting" %>
-      	 <%= f.submit "Next Step", class: "btn btn-default", :onclick => "updateForm()" %>
+      	 <%= image_submit_tag "next.png", class: "btn btn-default", height:'64',width:'76', :onclick => "updateForm()" %>
         <% elsif %>
-         <%= f.submit "Next Step", class: "btn btn-default" %>
+         <%= image_submit_tag "next.png", class: "btn btn-default", height:'64',width:'76' %>
         <% end %>
 
      	</div>  

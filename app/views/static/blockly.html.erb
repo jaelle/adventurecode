@@ -20,7 +20,7 @@
         window.parent.blocklyLoaded(Blockly);
         var defaultXml =
               '<xml>' +
-              '  <block type="mazebuilder_settings" x="70" y="70">' + 
+              '  <block type="mazebuilder_settings" x="250" y="25">' + 
               '    <value name="title">' + 
               '       <block type="mazebuilder_title" id="109"></block>' + 
               '    </value></block>' +
@@ -33,9 +33,23 @@
               '</xml>';*/
 
         loadBlocks(defaultXml);
+        document.getElementById(":1").style.backgroundColor="#5a6da8";
+        document.getElementById(":1").style.fontSize="20px";
+        document.getElementById(":1").style.height="30px";
+        document.getElementById(":1").style.color="white";
+        document.getElementById(":2").style.backgroundColor="#9459a8";
+        document.getElementById(":2").style.fontSize="20px";
+        document.getElementById(":2").style.height="30px";
+        document.getElementById(":2").style.color="white";
+        document.getElementById(":3").style.backgroundColor="#a75a6d";
+        document.getElementById(":3").style.fontSize="20px";
+        document.getElementById(":3").style.height="30px";
+        document.getElementById(":3").style.color="white";
+        document.getElementsByClassName("blocklyTreeSelected").backgroundColor="white";
+        //TODO: simulate a fake mousedown event
+        //elem.dispatchEvent(new Event('mousedown'))
       }
       loadBlocks = function(defaultXml) {
-        console.log("tada")
           try {
             var loadOnce = window.sessionStorage.loadOnceBlocks;
           } catch(e) {

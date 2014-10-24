@@ -31,7 +31,7 @@ class MazesController < ApplicationController
     @maze = Maze.new(session[:maze_params])
     @maze.current_step = session[:maze_step]
     if @maze.valid?
-      if params[:back_button]
+      if params['back_button.x']
         @maze.previous_step
       elsif @maze.last_step?
         @maze.save if @maze.all_valid?
