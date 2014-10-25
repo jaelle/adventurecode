@@ -9,7 +9,7 @@ Blockly.Blocks['move_west'] = {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(330);
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-left.png') %>", 50, 50, "Move West"));
+        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-left.png') %>", 30, 30, "Move West"));
     this.setPreviousStatement(true, "direction");
     this.setNextStatement(true, "direction");
     this.setTooltip('');
@@ -21,7 +21,7 @@ Blockly.Blocks['move_north'] = {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(330);
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-up.png') %>", 50, 50, "Move North"));
+        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-up.png') %>", 30, 30, "Move North"));
     this.setPreviousStatement(true, "direction");
     this.setNextStatement(true, "direction");
     this.setTooltip('');
@@ -33,7 +33,7 @@ Blockly.Blocks['move_east'] = {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(330);
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-right.png') %>", 50, 50, "Move West"));
+        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-right.png') %>", 30, 30, "Move West"));
     this.setPreviousStatement(true, "direction");
     this.setNextStatement(true, "direction");
     this.setTooltip('');
@@ -45,7 +45,7 @@ Blockly.Blocks['move_south'] = {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(330);
     this.appendDummyInput()
-        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-down.png') %>", 50, 50, "Move South"));
+        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-down.png') %>", 30, 30, "Move South"));
     this.setPreviousStatement(true, "direction");
     this.setNextStatement(true, "direction");
     this.setTooltip('');
@@ -59,7 +59,7 @@ Blockly.Blocks['loop_n_times'] = {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(160);
     this.appendStatementInput("loop")
-        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-repeat.png') %>", 45, 50, "*"));
+        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-repeat.png') %>", 45, 30, "*"));
     this.appendDummyInput()
         .appendField(new Blockly.FieldTextInput("2"), "n")
         .appendField("times");
@@ -74,7 +74,7 @@ Blockly.Blocks['loop_forever'] = {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(160);
     this.appendStatementInput("loop")
-        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-repeat.png') %>", 45, 50, "Loop Forever"));
+        .appendField(new Blockly.FieldImage("<%= asset_path('arrow-repeat.png') %>", 45, 30, "Loop Forever"));
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('');

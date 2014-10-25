@@ -37,7 +37,7 @@
         <% if @maze.current_step == "setting" %>
       	 <%= image_submit_tag "next.png", class: "btn btn-default", height:'64',width:'76', :onclick => "updateForm()" %>
         <% elsif %>
-         <%= image_submit_tag "next.png", class: "btn btn-default", height:'64',width:'76' %>
+         <%= image_submit_tag "next.png", class: "btn btn-default", height:'64',width:'76' unless @maze.last_step? %>
         <% end %>
 
      	</div>  

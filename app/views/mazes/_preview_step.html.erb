@@ -86,10 +86,17 @@
 		    }
 		</script>
 			<div class="col-lg-6">
-				<button type="button" class="btn btn-primary" style="float:right" onclick="runCode()">Run</button>
-				<button type="button" class="btn btn-default" style="float:right" onclick='resetSolution()'>Reset Solution</button>
-				<br /><br />
-				<iframe src="/static/blocklymaze" class="blockly col-lg-12" style="border:0 1px 1px 0;border-style:solid;border-color:#ddd;padding:0;height:350px;clear:both"></iframe>
+				<iframe src="/static/blocklymaze" class="blockly col-lg-10" style="border:0 1px 1px 0;border-style:solid;border-color:#ddd;padding:0;height:400px;clear:both;float:left"></iframe>
+				<div class="col-lg-2">
+					<button type="button" class="maze-run btn btn-primary" onclick="runCode()">
+						<%= image_tag "run.png", width:'50', height:'50' %>
+					</button>
+					<br /><br />
+					<button type="button" class="maze-reset btn btn-default" onclick='resetSolution()'>
+						<%= image_tag "reset.png", width:'50', height:'50' %>
+					</button>
+				</div>
+
 			</div>
 
 		<div style="display:none">

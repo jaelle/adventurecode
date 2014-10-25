@@ -2,3 +2,7 @@
 .draggable{
 	position:absolute;
 }
+.no-padding
+{
+	padding:0;
+}
