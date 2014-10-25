@@ -5,7 +5,7 @@
 $(window).load ->
 
 	if $("#maze_layout").val() == ""
-		@myMazeLayout = new MazeLayout('mazebuilder',"",50,5,5,"new")
+		@myMazeLayout = new MazeLayout('mazebuilder',"",75,5,5,"new")
 		@myMazeLayout.updateJSON('#maze_layout')
 	else 
 		setting_img = $("#setting")[0];
@@ -16,7 +16,7 @@ $(window).load ->
 
 			$("#setting").hide()
 
-			@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#maze_layout").val()),50,5,5,"new")
+			@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#maze_layout").val()),75,5,5,"new")
 			@myMazeLayout.updateSetting(setting_img)
 
 			if $("#maze_start").val()?
@@ -52,8 +52,8 @@ $(window).load ->
 				y = event.clientY - rect.top
 			
 				#which cell is this?
-				col = Math.floor(x / 50)
-				row = Math.floor(y / 50)
+				col = Math.floor(x / 75)
+				row = Math.floor(y / 75)
 
 				console.log("col:" + col + " " + "row:" + row + " " + map[0][1])
 
@@ -68,20 +68,20 @@ $(window).load ->
 
 					$("#maze_layout").val(JSON.stringify(map))
 					$("#mazebuilder .maze").remove()
-					@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#maze_layout").val()),50,5,5,"new")
+					@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#maze_layout").val()),75,5,5,"new")
 			
 
 	$(".mazelayout").on 'click', (event) ->
 		#console.log()
 		$("#maze_layout").val(this.children[0].value)
 		$("#mazebuilder .maze").remove()
-		@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#maze_layout").val()),50,5,5,"new")
+		@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#maze_layout").val()),75,5,5,"new")
 	
 class @MazeLayout
 	currentCell: null
 	numCols: 5
 	numRows: 5
-	cellSize: 50
+	cellSize: 75
 	canvas: null
 	drawingContext: null
 	layoutmap: null
@@ -180,7 +180,10 @@ class @MazeLayout
 			# pattern = @drawingContext.createPattern(cell.image, "repeat")
 			# @drawingContext.fillStyle = pattern
 			# @drawingContext.fillRect x, y, @cellSize, @cellSize
-
+			console.log(@cellSize)
+			fillStyle = 'rgb(255,255,255)'
+			@drawingContext.fillStyle = fillStyle
+			@drawingContext.fillRect startX, startY, @cellSize, @cellSize
 			@drawingContext.drawImage cell.image, 0, 0, @cellSize, @cellSize, startX, startY, @cellSize, @cellSize 
 
 

@@ -1,9 +1,29 @@
 
 			
-		<div class="col-lg-6">
-			<h4>Drag the character and goal to an empty space</h4>
+	<div class="col-lg-6">
+
+			<h4>Drag the character and goal to an empty space.</h4>
+		<div class="col-lg-6" style="margin-top:25px">
+			<div align="center">
+				<h4>Main Character:</h4>
+				<div style="border:1px solid #c0c0c0;width:100px;height:100px;">
+					<%= image_tag('dog.png', {:id =>'maincharacter', :class => 'draggable', :style => 'margin-left:-25px;margin-top:25px;'}) %>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-lg-6" style="margin-top:25px">
+			<div align="center">
+				<h4>Goal:</h4>
+				<div style="border:1px solid #c0c0c0;width:100px;height:100px;">
+					<%= image_tag('dog-bowl.png', {:id => 'goal', :class =>'draggable', :style => 'margin-left:-25px;margin-top:25px;'}) %>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6">
 			<div class="field">
-				<div id="mazebuilder"></div>
+				<div id="mazebuilder" align="center"></div>
 				<%= f.hidden_field :layout, :value => @maze.layout %>
 				<%= f.hidden_field :setting_id, :value => @maze.setting_id %>
 				<%= f.hidden_field :main_character_id, :value => @maze.main_character_id %>
@@ -13,20 +33,10 @@
 				<!--input type="hidden" name="layout" id="layout" value="<%= render plain: @layout %>" ///-->
 			</div>
 		</div>
-		<div class="col-lg-3">
-			<h4>Main Character:</h4>
-			<%= image_tag('dog.png', {:id =>'maincharacter', :class => 'draggable'}) %>
-		</div>
 
-		<div class="col-lg-3">
-			<h4>Goal:</h4>
-			<%= image_tag('dog-bowl.png', {:id => 'goal', :class =>'draggable'}) %>
-		</div>
-
-		<%= image_tag('cornstalk.png', {:id => 'setting', :onload => "console.log('loaded')"}) %>
+		<%= image_tag('cornstalk.png', {:id => 'setting'}) %>
 		<script type="text/javascript">
 				function preload(arrayOfImages) {
-					console.log("preloading");
 					$(arrayOfImages).each(function () {
 				        $('<img class="preloader" />').attr('src',this).appendTo('body').css('display','none');
 				        console.log(this.src)
@@ -50,8 +60,8 @@
 					x = event.clientX - rect.left;
 					y = event.clientY - rect.top;
 				
-					col = Math.floor(x / 50);
-					row = Math.floor(y / 50);
+					col = Math.floor(x / 75);
+					row = Math.floor(y / 75);
 
 					endpoint = event.toElement.id;
 
