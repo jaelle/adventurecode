@@ -19,7 +19,7 @@ $(window).load ->
 			@myMazeLayout = new MazeLayout('mazebuilder',JSON.parse($("#maze_layout").val()),75,5,5,"new")
 			@myMazeLayout.updateSetting(setting_img)
 
-			if $("#maze_start").val()?
+			if ($("#maze_start").val() != "" && $("#step").val() != "endpoints")
 				coordinates = eval($("#maze_start").val())
 				row = coordinates[0]
 				col = coordinates[1]
@@ -27,7 +27,7 @@ $(window).load ->
 				@myMazeLayout.updateMainCharacter(maincharacter_img,row,col)
 
 
-			if $("#maze_end").val()?
+			if ($("#maze_end").val() != "" && $("#step").val() != "endpoints")
 				coordinates = eval($("#maze_end").val())
 				row = coordinates[0]
 				col = coordinates[1]

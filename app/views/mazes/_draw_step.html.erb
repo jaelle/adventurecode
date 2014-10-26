@@ -1,17 +1,30 @@
 
-		<div class="col-lg-6">
-			<div class="field">
-				<div id="mazebuilder"></div>
-				<%= f.hidden_field :layout%>
-				<!--input type="hidden" name="layout" id="layout" value="<%= render plain: @layout %>" ///-->
-			</div>
-		</div>
+		
       	<div class="col-lg-6">
 
 			<div class="layouts">
-			<h3>Choose one to start:</h3>
+			<h4>Choose a maze to start, or draw your own.</h4>
 
 			<%= render 'layouts/list_for_mazes' %>
 
 			</div>
     	</div>
+		<div class="field col-lg-6">
+			<div id="mazebuilder" class="col-lg-10" align="center"></div>
+			<%= f.hidden_field :layout%>
+			<!--input type="hidden" name="layout" id="layout" value="<%= render plain: @layout %>" ///-->
+
+			<div class="field col-lg-2">
+				<button type="button" class="maze-reset btn btn-default" onclick='resetDraw()'>
+					<%= image_tag "reset.png", width:'50', height:'50' %>
+				</button>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			function resetDraw() {
+				$("#maze_layout").val("[[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1]]");
+
+				myMazeLayout.resetLayout("[[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1]]",0,0);
+		    }
+		</script>

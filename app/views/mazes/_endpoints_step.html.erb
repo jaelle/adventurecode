@@ -3,35 +3,38 @@
 	<div class="col-lg-6">
 
 			<h4>Drag the character and goal to an empty space.</h4>
-		<div class="col-lg-6" style="margin-top:25px">
-			<div align="center">
+		<div class="col-lg-6">
 				<h4>Main Character:</h4>
-				<div style="border:1px solid #c0c0c0;width:100px;height:100px;">
-					<%= image_tag('dog.png', {:id =>'maincharacter', :class => 'draggable', :style => 'margin-left:-25px;margin-top:25px;'}) %>
+				<div style="width:100px;height:100px;">
+					<%= image_tag('dog.png', {:id =>'maincharacter', :class => 'draggable'}) %>
 				</div>
-			</div>
 		</div>
 
-		<div class="col-lg-6" style="margin-top:25px">
-			<div align="center">
+		<div class="col-lg-6">
 				<h4>Goal:</h4>
-				<div style="border:1px solid #c0c0c0;width:100px;height:100px;">
-					<%= image_tag('dog-bowl.png', {:id => 'goal', :class =>'draggable', :style => 'margin-left:-25px;margin-top:25px;'}) %>
+				<div style="width:100px;height:100px;">
+					<%= image_tag('dog-bowl.png', {:id => 'goal', :class =>'draggable'}) %>
 				</div>
-			</div>
 		</div>
 	</div>
 	<div class="col-lg-6">
-			<div class="field">
-				<div id="mazebuilder" align="center"></div>
+			<div class="field col-lg-10">
+				<div id="mazebuilder" style="float:right"></div>
 				<%= f.hidden_field :layout, :value => @maze.layout %>
 				<%= f.hidden_field :setting_id, :value => @maze.setting_id %>
 				<%= f.hidden_field :main_character_id, :value => @maze.main_character_id %>
 				<%= f.hidden_field :goal_id, :value => @maze.goal_id %>
 				<%= f.hidden_field :start %>
 				<%= f.hidden_field :end %>
-				<!--input type="hidden" name="layout" id="layout" value="<%= render plain: @layout %>" ///-->
+				<%= f.hidden_field :startCoordinates %>
+				<%= f.hidden_field :endCoordinates %>
+				<input type="hidden" name="step" id="step" value="<%= render plain: @maze.current_step %>" />
 			</div>
+			<div class="col-lg-2">
+				<button type="button" class="btn btn-default" onclick='resetDraw()'>
+					<%= image_tag "reset.png", width:'50', height:'50' %>
+				</button>
+			</div>			
 		</div>
 
 		<%= image_tag('cornstalk.png', {:id => 'setting'}) %>
@@ -45,8 +48,31 @@
 
 				// Usage:
 				preload(['<%= asset_path('dog.png') %>'],['<%= asset_path('cornstalk.png') %>'],['<%= asset_path('dog-bowl.png') %>']);
-				$("#maincharacter").draggable();
-				$("#goal").draggable();
+
+				$("#maincharacter").draggable(
+					{
+						stack:'#mazebuilder',
+						revert: function(event,ui) {
+							$(this).data("uiDraggable").originalPosition = {
+				                top : 40,
+				                left : 20
+				            };
+
+
+            				return !event;
+						}
+					});
+				$("#goal").draggable({
+						stack:'#mazebuilder',
+						revert: function(event,ui) {
+							$(this).data("uiDraggable").originalPosition = {
+				                top : 40,
+				                left : 20
+				            };
+
+
+            				return !event;
+						}});
 
 				$("#mazebuilder").droppable({
 					drop: function( event, ui ) {
@@ -68,14 +94,22 @@
 					if (endpoint == "maincharacter")
 					{
 						$("#maze_start").val("[" + row + "," + col + "]");
+						$("#maze_startCoordinates").val("[" + x + "," + y + "]");
 					}
 					else if (endpoint == "goal")
 					{
 						$("#maze_end").val("[" + row + "," + col + "]");
+						$("#maze_endCoordinates").val("[" + x + "," + y + "]");
 					}
 
 					//TODO: snap this element to the grid
 
-					console.log(endpoint + " coordinates:" + row + ", " + col);
+					console.log("LOOK HERE:" + endpoint + " x:" + x + ", y:" + y);
 				}
+
+				function resetDraw() {
+					$('#goal').css('left', '20px').css('top', '40px');
+					$('#maincharacter').css('left', '20px').css('top', '40px');
+			    }
+
 	    	</script>
