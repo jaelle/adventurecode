@@ -25,26 +25,28 @@
 
 			function moveNorth()
 			{
-			  instructions.push('myMazeLayout.move("north")');
+			  instructions.push('mazePuzzle.move("north")');
 			}
 			function moveEast()
 			{
-			  instructions.push('myMazeLayout.move("east")');
+			  instructions.push('mazePuzzle.move("east")');
 
 			}
 			function moveSouth()
 			{
-			  instructions.push('myMazeLayout.move("south")');
+			  instructions.push('mazePuzzle.move("south")');
 
 			}
 			function moveWest()
 			{
-			  instructions.push('myMazeLayout.move("west")');
+			  instructions.push('mazePuzzle.move("west")');
 
 			}
 
 		    function runCode() {
 				var code = Blockly.JavaScript.workspaceToCode();
+				instructions = [];
+
 
 		    	try {
 				    eval(code);
@@ -56,35 +58,20 @@
 					}
 				}
 
-				console.log("INSTRUCTIONS:");
-				console.log("Length:" + instructions.length);
+
+				setupPuzzle("reset");
 
 				for (var i=0;i<instructions.length;i++)
 				{
 					interval = 1000;
 					step = i+1;
-					//console.log(i + ":" + instructions[i]);
-					/*setTimeout(
-						function() {
-							console.log("in timeout function:" + instructions[i])
-						},
-						(interval * step),
-						instructions[i]
-					)*/
 					setTimeout('eval(instructions[' + i + '])',interval*step)
 				}
 		    }
 
 		    function resetSolution() {
 				Blockly.mainWorkspace.clear();
-				coordinates = eval($("#maze_start").val());
-				row = coordinates[0];
-				col = coordinates[1];
-
-				map = eval($("#maze_layout").val());
-				console.log("[" + row + "," + col + "]");
-				myMazeLayout.resetLayout(map,row,col);
-				instructions = [];
+				setupPuzzle("reset");
 		    }
 		</script>
 			<div class="col-lg-6">
@@ -100,53 +87,52 @@
 				</div>
 
 			</div>
-
-		<div style="display:none">
-			<%= image_tag('cornstalk.png', {:id => 'setting', :onload => "console.log('loaded')"}) %>
-				<%= image_tag('dog.png', {:id =>'maincharacter', :class => 'draggable'}) %>
-				<%= image_tag('dog-bowl.png', {:id => 'goal', :class =>'draggable'}) %>
-		</div>
 		<script type="text/javascript">
-			function preload(arrayOfImages) {
-				$(arrayOfImages).each(function () {
-			        $('<img />').attr('src',this).appendTo('body').css('display','none');
-			    });
+			
+			$(window).load
+	        {
+				var mazePuzzle = new MazeLayout('mazebuilder',75,5,5);
+				mazePuzzle.setMap(jQuery.parseJSON($('#maze_layout').val()));
+
+	      		settingImg = mazePuzzle.setSetting($('#maze_setting_id').val());
+	      		
+	      		settingImg.onload = function()
+	      		{
+
+	      			setupPuzzle("new");
+	      		}
+
 			}
 
-			// Usage:
-			preload(['<%= asset_path('dog.png') %>'],['<%= asset_path('cornstalk.png') %>'],['<%= asset_path('dog-bowl.png') %>']);
-
-			function setStartCoordinates()
+			function setupPuzzle(step) 
 			{
-				var coordinates = eval($("#maze_start").val());
-				console.log(coordinates);
+				coordinates = jQuery.parseJSON($('#maze_start').val());
+      			row = coordinates[0];
+      			col = coordinates[1];
 
-				var row = coordinates[0];
-				var col = coordinates[1];
+      			maincharacterImg = mazePuzzle.setMainCharacter($('#maze_main_character_id').val(),col,row);
 
-				rect = $("#mazebuilder .maze").offset()
+      			maincharacterImg.onload = function()
+      			{
 
-				var x = rect.left + (col-1) * 75
-				var y = rect.top + (row-1) * 75
+	      			coordinates = jQuery.parseJSON($('#maze_end').val());
+	      			row = coordinates[0];
+	      			col = coordinates[1];
 
-				console.log("start coordinates: ")
-				console.log($("#maincharacter").position())
-				$("#maincharacter").parent().css({position: 'relative'});
-				$("#maincharacter").css({
-					top: x,
-					left: y,
-					position:'absolute'
-				})
-				console.log($("#maincharacter").position())
+      				goalImg = mazePuzzle.setGoal($('#maze_goal_id').val(),col,row);
 
+      				goalImg.onload = function()
+      				{
+      					if (step == "reset")
+      					{
+      						mazePuzzle.updateLayout();
+      					}
+      					else 
+      					{
+							mazePuzzle.show();
+      					}
+      				}
+      			}
 			}
-
-			//$("#goal").draggable();
-
-			//$("#mazebuilder").droppable({
-			//	drop: function( event, ui ) {
-		    //    saveCoordinates(this,event,ui)
-		    //  }
-			//});
 
 	    </script>

@@ -139,8 +139,8 @@
 					<div id="mazebuilder" style="float:right"></div>
 						<%= f.hidden_field :layout, :value => @maze.layout %>
 						<%= f.hidden_field :setting_id, :value => @maze.setting_id %>
-						<%= f.hidden_field :main_character_id, :value => @maze.main_character_id %>
-						<%= f.hidden_field :goal_id, :value => @maze.goal_id %>
+						<%= f.hidden_field :main_character_id, :value => 1 %>
+						<%= f.hidden_field :goal_id, :value => 1 %>
 						<%= f.hidden_field :start %>
 						<%= f.hidden_field :end %>
 						<%= f.hidden_field :startCoordinates %>
@@ -159,7 +159,8 @@
 	        {
 				var mazePuzzle = new MazeLayout('mazebuilder',75,5,5);
 				mazePuzzle.setMap(jQuery.parseJSON($('#maze_layout').val()));
-	      		settingImg = mazePuzzle.setSetting(2);
+	      		settingImg = mazePuzzle.setSetting($('#maze_setting_id').val());
+	      		
 	      		settingImg.onload = function()
 	      		{
 					mazePuzzle.show();

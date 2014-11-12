@@ -82,8 +82,7 @@ class MazesController < ApplicationController
   end
 
   def preview
-
-    @title = "Step 2 - Preview the maze."
+    
   end
 
   def share

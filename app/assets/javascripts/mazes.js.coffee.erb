@@ -43,12 +43,18 @@ class @MazeLayout
 	setMainCharacter: (maincharacter_id, col, row) ->
 
 		# get main character image path based on id
-		@maincharacter = @placeMainCharacter(col,row,"<%= image_path('dog.png') %>")
+		maincharacterImg = new Image()
+		maincharacterImg.src = "<%= image_path('dog.png') %>"
+		@maincharacter = @placeMainCharacter(col,row,maincharacterImg)
+		return maincharacterImg
 
 	setGoal: (goal_id, col, row) ->
 
 		#get goal image based on id
-		@goal = @placeGoal(col,row,"<%= image_path('dog-bowl.png') %>")
+		goalImg = new Image()
+		goalImg.src = "<%= image_path('dog-bowl.png') %>"
+		@goal = @placeGoal(col,row,goalImg)
+		return goalImg
 
 	show: ->
 
@@ -97,13 +103,13 @@ class @MazeLayout
 		color: color
 		image: image
 
-	placeMainCharacter: (image,col,row) ->
+	placeMainCharacter: (col,row,image) ->
 		col: col
 		row: row
 		image: image
 		color: "white"
 
-	placeGoal: (image,col,row) ->
+	placeGoal: (col,row,image) ->
 		col: col
 		row: row
 		image: image
@@ -127,14 +133,18 @@ class @MazeLayout
 					color = "white"
 					
 					# main character is setup
+					console.log(@maincharacter)
+
+					#goal should go first so that when it shares a space with 
+					#main character, maincharacter goes first
+					if @goal?
+						if @goal.col == col && @goal.row == row 
+							image = @goal.image
+
 					if @maincharacter?
 						if @maincharacter.col == col && @maincharacter.row == row 
 							image = @maincharacter.image
 
-					#goal is setup
-					if @goal?
-						if @goal.col == col && @goal.row == row 
-							image = @goal.image
 				else
 					color = "black"
 
