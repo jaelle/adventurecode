@@ -143,8 +143,6 @@
 						<%= f.hidden_field :goal_id, :value => 1 %>
 						<%= f.hidden_field :start %>
 						<%= f.hidden_field :end %>
-						<%= f.hidden_field :startCoordinates %>
-						<%= f.hidden_field :endCoordinates %>
 						<input type="hidden" name="step" id="step" value="<%= render plain: @maze.current_step %>" />
 					</div>
 					<div class="col-lg-2">
@@ -160,7 +158,7 @@
 				var mazePuzzle = new MazeLayout('mazebuilder',75,5,5);
 				mazePuzzle.setMap(jQuery.parseJSON($('#maze_layout').val()));
 	      		settingImg = mazePuzzle.setSetting($('#maze_setting_id').val());
-	      		
+
 	      		settingImg.onload = function()
 	      		{
 					mazePuzzle.show();
