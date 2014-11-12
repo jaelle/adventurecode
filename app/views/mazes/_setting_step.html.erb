@@ -180,10 +180,12 @@
 						stack:'#mazebuilder',
 						helper: "clone",
 						appendTo:"#mazebuilder",
+						scroll:true,
 						stop: function(event, ui)
 						{
-							console.log($(ui.helper).clone());
-							$(ui.helper).clone(true).removeClass('maincharacter ui-draggable ui-draggable-dragging').addClass('maincharacter-clone').css('top',(event.clientY-event.offsetY)).css('left',(event.clientX-event.offsetX)).appendTo('body').draggable({});
+							clone = $(ui.helper).clone()[0];
+
+							$(ui.helper).clone(true).removeClass('maincharacter ui-draggable ui-draggable-dragging').addClass('maincharacter-clone').css('top',clone.style.top).css('left',clone.style.left).appendTo('#mazebuilder').draggable({});
    
 						}
 					});
@@ -192,28 +194,19 @@
 					{
 						stack:'#mazebuilder',
 						helper: "clone",
-						appendTo:"body",
-
+						appendTo:"#mazebuilder",
+						scroll:true,
 						stop: function(event, ui)
 						{
-							$(ui.helper).clone(true).removeClass('goal ui-draggable ui-draggable-dragging').addClass('goal-clone').css('top',(event.clientY-event.offsetY)).css('left',(event.clientX-event.offsetX)).appendTo('body').draggable({});
+							clone = $(ui.helper).clone()[0];
+
+							$(ui.helper).clone(true).removeClass('goal ui-draggable ui-draggable-dragging').addClass('goal-clone').css('top',clone.style.top).css('left',clone.style.left).appendTo('#mazebuilder').draggable({});
    
 						}
 					});
 
 				$("#mazebuilder").droppable({
 					drop: function( event, ui ) {
-						//console.log("dropped");
-						//clone = $(ui.draggable).clone()[0];
-						//clone.css('position','absolute').css('top',event.clientX).css('left',event.clientY);
-						//$(clone).draggable();
-						//$("body").append(clone);
-			            //clone.removeClass("ui-draggable");
-			            //clone.draggable({
-			            //    containment: 'parent',
-			             //   zIndex: 1000
-			            //});
-			            //console.log(clone);
 				        saveCoordinates(this,event,ui)
 			      	}
 				});
@@ -224,9 +217,6 @@
 
 				function saveCoordinates(canvas,event,ui)
 				{
-					console.log('inside save coordinates')
-					console.log(event)
-
 					rect = $("#mazebuilder .maze")[0].getBoundingClientRect();
 					x = event.clientX - rect.left;
 					y = event.clientY - rect.top;
@@ -241,17 +231,11 @@
 					{
 						console.log("tada!");
 						$("#maze_start").val("[" + row + "," + col + "]");
-						$("#maze_startCoordinates").val("[" + x + "," + y + "]");
 					}
 					else if (endpoint.indexOf("goal") >= 0)
 					{
 						$("#maze_end").val("[" + row + "," + col + "]");
-						$("#maze_endCoordinates").val("[" + x + "," + y + "]");
 					}
-
-					//TODO: snap this element to the grid
-
-					console.log("LOOK HERE:" + endpoint + " x:" + x + ", y:" + y);
 				}
 
 				function resetDraw() {
