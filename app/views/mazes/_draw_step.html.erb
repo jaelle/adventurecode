@@ -135,9 +135,8 @@
 					function(event) {
 						var map = $("#mazestring1").val();
 						mazePuzzle.setMap(jQuery.parseJSON(map))
-						mazePuzzle.updateLayout();
-
 						$("#maze_layout").val(map);
+						mazePuzzle.updateLayout();
 					}
 				);
 
@@ -149,10 +148,9 @@
 				$("#samplemaze2").click(
 					function(event) {
 						var map = $("#mazestring2").val();
-						$("#maze_layout").val(jQuery.parseJSON(map));
-						mazePuzzle.updateLayout();
-
+						mazePuzzle.setMap(jQuery.parseJSON(map))
 						$("#maze_layout").val(map);
+						mazePuzzle.updateLayout();
 					}
 				);
 
@@ -164,10 +162,9 @@
 				$("#samplemaze3").click(
 					function(event) {
 						var map = $("#mazestring3").val();
-						$("#maze_layout").val(jQuery.parseJSON(map));
-						mazePuzzle.updateLayout();	
-
+						mazePuzzle.setMap(jQuery.parseJSON(map))
 						$("#maze_layout").val(map);
+						mazePuzzle.updateLayout();	
 					}
 				);
 

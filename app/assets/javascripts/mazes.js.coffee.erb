@@ -15,6 +15,8 @@ class @MazeLayout
 
 	drawingContext: null
 
+	error: false
+
 	constructor: (containerId,cellSize,numRows,numCols) ->
 
 		# set default settings for this maze
@@ -60,6 +62,7 @@ class @MazeLayout
 
 		@createCanvas()
 		@updateLayout()
+		@error = false
 	
 	createCanvas: ->
 		@canvas = document.createElement 'canvas'
@@ -117,6 +120,7 @@ class @MazeLayout
 
 	updateLayout: () ->
 		currentCell = []
+		@error = false
 
 		for row in [0..(@numRows-1)] by 1
 			currentCell[row] = [] 
@@ -181,30 +185,34 @@ class @MazeLayout
 		$(field_id).val(JSON.stringify(@map))
 
 	move: (direction) ->
-		if direction == "north"
-			new_col = @maincharacter.col;
-			new_row = @maincharacter.row - 1
-		else if direction == "east"
-			new_col = @maincharacter.col + 1
-			new_row = @maincharacter.row
-		else if direction == "south"
-			new_col = @maincharacter.col
-			new_row = @maincharacter.row + 1
-		else
-			new_col = @maincharacter.col - 1
-			new_row = @maincharacter.row
 
-		newSquare = @map[new_row][new_col]
+		if (!@error)
+			if direction == "north"
+				new_col = @maincharacter.col;
+				new_row = @maincharacter.row - 1
+			else if direction == "east"
+				new_col = @maincharacter.col + 1
+				new_row = @maincharacter.row
+			else if direction == "south"
+				new_col = @maincharacter.col
+				new_row = @maincharacter.row + 1
+			else
+				new_col = @maincharacter.col - 1
+				new_row = @maincharacter.row
 
-		# are we moving to an open tile?
-		if (newSquare? && newSquare != 0)
-			@maincharacter.row = new_row
-			@maincharacter.col = new_col
+			newSquare = @map[new_row][new_col]
 
-			@updateLayout()
+			# are we moving to an open tile?
+			if (newSquare? && newSquare != 0)
+				@maincharacter.row = new_row
+				@maincharacter.col = new_col
 
-		else 
-			alert('cant move ' + direction)
+				@updateLayout()
+
+			else 
+				alert('cant move ' + direction)
+				@error = true
+
 
 		# main character made it to the goal
 		if (@maincharacter.col == @goal.col && @maincharacter.row == @goal.row)
