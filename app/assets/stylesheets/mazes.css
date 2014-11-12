@@ -6,3 +6,21 @@
 {
 	padding:0;
 }
+.maze-setting
+{
+	max-height:215px;
+	overflow-y:scroll;
+	border:1px solid #CCC;
+}
+.maze-character, .maze-goal
+{
+	max-height:155px;
+	overflow-y:scroll;
+	border:1px solid #CCC;
+	z-index:0;
+}
+.list-group-item 
+{
+	width:100px;
+	height:115px;
+}

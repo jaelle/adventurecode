@@ -1,31 +1,263 @@
-			<script>
-			    function blocklyLoaded(blockly) {
-			      // Called once Blockly is fully loaded.
-			      window.Blockly = blockly;
-			    }
 
-			    function updateForm()
-			    {
-			    	var code = Blockly.JavaScript.workspaceToCode();
-			    	console.log(code);
 
-			    	try {
-					    eval(code);
-					} catch (e) {
-						// Null is thrown for infinite loop.
-						// Otherwise, abnormal termination is a user error.
-						if (e !== Infinity) {
-						  alert(e);
+
+			<div class="col-lg-6">
+				<div class="main_character col-lg-12">
+					<h5><b>Drag a character to an empty space.</b></h5>
+
+					<div class="maze-character">
+						<table class="table table-bordered col-lg-12">
+							<tr>
+								<td width="25%" height="110">
+									<a href="#" class="list-group-item" onclick="javascript:saveMainCharacter(1);">
+										<h5>Dog</h5>
+										<img src="<%= asset_path('dog.png'); %>" width="50" class="draggable maincharacter" />
+									</a>
+								</td>
+								<td width="25%">
+									<a href="#" class="list-group-item" onclick="javascript:saveMainCharacter(1);">
+										<h5>Dog</h5>
+										<img src="<%= asset_path('dog.png'); %>" width="50" class="draggable maincharacter" />
+									</a>
+								</td>
+								<td width="25%">
+									<a href="#" class="list-group-item" onclick="javascript:saveMainCharacter(1);">
+										<h5>Dog</h5>
+										<img src="<%= asset_path('dog.png'); %>" width="50" class="draggable maincharacter" />
+									</a>
+								</td>
+								<td width="25%">
+									<a href="#" class="list-group-item" onclick="javascript:saveMainCharacter(1);">
+										<h5>Dog</h5>
+										<img src="<%= asset_path('dog.png'); %>" width="50" class="draggable maincharacter" />
+									</a>
+								</td>
+							</tr>
+							<tr>
+								
+								<td width="25%" height="110">
+									<a href="#" class="list-group-item" onclick="javascript:saveMainCharacter(1);">
+										<h5>Dog</h5>
+										<img src="<%= asset_path('dog.png'); %>" width="50" class="draggable maincharacter" />
+									</a>
+								</td>
+								<td width="25%">
+									<a href="#" class="list-group-item" onclick="javascript:saveMainCharacter(1);">
+										<h5>Dog</h5>
+										<img src="<%= asset_path('dog.png'); %>" width="50" class="draggable maincharacter" />
+									</a>
+								</td>
+								<td width="25%">
+									<a href="#" class="list-group-item" onclick="javascript:saveMainCharacter(1);">
+										<h5>Dog</h5>
+										<img src="<%= asset_path('dog.png'); %>" width="50" class="draggable maincharacter" />
+									</a>
+								</td>
+								<td width="25%">
+									<a href="#" class="list-group-item" onclick="javascript:saveMainCharacter(1);">
+										<h5>Dog</h5>
+										<img src="<%= asset_path('dog.png'); %>" width="50" class="draggable maincharacter" />
+									</a>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="goal col-lg-12">
+					<br /><br />
+					<h5><b>Drag a goal to an empty space.</b></h5>
+
+					<div class="maze-goal">
+						<table class="table table-bordered col-lg-12">
+							<tr>
+								<td width="25%" height="110">
+									<a href="#" class="list-group-item" onclick="javascript:saveGoal(1);">
+										<h5>Dog Bowl</h5>
+										<img src="<%= asset_path('dog-bowl.png'); %>" width="50" class="draggable goal" />
+									</a>
+								</td>
+								<td width="25%">
+									<a href="#" class="list-group-item" onclick="javascript:saveGoal(2);">
+										<h5>Dog Bowl</h5>
+										<img src="<%= asset_path('dog-bowl.png'); %>" width="50" class="draggable goal" />
+									</a>
+								</td>
+								<td width="25%">
+									<a href="#" class="list-group-item" onclick="javascript:saveGoal(2);">
+										<h5>Dog Bowl</h5>
+										<img src="<%= asset_path('dog-bowl.png'); %>" width="50" class="draggable goal" />
+									</a>
+								</td>
+								<td width="25%">
+									<a href="#" class="list-group-item" onclick="javascript:saveGoal(2);">
+										<h5>Dog Bowl</h5>
+										<img src="<%= asset_path('dog-bowl.png'); %>" width="50" class="draggable goal" />
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td width="25%" height="110">
+									<a href="#" class="list-group-item" onclick="javascript:saveGoal(2);">
+										<h5>Dog Bowl</h5>
+										<img src="<%= asset_path('dog-bowl.png'); %>" width="50" class="draggable goal" />
+									</a>
+								</td>
+								<td width="25%">
+									<a href="#" class="list-group-item" onclick="javascript:saveGoal(2);">
+										<h5>Dog Bowl</h5>
+										<img src="<%= asset_path('dog-bowl.png'); %>" width="50" class="draggable goal" />
+									</a>
+								</td>
+								<td width="25%">
+									<a href="#" class="list-group-item" onclick="javascript:saveGoal(2);">
+										<h5>Dog Bowl</h5>
+										<img src="<%= asset_path('dog-bowl.png'); %>" width="50" class="draggable goal" />
+									</a>
+								</td>
+								<td width="25%">
+									<a href="#" class="list-group-item" onclick="javascript:saveGoal(2);">
+										<h5>Dog Bowl</h5>
+										<img src="<%= asset_path('dog-bowl.png'); %>" width="50" class="draggable goal" />
+									</a>
+								</td>
+							</tr>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+					<%= f.hidden_field :setting_id%>
+					<%= f.hidden_field :main_character_id%>
+					<%= f.hidden_field :goal_id%>
+			</div>
+
+			<div class="col-lg-6">
+				<div class="col-lg-12">
+					<h5>&nbsp; &nbsp; &nbsp;<b><%= render :plain => @maze.title %></b></h5>
+				</div>
+				<div class="field col-lg-10">
+					<div id="mazebuilder" style="float:right"></div>
+						<%= f.hidden_field :layout, :value => @maze.layout %>
+						<%= f.hidden_field :setting_id, :value => @maze.setting_id %>
+						<%= f.hidden_field :main_character_id, :value => @maze.main_character_id %>
+						<%= f.hidden_field :goal_id, :value => @maze.goal_id %>
+						<%= f.hidden_field :start %>
+						<%= f.hidden_field :end %>
+						<%= f.hidden_field :startCoordinates %>
+						<%= f.hidden_field :endCoordinates %>
+						<input type="hidden" name="step" id="step" value="<%= render plain: @maze.current_step %>" />
+					</div>
+					<div class="col-lg-2">
+						<button type="button" class="btn btn-default" onclick='resetDraw()'>
+						<%= image_tag "reset.png", width:'50', height:'50' %>
+						</button>
+					</div>			
+				</div>
+
+			<script type="text/javascript">
+			$(window).load
+	        {
+				var mazePuzzle = new MazeLayout('mazebuilder',75,5,5);
+				mazePuzzle.setMap(jQuery.parseJSON($('#maze_layout').val()));
+	      		settingImg = mazePuzzle.setSetting(2);
+	      		settingImg.onload = function()
+	      		{
+					mazePuzzle.show();
+	      		}
+			/*	function preload(arrayOfImages) {
+					$(arrayOfImages).each(function () {
+				        $('<img class="preloader" />').attr('src',this).appendTo('body').css('display','none');
+				        console.log(this.src)
+				    });
+				};
+
+				// Usage:
+				preload(['<%= asset_path('dog.png') %>'],['<%= asset_path('cornstalk.png') %>'],['<%= asset_path('dog-bowl.png') %>']);
+*/
+				var counter = 0;
+
+				$(".maincharacter").draggable(
+					{
+						stack:'#mazebuilder',
+						helper: "clone",
+						appendTo:"#mazebuilder",
+						stop: function(event, ui)
+						{
+							console.log($(ui.helper).clone());
+							$(ui.helper).clone(true).removeClass('maincharacter ui-draggable ui-draggable-dragging').addClass('maincharacter-clone').css('top',(event.clientY-event.offsetY)).css('left',(event.clientX-event.offsetX)).appendTo('body').draggable({});
+   
 						}
+					});
+
+				$(".goal").draggable(
+					{
+						stack:'#mazebuilder',
+						helper: "clone",
+						appendTo:"body",
+
+						stop: function(event, ui)
+						{
+							$(ui.helper).clone(true).removeClass('goal ui-draggable ui-draggable-dragging').addClass('goal-clone').css('top',(event.clientY-event.offsetY)).css('left',(event.clientX-event.offsetX)).appendTo('body').draggable({});
+   
+						}
+					});
+
+				$("#mazebuilder").droppable({
+					drop: function( event, ui ) {
+						//console.log("dropped");
+						//clone = $(ui.draggable).clone()[0];
+						//clone.css('position','absolute').css('top',event.clientX).css('left',event.clientY);
+						//$(clone).draggable();
+						//$("body").append(clone);
+			            //clone.removeClass("ui-draggable");
+			            //clone.draggable({
+			            //    containment: 'parent',
+			             //   zIndex: 1000
+			            //});
+			            //console.log(clone);
+				        saveCoordinates(this,event,ui)
+			      	}
+				});
+
+
+
+			}
+
+				function saveCoordinates(canvas,event,ui)
+				{
+					console.log('inside save coordinates')
+					console.log(event)
+
+					rect = $("#mazebuilder .maze")[0].getBoundingClientRect();
+					x = event.clientX - rect.left;
+					y = event.clientY - rect.top;
+				
+					col = Math.floor(x / 75);
+					row = Math.floor(y / 75);
+
+					endpoint = event.toElement.className;
+					console.log(endpoint.indexOf("maincharacter"))
+
+					if (endpoint.indexOf("maincharacter") >= 0)
+					{
+						console.log("tada!");
+						$("#maze_start").val("[" + row + "," + col + "]");
+						$("#maze_startCoordinates").val("[" + x + "," + y + "]");
 					}
+					else if (endpoint.indexOf("goal") >= 0)
+					{
+						$("#maze_end").val("[" + row + "," + col + "]");
+						$("#maze_endCoordinates").val("[" + x + "," + y + "]");
+					}
+
+					//TODO: snap this element to the grid
+
+					console.log("LOOK HERE:" + endpoint + " x:" + x + ", y:" + y);
+				}
+
+				function resetDraw() {
+					$('#goal').css('left', '20px').css('top', '40px');
+					$('#maincharacter').css('left', '20px').css('top', '40px');
 			    }
-			</script>
 
-			<h4>Drag blocks to setup your maze.</h4>
-
-			<iframe src="/static/blockly" class="blockly col-lg-12" style="border:0 1px 1px 0;border-style:solid;border-color:#ddd;padding:0;height:350px"></iframe>
-
-				<%= f.hidden_field :title%>
-				<%= f.hidden_field :setting_id%>
-				<%= f.hidden_field :main_character_id%>
-				<%= f.hidden_field :goal_id%>
+	    	</script>
