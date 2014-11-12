@@ -1,5 +1,5 @@
 
-      	
+
       	<div class="col-lg-6">
 
 			<div class="layouts col-lg-12"><br />
@@ -180,6 +180,8 @@
 		      	}
 				function resetDraw() {
 					$("#maze_layout").val("[[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1]]");
+					mazePuzzle.setMap(jQuery.parseJSON($('#maze_layout').val()));
+					mazePuzzle.updateLayout();
 			    }
 			}
 		</script>
