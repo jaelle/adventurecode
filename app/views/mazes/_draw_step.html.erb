@@ -19,7 +19,7 @@
 						<tr>
 							<td width="25%">
 								<a href="#" class="list-group-item" onclick="javascript:saveSetting(1);">
-									<h5>Cornfield</h4><img src="<%= asset_path('cornstalk.png'); %>" width="50" />
+									<h5>Cornfield</h4><img src="<%= asset_path('corn-icon.png'); %>" width="50" />
 								</a>
 
 							</td>
@@ -31,13 +31,13 @@
 							</td>
 							<td width="25%">
 								<a href="#" class="list-group-item" onclick="javascript:saveSetting(3);">
-									<h5>Ocean</h4><img src="<%= asset_path('wave-icon.png'); %>" width="50" />
+									<h5>Desert</h4><img src="<%= asset_path('cactus-icon.png'); %>" width="50" />
 								</a>
 
 							</td>
 							<td width="25%">
 								<a href="#" class="list-group-item" onclick="javascript:saveSetting(4);">
-									<h5>Ocean</h4><img src="<%= asset_path('wave-icon.png'); %>" width="50" />
+									<h5>Forest</h4><img src="<%= asset_path('forest-icon.png'); %>" width="50" />
 								</a>
 
 							</td>
@@ -45,25 +45,25 @@
 						<tr>
 							<td width="25%">
 								<a href="#" class="list-group-item" onclick="javascript:saveSetting(5);">
-									<h5>Cornfield</h4><img src="<%= asset_path('cornstalk.png'); %>" width="50" />
+									<h5>Clouds</h4><img src="<%= asset_path('cloud-icon.png'); %>" width="50" />
 								</a>
 
 							</td>
 							<td width="25%">
 								<a href="#" class="list-group-item" onclick="javascript:saveSetting(6);">
-									<h5>Ocean</h4><img src="<%= asset_path('wave-icon.png'); %>" width="50" />
+									<h5>City</h4><img src="<%= asset_path('city-icon.png'); %>" width="50" />
 								</a>
 
 							</td>
 							<td width="25%">
 								<a href="#" class="list-group-item" onclick="javascript:saveSetting(7);">
-									<h5>Ocean</h4><img src="<%= asset_path('wave-icon.png'); %>" width="50" />
+									<h5>Asteroid Belt</h4><img src="<%= asset_path('asteroid-icon.png'); %>" width="50" />
 								</a>
 
 							</td>
 							<td width="25%">
 								<a href="#" class="list-group-item" onclick="javascript:saveSetting(8);">
-									<h5>Ocean</h4><img src="<%= asset_path('wave-icon.png'); %>" width="50" />
+									<h5>Mountain</h4><img src="<%= asset_path('mountain-icon.png'); %>" width="50" />
 								</a>
 
 							</td>
@@ -173,7 +173,11 @@
 		      	{
 		      		$('#maze_setting_id').val(setting_id);
 		      		mazePuzzle.setSetting(setting_id);
-		      		mazePuzzle.updateLayout();
+		      		settingImg = mazePuzzle.setSetting(setting_id);
+					settingImg.onload = function()
+					{
+		      			mazePuzzle.updateLayout();
+		      		}
 		      	}
 				function resetDraw() {
 					$("#maze_layout").val("[[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1]]");

@@ -32,9 +32,24 @@ class @MazeLayout
 
 	setSetting: (setting_id) ->
 
+		setting_id = parseInt(setting_id)
+
+		switch setting_id
+			when 1 then asset = '<%= asset_path("corn-icon.png") %>'
+			when 2 then asset = '<%= asset_path("wave-icon.png") %>'
+			when 3 then asset = '<%= asset_path("cactus-icon.png") %>'
+			when 4 then asset = '<%= asset_path("forest-icon.png") %>'
+			when 5 then asset = '<%= asset_path("cloud-icon.png") %>'
+			when 6 then asset = '<%= asset_path("city-icon.png") %>'
+			when 7 then asset = '<%= asset_path("asteroid-icon.png") %>'
+			when 8 then asset = '<%= asset_path("mountain-icon.png") %>'
+			else asset = '<%= asset_path("corn-icon.png") %>'
+
+		console.log("in mazes: " + asset)
+
 		# get setting image path based on id
 		@setting = new Image()
-		@setting.src = "<%= asset_path('cornstalk.png') %>"
+		@setting.src = asset
 		@setting.width = @cellSize
 		@setting.height = @cellSize
 
@@ -44,17 +59,43 @@ class @MazeLayout
 
 	setMainCharacter: (maincharacter_id, col, row) ->
 
+		maincharacter_id = parseInt(maincharacter_id)
+
+		switch maincharacter_id
+			when 1 then asset = '<%= asset_path("dog.png") %>'
+			when 2 then asset = '<%= asset_path("cat-icon.png") %>'
+			when 3 then asset = '<%= asset_path("fish-icon.png") %>'
+			when 4 then asset = '<%= asset_path("porcupine-icon.png") %>'
+			when 5 then asset = '<%= asset_path("car-icon.png") %>'
+			when 6 then asset = '<%= asset_path("robot-icon.png") %>'
+			when 7 then asset = '<%= asset_path("ufo-icon.png") %>'
+			when 8 then asset = '<%= asset_path("bird-icon.png") %>'
+			else asset = '<%= asset_path("dog.png") %>'
+
 		# get main character image path based on id
 		maincharacterImg = new Image()
-		maincharacterImg.src = "<%= image_path('dog.png') %>"
+		maincharacterImg.src = asset
 		@maincharacter = @placeMainCharacter(col,row,maincharacterImg)
 		return maincharacterImg
 
 	setGoal: (goal_id, col, row) ->
 
+		goal_id = parseInt(goal_id)
+
+		switch goal_id
+			when 1 then asset = '<%= asset_path("dog-bowl.png") %>'
+			when 2 then asset = '<%= asset_path("yarn-icon.png") %>'
+			when 3 then asset = '<%= asset_path("treasure-icon.png") %>'
+			when 4 then asset = '<%= asset_path("nest-icon.png") %>'
+			when 5 then asset = '<%= asset_path("mappin-icon.png") %>'
+			when 6 then asset = '<%= asset_path("rocket-icon.png") %>'
+			when 7 then asset = '<%= asset_path("planet-icon.png") %>'
+			when 8 then asset = '<%= asset_path("house-icon.png") %>'
+			else asset = '<%= asset_path("dog-bowl.png") %>'
+
 		#get goal image based on id
 		goalImg = new Image()
-		goalImg.src = "<%= image_path('dog-bowl.png') %>"
+		goalImg.src = asset
 		@goal = @placeGoal(col,row,goalImg)
 		return goalImg
 
@@ -135,9 +176,6 @@ class @MazeLayout
 				# set the color and imagery for this tile
 				if @map[row][col] == 1
 					color = "white"
-					
-					# main character is setup
-					console.log(@maincharacter)
 
 					#goal should go first so that when it shares a space with 
 					#main character, maincharacter goes first
