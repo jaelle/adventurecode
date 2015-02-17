@@ -1,0 +1,16 @@
+.logo
+{
+    height:100px;
+}
+
+.nav-icon
+{
+    height:50px;
+}
+
+@media (max-width:960px) {
+    .logo
+    {
+	text-align:center;
+    }
+}

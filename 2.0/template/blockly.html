@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="blockly/blockly_compressed.js"></script>
+    <!--script src="blockly/blocks_compressed.js"></script//-->
+    <script src="blockly/blocks/adventurecode.js"></script>
+
+    <script src="blockly/javascript_compressed.js"></script>
+    <script src="blockly/generators/javascript/adventurecode.js"></script>
+
+    <script src="blockly/msg/js/en.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <style>
+      html, body {
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+      }
+      .blocklySvg {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+    <script>
+      function init() {
+        Blockly.inject(document.body, {toolbox: document.getElementById('toolbox')});
+        // Let the top-level application know that Blockly is ready.
+        window.parent.blocklyLoaded(Blockly);
+      }
+    </script>
+  </head>
+  <body onload="init()">
+    <xml id="toolbox" style="display: none">
+      <block type="move_north"></block>
+      <block type="move_east"></block>
+      <block type="move_south"></block>
+      <block type="move_west"></block>
+      <block type="loop_n_times"></block>
+    </xml>
+    <div style="position:absolute;top:5px;right:5px;" >
+      <button class="btn btn-success" type="button" onclick="parent.run_code()">
+        <img alt="Help" class="nav-icon" src="images/run.png" width="30" height="30" />
+      </button>
+      <button class="btn btn-default" type="button" onclick="parent.reset_code()">
+        <img alt="Help" class="nav-icon" src="images/reset.png" width="30" height="30" />
+      </button>
+    </div>
+  </body>
+</html>

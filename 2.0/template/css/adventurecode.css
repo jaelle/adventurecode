@@ -1,0 +1,25 @@
+.logo
+{
+    width:90%;
+}
+
+.nav-icon
+{
+    height:50px;
+}
+
+.maze, .maze_map
+{
+    border:1px solid #000;
+}
+
+.first-row
+{
+	margin-bottom:5%;
+}
+
+#blockly
+{
+	border:1px solid #CCC;
+	padding-left:0;
+}

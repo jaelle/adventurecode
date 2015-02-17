@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdventureCode</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="row page-header">
+	<div class="col-lg-9">
+	  <h1 class="logo">
+	    <a href="#"><img alt="AdventureCode" class="logo" src="images/logo.png" /></a></h1>
+	</div>
+	<div class="col-lg-3">
+	  <ul class="nav nav-pills nav-justified">
+	    <li><a href="#login">Login</a></li>
+	    <li><a href="#account">Account</a></li>
+	  </ul>
+	</div>
+      </div>
+
+      <div class="row">
+	<div class="col-lg-12">
+	  <div class="panel panel-primary">
+	    <div class="panel-heading">Maze Builder</div>
+
+	    <div class="panel-body">
+	      <div class="row">
+		<div class="col-lg-6">
+
+		</div>
+		<div class="col-lg-6">
+
+		</div>
+	      </div>
+	    </div>
+
+	    <div class="panel-footer">
+	      <div class="row">
+		<div class="col-lg-6">
+		  <div class="btn-group">
+		    <button class="btn btn-default" type="button" onclick="showHelp()">
+		      <img alt="Help" class="nav-icon" src="images/icon-help.png" />
+		    </button>
+		  </div>
+		</div>
+		<div class="col-lg-6">
+		  <input alt="Next" class="btn btn-default pull-right nav-icon" src="images/icon-next.png" type="image" />
+		</div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+      </div>
+
+      <footer><p>&copy; <a href="http://www.jlcreations.com">JLCreations.com 2015</a></p>
+      </footer>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
