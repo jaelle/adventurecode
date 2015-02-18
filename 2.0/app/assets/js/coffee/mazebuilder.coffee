@@ -137,4 +137,5 @@ class window.Maze
     index = row * @num_cols + col
 
 window.load_page = (path) ->
-  location.href = path
+  if path != "null"
+    location.href = path

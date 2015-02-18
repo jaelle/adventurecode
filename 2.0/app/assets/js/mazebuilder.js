@@ -155,7 +155,9 @@
   })();
 
   window.load_page = function(path) {
-    return location.href = path;
+    if (path !== "null") {
+      return location.href = path;
+    }
   };
 
 }).call(this);
