@@ -76,5 +76,3 @@ index_handler(Request):-
 blockly_handler(Request):-
 	reply_pwp_page(static('blockly.html'),[], Request).*/
 
-:- catch(server(8000),_E,fail).
-
