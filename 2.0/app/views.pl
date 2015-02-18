@@ -1,7 +1,10 @@
+view('/','pwp/step1.pwp','Choose Options').
 view('/step1','pwp/step1.pwp','Choose Options').
 view('/step2','pwp/step2.pwp','Build Maze').
 view('/step3','pwp/step3.pwp','Solve Maze').
 
+
+page('/',null,'/step2').
 page('/step1',null,'/step2').
 page('/step2','/step1','/step3').
 page('/step3','/step2',null).
