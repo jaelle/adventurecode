@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:pwp="http://www.cs.otago.ac.nz/staffpriv/ok/pwp.pl" pwp:ask="ensure_loaded(views)" lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -46,21 +46,11 @@
 
       <div class="row">
 	<div class="col-sm-12">
-	  <div class="panel panel-primary">
+	  <div class="panel panel-primary" pwp:ask="display_view(SCRIPT_NAME,View,Title)" >
 
-	    <div class="panel-heading">Solve Maze</div>
+	    <div class="panel-heading" pwp:use="Title" />
 
-	    <div class="panel-body">
-
-			<!-- Blockly //-->
-			<div class="col-md-7">
-				<iframe id="blockly" src="blockly.html" width="100%"></iframe>
-			</div>
-			<div id="mazebuilder" class="col-md-5" onclick="">
-			  <!-- Maze //-->
-			</div>
-			<input id="mazebuilder_map" type="hidden" value="">
-		</div>
+	    <div pwp:use="View" pwp:how="xml" />
 
 	    <div class="panel-footer">
 	      <div class="row">
@@ -69,10 +59,15 @@
 		    <img alt="Help" class="nav-icon" src="images/icon-help.png" />
 		  </button>
 		</div>
-		<div class="col-xs-9">
-		  <button class="btn btn-default pull-right" src="images/icon-next.png">
+		<div class="col-xs-9" pwp:ask="page(SCRIPT_NAME,Prev,Next)">
+		  <button class="btn btn-default pull-right" src="images/icon-next.png" pwp:att="$"  onclick="load_page('$(Next)$')">
 		    <img alt="Next" class="nav-icon" src="images/icon-next.png" />
 		  </button>
+
+		  <button class="btn btn-default pull-right" src="images/icon-back.png" pwp:att="$" onclick="load_page('$(Prev)$')">
+		    <img alt="Previous" class="nav-icon" src="images/icon-back.png" />
+		  </button>
+
 		</div>
 	      </div>
 	    </div>

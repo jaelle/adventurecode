@@ -1,9 +1,6 @@
-<div class="panel-heading">Create a maze</div>
 <div class="panel-body">
 
-	<div id="mazebuilder_maps" class="col-xs-7">
-	  <!-- Default Maps //-->
-	</div>
+	<p class="col-xs-7">Coming Soon</p>
 	<div id="mazebuilder" class="col-xs-5" onclick="">
 	  <!-- Maze //-->
 	</div>

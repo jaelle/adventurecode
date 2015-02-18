@@ -154,4 +154,8 @@
 
   })();
 
+  window.load_page = function(path) {
+    return location.href = path;
+  };
+
 }).call(this);

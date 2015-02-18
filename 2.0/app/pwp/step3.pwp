@@ -1,0 +1,10 @@
+<div class="panel-body">
+	<!-- Blockly //-->
+	<div class="col-md-7">
+		<iframe id="blockly" src="blockly.html" width="100%"></iframe>
+	</div>
+	<div id="mazebuilder" class="col-md-5" onclick="">
+	  <!-- Maze //-->
+	</div>
+	<input id="mazebuilder_map" type="hidden" value="">
+</div>

@@ -135,3 +135,6 @@ class window.Maze
 
   index: (row, col) ->
     index = row * @num_cols + col
+
+window.load_page = (path) ->
+  location.href = path

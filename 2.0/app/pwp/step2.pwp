@@ -1,4 +1,3 @@
-<div class="panel-heading">Create a maze</div>
 <div class="panel-body">
 
 	<div id="mazebuilder_maps" class="col-xs-7">
