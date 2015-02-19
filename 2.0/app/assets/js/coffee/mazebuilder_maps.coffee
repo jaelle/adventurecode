@@ -1,5 +1,5 @@
 
-window.display_maze_defaults = (container_id) ->
+window.display_map_defaults = (container_id) ->
   
   container = $ container_id
 
@@ -40,21 +40,6 @@ window.display_maze_defaults = (container_id) ->
 
     $("#mazebuilder_map0" + x).append map_input
 
-
-window.display_maze = ->
-
-  window.maze = new Maze "#mazebuilder", 5, 5, false
-  window.maze_canvas = maze.create()
-
-  maze_map = $ "#mazebuilder_map"
-  maze_map.val("[" + maze.map + "]")
-
-  touch_tracker = new TouchTracker(maze_canvas, {swipeThreshold: 400})
-
-  maze_canvas.on "click", (event) ->
-    maze.toggle_cell(event)
-    maze_map.val("[" + maze.map + "]")
-
 window.select_maze = (map_container_id) ->
-  map = $(map_container_id + " input").val()
-  maze.load_map(map)
+  map_array = $(map_container_id + " input").val()
+  maze.load_map(map_array)

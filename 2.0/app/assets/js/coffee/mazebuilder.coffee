@@ -135,7 +135,70 @@ class window.Maze
 
   index: (row, col) ->
     index = row * @num_cols + col
+    
+  setting: (image_path) ->
+    
+    console.log(image_path)
+    
+  character: (image_path) ->
+    
+    console.log(image_path)
+    
+  goal: (image_path) ->
+    
+    console.log(image_path)
+
+  place_draggable_character: ->
+
+    console.log("Placing draggable character at first available blank space")
+
+  place_draggable_goal: ->
+
+    console.log("Placing draggable goal at last available blank space")
+
+window.display_maze = ->
+
+  window.maze = new Maze "#mazebuilder", 5, 5, false
+  window.maze_canvas = maze.create()
+
+  maze_map = $ "#mazebuilder_map"
+  maze_map.val("[" + maze.map + "]")
+
+  # touch_tracker = new TouchTracker(maze_canvas, {swipeThreshold: 400})
+
+  maze_canvas.on "click", (event) ->
+    maze.toggle_cell(event)
+    maze_map.val("[" + maze.map + "]")
+
+  maze
 
 window.load_page = (path) ->
   if path != "null"
     location.href = path
+
+window.init = (page) ->
+  
+  #setup page specific settings
+  switch page
+    when "/step2"
+      display_map_defaults("#mazebuilder_maps")
+      map_array = $("#mazebuilder_map00 input").val()
+    when "/step3"
+      blockly_panel = new BlocklyPanel("#blockly","#mazebuilder")
+      map_array = "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]"
+
+  # display maze
+  switch page
+    when "/step2", "/step3"
+      maze = display_maze()
+      
+      # load maze settings
+      maze.setting('images/corn.png')
+      maze.character('images/dog.png')
+      maze.goal('images/dogbowl.png')
+      
+      maze.load_map(map_array)
+      maze.place_draggable_goal()
+      maze.place_draggable_character()
+    else 
+      maze = display_maze()
