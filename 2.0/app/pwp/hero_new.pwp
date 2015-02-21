@@ -1,5 +1,5 @@
 <div class="panel-body">
-	<form action="/setting_save" method="post" enctype="multipart/form-data">
+	<form action="/hero_save" method="post" enctype="multipart/form-data">
 		<div class="form-group">
 			<label for="description">Description</b>
 			<input class="form-control" type="text" name="description" id="description" />

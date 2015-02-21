@@ -1,0 +1,22 @@
+<div class="panel-body">
+	<form action="/mazemap_save" method="post">
+		<div class="form-group">
+			<label for="description">Description</b>
+			<input class="form-control" type="text" name="description" id="description" />
+		</div>
+		<div class="row">
+			<div id="mazebuilder" class="col-xs-5">
+			  <!-- Maze //-->
+			</div>
+		</div>
+		<div class="row">
+			<input id="mazebuilder_map" name="mazebuilder_map" type="hidden" value="">
+		</div>
+		<br />
+		<div class="row">
+			<div class="col-xs-12">
+  				<button type="submit" class="btn btn-default">Submit</button>
+  			</div>
+  		</div>
+	</form>
+</div>
