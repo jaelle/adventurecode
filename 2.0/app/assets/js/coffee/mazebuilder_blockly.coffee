@@ -17,6 +17,8 @@ class window.BlocklyPanel
     false
 
   resize_blockly: ->
+    console.log(@blockly_container)
+    console.log(@maze_container)
     $(@blockly_container)[0].height = $(@maze_container + " canvas")[0].height + 2
 
   _initBehavior: =>

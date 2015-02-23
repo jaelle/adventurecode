@@ -23,3 +23,24 @@
 	border:1px solid #CCC;
 	padding-left:0;
 }
+
+.options-cell
+{
+    text-align:center;
+    width:8.33333333%;
+}
+.options-page-header 
+{
+    padding-bottom: 9px;
+    margin: 20px 0 20px;
+    border-bottom: 1px solid #eee;
+}
+.options-table
+{
+    height:300px;
+    overflow:scroll;
+}
+.maze_piece
+{
+    z-index:500;
+}

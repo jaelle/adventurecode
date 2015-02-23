@@ -5,21 +5,27 @@
 :-use_module(library(http/http_client)).
 :-use_module(library(http/html_write)).
 :-use_module(library(http/http_parameters)).
+:-use_module(library(http/json)).
+:-use_module(library(http/http_session)).
 
 :- ensure_loaded(debug).
-:- ensure_loaded(db_config).
+:- ensure_loaded(db).
 
 user:file_search_path(pwp_root,'pwp').
 user:file_search_path(static,'static').
 user:file_search_path(assets,'assets').
 
 :- http_handler('/blockly.html', blockly_handler, [priority(1)]).
+:- http_handler('/mazemap_json', mazemap_json_handler, [priority(1)]).
+:- http_handler('/settings_json', settings_json_handler, [priority(1)]).
+:- http_handler('/goals_json', goals_json_handler, [priority(1)]).
+:- http_handler('/heroes_json', heroes_json_handler, [priority(1)]).
 
-:- http_handler('/setting_save', upload_handler, [priority(1)]).
+/*:- http_handler('/setting_save', upload_handler, [priority(1)]).
 :- http_handler('/goal_save', upload_handler, [priority(1)]).
 :- http_handler('/hero_save', upload_handler, [priority(1)]).
 
-:- http_handler('/mazemap_save', mazemap_save_handler, [priority(1)]).
+:- http_handler('/mazemap_save', mazemap_save_handler, [priority(1)]).*/
 
 :- http_handler('/js', assets_handler, [prefix, priority(1)]).
 :- http_handler('/css', assets_handler, [prefix, priority(1)]).
@@ -36,9 +42,30 @@ server(Port):-
 
 
 default_handler(Request):-
-
+	
+	% Check for POST data
+	memberchk(method(post), Request),
+	??http_read_data(Request, [maze_setting=Setting,maze_goal=Goal,maze_hero=Hero,maze_map=MazeMap], []),
+	
+	http_session_retractall(maze_setting(Settings)),
+	http_session_retractall(maze_goal(Goals)),
+	http_session_retractall(maze_hero(Heroes)),
+	http_session_retractall(maze_map(MazeMaps)),
+	
+	http_session_assert(maze_setting(Setting)),
+	http_session_assert(maze_hero(Hero)),
+	http_session_assert(maze_goal(Goal)),
+	http_session_assert(maze_map(MazeMap)),
+	
 	% Handle PWP
 	reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
+	
+default_handler(Request):-
+	% no POST data
+	
+	% Handle PWP
+	reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
+
 	
 assets_handler(Request):-
 
@@ -64,6 +91,7 @@ upload_handler(Request):-
     memberchk(filename(Target),FileAttributes),
     
     directory_file_path('assets/images/uploads',Target,Path),
+    directory_file_path('images/uploads',Target,WebPath),
 			
 	open(Path,write,FStream,[create([read,write]),encoding(octet)]),
 	write(FStream,File),
@@ -71,51 +99,64 @@ upload_handler(Request):-
 
     memberchk(path(URLPath), Request),
     
-	db_config(Username,Password),
-	odbc_connect(adventurecode_connector,Connection,[user(Username),password(Password)]),
-	
-	db_save(Connection,Description,Path,URLPath),
+	db_connect(Connection),
+	db_save(Connection,Description,WebPath,URLPath),
 	
     reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
     
 mazemap_save_handler(Request):-
 	memberchk(method(post), Request),
-	??http_read_data(Request, Parts, []),
+	http_read_data(Request, [description=Description,mazebuilder_map=Map], []),
 	
-	format('Map: ~w',Map).
+	db_connect(Connection),
+	db_insert_mazemap(Connection,Description,Map),
 	
     reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
+    
+mazemap_json_handler(Request):-
 
-db_save(Connection,Description,Path,'/setting_save'):-
-	db_insert_setting(Connection,Description,Path).
-
-db_save(Connection,Description,Path,'/hero_save'):-
-	db_insert_hero(Connection,Description,Path).
-
-db_save(Connection,Description,Path,'/goal_save'):-
-	db_insert_goal(Connection,Description,Path).
+	db_connect(Connection),
+	findall(
+		mazemap{description:Description,map:Map},
+		db_select_mazemaps(Connection,row(_Id,Description,Map)),
+		Maps),
 	
-db_insert_setting(Connection,Description,ImagePath):-
-	setup_call_cleanup(
-		odbc_prepare(Connection,'INSERT INTO settings (description,image_path) VALUES (?,?)',[varchar(255),varchar(255)],Insert),
-		odbc_execute(Insert,[Description,ImagePath],_Result),
-		odbc_free_statement(Insert)).
+	% must output the header or json_write will hang
+    format('Content-type: text/json~n~n'),	
+	json_write(current_output,Maps).
+    
+settings_json_handler(Request):-
 
-db_insert_hero(Connection,Description,ImagePath):-
-	setup_call_cleanup(
-		odbc_prepare(Connection,'INSERT INTO heroes (description,image_path) VALUES (?,?)',[varchar(255),varchar(255)],Insert),
-		odbc_execute(Insert,[Description,ImagePath],_Result),
-		odbc_free_statement(Insert)).
+	??db_connect(Connection),
+	findall(
+		setting{id:Id,description:Description,image_path:ImagePath},
+		db_select_settings(Connection,row(Id,Description,ImagePath)),
+		Settings),
+	
+	% must output the header or json_write will hang
+    format('Content-type: text/json~n~n'),	
+	json_write(current_output,Settings).
+	
+goals_json_handler(Request):-
 
-db_insert_goal(Connection,Description,ImagePath):-
-	setup_call_cleanup(
-		odbc_prepare(Connection,'INSERT INTO goals (description,image_path) VALUES (?,?)',[varchar(255),varchar(255)],Insert),
-		odbc_execute(Insert,[Description,ImagePath],_Result),
-		odbc_free_statement(Insert)).
+	db_connect(Connection),
+	findall(
+		goal{id:Id,description:Description,image_path:ImagePath},
+		db_select_goals(Connection,row(Id,Description,ImagePath)),
+		Goals),
+	
+	% must output the header or json_write will hang
+    format('Content-type: text/json~n~n'),	
+	json_write(current_output,Goals).
 
+heroes_json_handler(Request):-
 
-db_insert_mazemap(Connection,Description,MazeMap):-
-	setup_call_cleanup(
-		odbc_prepare(Connection,'INSERT INTO mazemaps (map,image_path) VALUES (?,?)',[varchar(255),varchar(255)],Insert),
-		odbc_execute(Insert,[Description,MazeMap],_Result),
-		odbc_free_statement(Insert)).
+	db_connect(Connection),
+	findall(
+		hero{id:Id,description:Description,image_path:ImagePath},
+		db_select_heroes(Connection,row(Id,Description,ImagePath)),
+		Heroes),
+	
+	% must output the header or json_write will hang
+    format('Content-type: text/json~n~n'),	
+	json_write(current_output,Heroes).

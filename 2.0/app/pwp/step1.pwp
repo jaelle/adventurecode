@@ -1,9 +1,29 @@
 <div class="panel-body">
-
-	<p class="col-xs-7">Coming Soon</p>
-	<div id="mazebuilder" class="col-xs-5" onclick="">
-	  <!-- Maze //-->
+	<div class="options-page-header col-xs-12">
+			<h4 align="center">
+			<span id="chosen_hero"><img src="images/question.png" width="50" /></span>
+			begins a grand adventure to find a <span id="chosen_goal"><img src="images/question.png" width="50" /></span>
+			in the <span id="chosen_setting"><img src="images/question.png" width="50" /></span>.</h4>
 	</div>
-	<input id="mazebuilder_map" type="hidden" value="">
-	
+	<div class="row">
+		<div class="col-xs-4 options-table">
+			<h5>Choose the Hero:</h5>
+			<table id="heroes" class-"list-group">
+				
+			</table>
+		</div>
+		<div class="col-xs-4 options-table">
+			<h5>Choose the Goal:</h5>
+			<table id="goals" class-"list-group">
+				
+			</table>
+		</div>
+		<div class="col-xs-4 options-table">
+			<h5>Choose the Setting:</h5>
+			
+			<table id="settings" class-"list-group">
+				
+			</table>
+		</div>
+	</div>
 </div>

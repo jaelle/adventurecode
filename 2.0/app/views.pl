@@ -1,7 +1,7 @@
-view('/','pwp/step1.pwp','Choose Options').
-view('/step1','pwp/step1.pwp','Choose Options').
-view('/step2','pwp/step2.pwp','Build Maze').
-view('/step3','pwp/step3.pwp','Solve Maze').
+view('/','pwp/step1.pwp','Fill in the blanks').
+view('/step1','pwp/step1.pwp','Fill in the blanks').
+view('/step2','pwp/step2.pwp','Choose a path').
+view('/step3','pwp/step3.pwp','Reach the goal').
 view('/setting_new','pwp/setting_new.pwp','Create New Setting').
 view('/setting_save','pwp/save.pwp','New Setting Saved').
 view('/hero_new','pwp/hero_new.pwp','Create New Hero').

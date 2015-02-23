@@ -23,6 +23,8 @@
     };
 
     BlocklyPanel.prototype.resize_blockly = function() {
+      console.log(this.blockly_container);
+      console.log(this.maze_container);
       return $(this.blockly_container)[0].height = $(this.maze_container + " canvas")[0].height + 2;
     };
 

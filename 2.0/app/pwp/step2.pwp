@@ -1,11 +1,27 @@
 <div class="panel-body">
-
-	<div id="mazebuilder_maps" class="col-xs-7">
-	  <!-- Default Maps //-->
+	<div class="options-page-header col-xs-12">
+		<h4 align="center">
+			Choose a path or draw your own.<br />
+			Drag 
+		<img 	id="hero_piece" class="hero maze_piece"
+				pwp:ask="	http_session_data(maze_hero(Hero)),atom_number(Hero,HeroId),
+							db_get_hero_image(HeroId,HeroImage),!" 
+				pwp:att="$" src="$(HeroImage)$" data-toggle="tooltip" data-placement="bottom" title="Click and drag me to the grid below." />
+			and 
+		<img 	id="goal_piece" class="goal maze_piece"
+				pwp:ask="	http_session_data(maze_goal(Goal)),atom_number(Goal,GoalId),
+							db_get_goal_image(GoalId,GoalImage),!" 
+				pwp:att="$" src="$(GoalImage)$" data-toggle="tooltip" data-placement="bottom" title="Don't forget to drag the goal too!" />
+			
+			to the grid below.
+		</h4>
 	</div>
-	<div id="mazebuilder" class="col-xs-5" onclick="">
-	  <!-- Maze //-->
+	<div class="row">
+		<div id="mazebuilder_maps" class="col-xs-7">
+		  <!-- Default Maps //-->
+		</div>
+		<div id="mazebuilder" class="col-xs-5">
+		  <!-- Maze //-->
+		</div>
 	</div>
-	<input id="mazebuilder_map" type="hidden" value="">
-	
 </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:pwp="http://www.cs.otago.ac.nz/staffpriv/ok/pwp.pl" pwp:ask="ensure_loaded(views)" lang="en">
+<html xmlns:pwp="http://www.cs.otago.ac.nz/staffpriv/ok/pwp.pl" pwp:ask="use_module(library(http/http_session)),ensure_loaded(views)" lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,6 +10,7 @@
     <link href="css/adventurecode.css" rel="stylesheet" />
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/jquery-ui.min.css" rel="stylesheet" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -27,6 +28,7 @@
     <script src="js/mazebuilder_blockly.js"></script>
 
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
 
   </head>
   <body pwp:att="$" onload="init('$(SCRIPT_NAME)$')">
@@ -45,36 +47,50 @@
       </div>
 
       <div class="row">
-	<div class="col-sm-12">
-	  <div class="panel panel-primary" pwp:ask="display_view(SCRIPT_NAME,View,Title)" >
+	       <form id="mazebuilder_form" action="#" method="post">
+	        <div class="col-sm-12">
+	          <div class="panel panel-primary" pwp:ask="display_view(SCRIPT_NAME,View,Title)" >
 
-	    <div class="panel-heading" pwp:use="Title" />
+	            <div class="panel-heading" pwp:use="Title" />
 
-	    <div pwp:use="View" pwp:how="xml" />
+	            <div pwp:use="View" pwp:how="xml" />
+        	
+    	        <div class="panel-footer">
+    	          <div class="row">
+    		        <div class="col-xs-3">
+    		          <button class="btn btn-default" type="button" onclick="showHelp()">
+    		            <img alt="Help" class="nav-icon" src="images/icon-help.png" />
+    		          </button>
+    		        </div>
+    		        <div class="col-xs-9" pwp:ask="page(SCRIPT_NAME,Prev,Next)">
+    		          <button class="btn btn-default pull-right" type="button" src="images/icon-next.png" pwp:att="$"  onclick="submit_form('#mazebuilder_form','$(Next)$')">
+    		            <img alt="Next" class="nav-icon" src="images/icon-next.png" />
+    		          </button>
+    
+    		          <button class="btn btn-default pull-right" type="button" src="images/icon-back.png" pwp:att="$" onclick="submit_form('#mazebuilder_form',$(Prev)$')">
+    		              <img alt="Previous" class="nav-icon" src="images/icon-back.png" />
+    		          </button>
+    	        	</div><!--col-xs-9//-->
+    	          </div><!--row//-->
+    	        </div><!--panel-footer//-->
+	          </div><!--panel//-->
+        	</div><!--col-sm-12//-->
+        	
 
-	    <div class="panel-footer">
-	      <div class="row">
-		<div class="col-xs-3">
-		  <button class="btn btn-default" type="button" onclick="showHelp()">
-		    <img alt="Help" class="nav-icon" src="images/icon-help.png" />
-		  </button>
-		</div>
-		<div class="col-xs-9" pwp:ask="page(SCRIPT_NAME,Prev,Next)">
-		  <button class="btn btn-default pull-right" src="images/icon-next.png" pwp:att="$"  onclick="load_page('$(Next)$')">
-		    <img alt="Next" class="nav-icon" src="images/icon-next.png" />
-		  </button>
-
-		  <button class="btn btn-default pull-right" src="images/icon-back.png" pwp:att="$" onclick="load_page('$(Prev)$')">
-		    <img alt="Previous" class="nav-icon" src="images/icon-back.png" />
-		  </button>
-
-		</div>
-	      </div>
-	    </div>
-
-	  </div>
-	</div>
-      </div>
+                
+        	<input type="hidden" name="maze_setting" id="maze_setting" pwp:ask="http_session_data(maze_setting(Setting))" pwp:att="$" value="$(Setting)$" />
+        	<input type="hidden" name="maze_setting" id="maze_setting" pwp:ask="\+http_session_data(maze_setting(Setting))" value="" />
+        	
+        	<input type="hidden" name="maze_goal" id="maze_goal" pwp:ask="http_session_data(maze_goal(Goal))" pwp:att="$" value="$(Goal)$" />
+        	<input type="hidden" name="maze_goal" id="maze_goal" pwp:ask="\+http_session_data(maze_goal(Goal))" value="" />
+        	
+        	<input type="hidden" name="maze_hero" id="maze_hero" pwp:ask="http_session_data(maze_hero(Hero))" pwp:att="$" value="$(Hero)$" />
+        	<input type="hidden" name="maze_hero" id="maze_hero" pwp:ask="\+http_session_data(maze_hero(Hero))" value="" />
+        	
+        	<input type="hidden" name="maze_map" id="maze_map" pwp:ask="??http_session_data(maze_map(MazeMap))" pwp:att="$" value="$(MazeMap)$" />
+        	<input type="hidden" name="maze_map" id="maze_map" pwp:ask="\+http_session_data(maze_map(MazeMap))" value="[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" />
+        </form>
+      </div><!--row//-->
 
       <footer><p>&copy; <a href="http://www.jlcreations.com">JLCreations.com 2015</a></p>
       </footer>

@@ -15,6 +15,12 @@
 
     Maze.drawing_context = null;
 
+    Maze.setting_image = null;
+
+    Maze.goal_image = null;
+
+    Maze.hero_image = null;
+
     function Maze(_at_container_id, _at_num_cols, _at_num_rows, _at_is_map) {
       this.container_id = _at_container_id;
       this.num_cols = _at_num_cols;
@@ -66,7 +72,8 @@
 
     Maze.prototype.load_map = function(map) {
       this.map = JSON.parse(map);
-      return this.update();
+      this.update();
+      return this.map;
     };
 
     Maze.prototype.resize_canvas = function() {
@@ -86,7 +93,7 @@
           _results1 = [];
           for (col = _j = 0, _ref1 = this.num_cols; _j < _ref1; col = _j += 1) {
             color = this.map[count];
-            current_cell[row][col] = this.create_cell(col, row, this.map[count]);
+            current_cell[row][col] = this.create_cell(col, row, this.map[count], this.setting_image);
             this.draw_cell(current_cell[row][col]);
             _results1.push(count++);
           }
@@ -96,11 +103,12 @@
       return _results;
     };
 
-    Maze.prototype.create_cell = function(col, row, color) {
+    Maze.prototype.create_cell = function(col, row, color, image) {
       return {
         col: col,
         row: row,
-        color: color
+        color: color,
+        image: image
       };
     };
 
@@ -115,7 +123,12 @@
       } else {
         this.drawing_context.fillStyle = "rgb(0,0,0)";
       }
-      return this.drawing_context.fillRect(x, y, this.cell_size, this.cell_size);
+      this.drawing_context.fillRect(x, y, this.cell_size, this.cell_size);
+      if (cell.image != null) {
+        if (cell.color === this.black) {
+          return this.drawing_context.drawImage(cell.image, 0, 0, this.cell_size, this.cell_size, x, y, this.cell_size, this.cell_size);
+        }
+      }
     };
 
     Maze.prototype.clear_canvas = function() {
@@ -126,7 +139,8 @@
     Maze.prototype.update = function() {
       this.resize_canvas();
       this.clear_canvas();
-      return this.update_cells();
+      this.update_cells();
+      return $("#maze_map").val("[" + this.map + "]");
     };
 
     Maze.prototype.toggle_cell = function(event) {
@@ -150,16 +164,16 @@
       return index = row * this.num_cols + col;
     };
 
-    Maze.prototype.setting = function(image_path) {
-      return console.log(image_path);
+    Maze.prototype.setting = function(image) {
+      return this.setting_image = image;
     };
 
-    Maze.prototype.character = function(image_path) {
-      return console.log(image_path);
+    Maze.prototype.hero = function(image) {
+      return this.hero_image = image;
     };
 
-    Maze.prototype.goal = function(image_path) {
-      return console.log(image_path);
+    Maze.prototype.goal = function(image) {
+      return this.goal_image = image;
     };
 
     Maze.prototype.place_draggable_character = function() {
@@ -178,7 +192,7 @@
     var maze_map;
     window.maze = new Maze("#mazebuilder", 5, 5, false);
     window.maze_canvas = maze.create();
-    maze_map = $("#mazebuilder_map");
+    maze_map = $("#maze_map");
     maze_map.val("[" + maze.map + "]");
     maze_canvas.on("click", function(event) {
       maze.toggle_cell(event);
@@ -187,35 +201,195 @@
     return maze;
   };
 
-  window.load_page = function(path) {
+  window.submit_form = function(form_id, path) {
     if (path !== "null") {
-      return location.href = path;
+      $(form_id).attr("action", path);
+      return $(form_id).submit();
     }
   };
 
+  window.display_settings = function(container_id) {
+    return get_options('/settings_json', container_id);
+  };
+
+  window.display_goals = function(container_id) {
+    return get_options('/goals_json', container_id);
+  };
+
+  window.display_heroes = function(container_id) {
+    return get_options('/heroes_json', container_id);
+  };
+
+  window.get_options = function(url, container_id) {
+    return $.getJSON(url, function(data) {
+      return display_options_list(container_id, data);
+    });
+  };
+
+  window.display_options_list = function(container_id, data) {
+    var cell, container, image_path, img, link, new_height, p, row, title, x, _i, _ref;
+    console.log("Success");
+    console.log(data);
+    container = $(container_id);
+    new_height = container.width();
+    container.height(new_height + "px");
+    row = $("<tr>");
+    for (x = _i = 0, _ref = data.length; _i < _ref; x = _i += 1) {
+      cell = $("<td>");
+      cell.attr("class", "options-cell");
+      link = $("<a>");
+      link.attr("class", "list-group-item ");
+      link.attr("id", container_id.substring(1, container_id.length) + data[x].id);
+      link.attr("onclick", "javascript:select('" + container_id + "'," + data[x].id + ")");
+      p = $("<p>");
+      p.attr("class", "list-group-item-text");
+      img = $("<img>");
+      image_path = data[x].image_path;
+      img.attr("src", image_path);
+      img.attr("width", "50");
+      p.append(img);
+      link.append(p);
+      title = $("<h5>");
+      title.attr("class", "list-group-item-heading");
+      title.append(data[x].description);
+      cell.append(link);
+      row.append(cell);
+      if ((x + 1) % 3 === 0) {
+        container.append(row);
+        row = $("<tr>");
+      }
+    }
+    container.append(row);
+    return window.select = function(container_id, id) {
+      var option_id, save_setting, selected_image, selection;
+      $(container_id + " .list-group-item").removeClass("active");
+      option_id = container_id + id;
+      container = $(option_id);
+      container.addClass("active");
+      selected_image = $("<img>");
+      selected_image.attr("src", container.children().children()[0].src);
+      selected_image.attr("width", "50");
+      switch (container_id) {
+        case "#settings":
+          selection = $("#chosen_setting");
+          save_setting = $("#maze_setting");
+          break;
+        case "#heroes":
+          selection = $("#chosen_hero");
+          save_setting = $("#maze_hero");
+          break;
+        case "#goals":
+          selection = $("#chosen_goal");
+          save_setting = $("#maze_goal");
+      }
+      selection.empty();
+      selection.append(selected_image);
+      save_setting.val(id);
+      return console.log(save_setting);
+    };
+  };
+
+  window.set_option_image = function(option_id, type, page) {
+    switch (type) {
+      case "setting":
+        return get_image_path('/settings_json', option_id, type, page);
+      case "hero":
+        return get_image_path('/heroes_json', option_id, type, page);
+      case "goal":
+        return get_image_path('/goals_json', option_id, type, page);
+    }
+  };
+
+  window.get_image_path = function(url, id, type, page) {
+    return $.getJSON(url, function(data) {
+      var image_path, option_image, x, _i, _ref, _results;
+      _results = [];
+      for (x = _i = 0, _ref = data.length; _i < _ref; x = _i += 1) {
+        if (parseInt(data[x].id) === parseInt(id)) {
+          image_path = data[x].image_path;
+          option_image = new Image();
+          option_image.width = window.maze.cell_size;
+          option_image.height = window.maze.cell_size;
+          option_image.src = image_path;
+          _results.push(option_image.onload = function() {
+            console.log("loaded" + option_image);
+            switch (type) {
+              case "setting":
+                window.maze.setting(option_image);
+                break;
+              case "hero":
+                window.maze.hero(option_image);
+                break;
+              case "goal":
+                window.maze.goal(option_image);
+            }
+            console.log(page);
+            if (page === "/step2") {
+              return display_map_defaults("#mazebuilder_maps");
+            } else {
+              console.log($("#maze_map").val());
+              return window.maze.load_map($("#maze_map").val());
+            }
+          });
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    });
+  };
+
   window.init = function(page) {
-    var blockly_panel, map_array, maze;
+    var blockly_panel, setting_id;
     switch (page) {
-      case "/step2":
-        display_map_defaults("#mazebuilder_maps");
-        map_array = $("#mazebuilder_map00 input").val();
+      case "/":
+      case "/step1":
+        display_settings("#settings");
+        display_heroes("#heroes");
+        display_goals("#goals");
         break;
-      case "/step3":
-        blockly_panel = new BlocklyPanel("#blockly", "#mazebuilder");
-        map_array = "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]";
+      case "/step2":
+        $(function() {
+          $('[data-toggle="tooltip"]').tooltip();
+          return $('#hero_piece').tooltip('show');
+        });
+        $('#hero_piece').draggable({
+          stack: "#mazebuilder",
+          revert: "invalid",
+          helper: "clone",
+          appendTo: "#mazebuilder",
+          scroll: true,
+          stop: function(event, ui) {
+            var clone;
+            clone = $(ui.helper).clone()[0];
+            $(ui.helper).clone(true).removeClass('hero ui-draggable ui-draggable-dragging').addClass('hero-clone').css('top', clone.style.top).css('left', clone.style.left).appendTo('#mazebuilder').draggable({});
+            return $("#goal_piece").tooltip('show');
+          }
+        });
+        $('#goal_piece').draggable({
+          stack: "#mazebuilder",
+          revert: "invalid",
+          helper: "clone",
+          appendTo: "#mazebuilder",
+          scroll: true,
+          stop: function(event, ui) {
+            var clone;
+            clone = $(ui.helper).clone()[0];
+            return $(ui.helper).clone(true).removeClass('goal ui-draggable ui-draggable-dragging').addClass('goal-clone').css('top', clone.style.top).css('left', clone.style.left).appendTo('#mazebuilder').draggable({});
+          }
+        });
+        make_droppable('#mazebuilder');
     }
     switch (page) {
       case "/step2":
       case "/step3":
-        maze = display_maze();
-        maze.setting('images/corn.png');
-        maze.character('images/dog.png');
-        maze.goal('images/dogbowl.png');
-        maze.load_map(map_array);
-        maze.place_draggable_goal();
-        return maze.place_draggable_character();
-      default:
-        return maze = display_maze();
+        window.maze = display_maze();
+        setting_id = $("#maze_setting").val();
+        set_option_image(setting_id, "setting", page);
+    }
+    switch (page) {
+      case "/step3":
+        return blockly_panel = new BlocklyPanel("#blockly", "#mazebuilder");
     }
   };
 

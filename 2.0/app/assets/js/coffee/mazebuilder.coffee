@@ -9,6 +9,9 @@ class window.Maze
   @black: null
 
   @drawing_context: null
+  @setting_image: null
+  @goal_image: null
+  @hero_image: null
 
   constructor: (@container_id, @num_cols, @num_rows, @is_map) ->
 
@@ -66,6 +69,7 @@ class window.Maze
   load_map: (map) ->
     @map = JSON.parse(map) 
     @update()
+    @map
 
   resize_canvas: -> 
     @canvas[0].width = @cell_size * @num_cols
@@ -82,15 +86,16 @@ class window.Maze
       for col in [0...@num_cols] by 1
         color = @map[count]
 
-        current_cell[row][col] = @create_cell col,row, @map[count]
+        current_cell[row][col] = @create_cell col,row, @map[count], @setting_image
         @draw_cell current_cell[row][col]
 
         count++
 
-  create_cell: (col, row, color) ->
+  create_cell: (col, row, color, image) ->
     col: col
     row: row
     color: color
+    image: image
 
   draw_cell: (cell) ->
     x = cell.col * @cell_size
@@ -105,6 +110,10 @@ class window.Maze
       @drawing_context.fillStyle = "rgb(0,0,0)"
 
     @drawing_context.fillRect x, y, @cell_size, @cell_size 
+    
+    if cell.image?
+      if cell.color == @black
+        @drawing_context.drawImage cell.image, 0, 0, @cell_size, @cell_size, x, y, @cell_size, @cell_size
 
   clear_canvas: ->
     @drawing_context.fillStyle = "rgb(255,255,255)"
@@ -114,6 +123,8 @@ class window.Maze
     @resize_canvas()
     @clear_canvas()
     @update_cells()
+    
+    $("#maze_map").val("[" + @map + "]")
 
   toggle_cell: (event) ->
     rect = @canvas[0].getBoundingClientRect()
@@ -136,17 +147,14 @@ class window.Maze
   index: (row, col) ->
     index = row * @num_cols + col
     
-  setting: (image_path) ->
+  setting: (image) ->
+    @setting_image = image
     
-    console.log(image_path)
+  hero: (image) ->
+    @hero_image = image
     
-  character: (image_path) ->
-    
-    console.log(image_path)
-    
-  goal: (image_path) ->
-    
-    console.log(image_path)
+  goal: (image) ->
+    @goal_image = image
 
   place_draggable_character: ->
 
@@ -161,7 +169,7 @@ window.display_maze = ->
   window.maze = new Maze "#mazebuilder", 5, 5, false
   window.maze_canvas = maze.create()
 
-  maze_map = $ "#mazebuilder_map"
+  maze_map = $ "#maze_map"
   maze_map.val("[" + maze.map + "]")
 
   # touch_tracker = new TouchTracker(maze_canvas, {swipeThreshold: 400})
@@ -172,33 +180,183 @@ window.display_maze = ->
 
   maze
 
-window.load_page = (path) ->
+window.submit_form = (form_id,path) ->
   if path != "null"
-    location.href = path
+    $(form_id).attr "action", path
+    $(form_id).submit()
+    
+window.display_settings = (container_id) ->
+  get_options('/settings_json',container_id)
 
+window.display_goals = (container_id) ->
+  get_options('/goals_json',container_id)
+
+window.display_heroes = (container_id) ->
+  get_options('/heroes_json',container_id)
+  
+window.get_options = (url, container_id) ->
+  $.getJSON url, (data) ->
+    display_options_list container_id,data
+    
+window.display_options_list = ( container_id, data ) ->
+  console.log("Success")
+  console.log(data)
+  
+  container = $ container_id
+  new_height = container.width()
+  container.height(new_height + "px") 
+  
+  row = $ "<tr>"
+
+  for x in [0...data.length] by 1
+    cell = $ "<td>"
+    cell.attr "class", "options-cell"
+    
+    link = $ "<a>"
+    link.attr "class", "list-group-item "
+    link.attr "id", container_id.substring(1,container_id.length) + data[x].id
+    link.attr "onclick", "javascript:select('"+ container_id + "'," + data[x].id + ")"
+    
+    p = $ "<p>"
+    p.attr "class", "list-group-item-text"
+    
+    img = $ "<img>"
+    # remove '/assets' from image_path
+    image_path = data[x].image_path
+    img.attr "src", image_path
+    img.attr "width", "50"
+    
+    p.append img
+    link.append p
+    
+    title = $ "<h5>"
+    title.attr "class", "list-group-item-heading"
+    title.append data[x].description
+    
+    # link.append title
+    
+    cell.append link
+    row.append cell
+    
+    if (x+1) % 3 == 0
+      container.append row
+      row = $ "<tr>"
+  
+  container.append row
+  
+  window.select = (container_id,id) ->
+    $(container_id + " .list-group-item").removeClass("active")
+    
+    option_id = container_id + id
+    container = $ option_id
+    container.addClass("active")
+    
+    selected_image = $ "<img>"
+    selected_image.attr "src", container.children().children()[0].src
+    selected_image.attr "width", "50"
+    
+    switch container_id
+      when "#settings"
+        selection = $ "#chosen_setting"
+        save_setting = $ "#maze_setting"
+      when "#heroes"
+        selection = $ "#chosen_hero"
+        save_setting = $ "#maze_hero"
+      when "#goals"
+        selection = $ "#chosen_goal"
+        save_setting = $ "#maze_goal"
+    
+    selection.empty()
+    selection.append selected_image
+    
+    save_setting.val(id)
+    console.log(save_setting)
+
+window.set_option_image = (option_id,type,page) ->
+  switch type
+    when "setting"
+      get_image_path('/settings_json',option_id,type,page)
+    when "hero"
+      get_image_path('/heroes_json',option_id,type,page)
+    when "goal"
+      get_image_path('/goals_json',option_id,type,page)
+
+window.get_image_path = (url,id,type,page) ->
+  $.getJSON url, (data) ->
+		
+    for x in [0...data.length] by 1
+      
+      if parseInt(data[x].id) == parseInt(id)
+        image_path = data[x].image_path
+        option_image = new Image()
+        option_image.width = window.maze.cell_size
+        option_image.height = window.maze.cell_size
+        option_image.src = image_path
+        
+        option_image.onload = ->
+          console.log("loaded" + option_image)
+          
+          switch type
+            when "setting"
+              window.maze.setting(option_image)
+            when "hero"
+              window.maze.hero(option_image)
+            when "goal"
+              window.maze.goal(option_image)
+          
+          console.log(page)
+          if page == "/step2"
+            #mazebuilder_maps contains the maps to choose from
+            display_map_defaults("#mazebuilder_maps")
+          else 
+            # TODO: for some reason #maze_map is empty here. 
+            console.log($("#maze_map").val())
+            window.maze.load_map($("#maze_map").val())
+              
+    
 window.init = (page) ->
   
   #setup page specific settings
   switch page
+    when "/","/step1"
+      display_settings("#settings")
+      display_heroes("#heroes")
+      display_goals("#goals")
     when "/step2"
-      display_map_defaults("#mazebuilder_maps")
-      map_array = $("#mazebuilder_map00 input").val()
-    when "/step3"
-      blockly_panel = new BlocklyPanel("#blockly","#mazebuilder")
-      map_array = "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]"
+      $ ->
+        $('[data-toggle="tooltip"]').tooltip()
+        $('#hero_piece').tooltip('show')
 
-  # display maze
+      $('#hero_piece').draggable
+        stack: "#mazebuilder"
+        revert: "invalid"
+        helper: "clone"
+        appendTo: "#mazebuilder"
+        scroll:true
+        stop: (event,ui) ->
+          clone = $(ui.helper).clone()[0];
+          $(ui.helper).clone(true).removeClass('hero ui-draggable ui-draggable-dragging').addClass('hero-clone').css('top',clone.style.top).css('left',clone.style.left).appendTo('#mazebuilder').draggable({})
+          $("#goal_piece").tooltip('show')
+
+      $('#goal_piece').draggable
+        stack: "#mazebuilder"
+        revert: "invalid"
+        helper: "clone"
+        appendTo: "#mazebuilder"
+        scroll: true
+        stop: (event,ui) ->
+          clone = $(ui.helper).clone()[0];
+          $(ui.helper).clone(true).removeClass('goal ui-draggable ui-draggable-dragging').addClass('goal-clone').css('top',clone.style.top).css('left',clone.style.left).appendTo('#mazebuilder').draggable({})
+
+      make_droppable('#mazebuilder')
+  
   switch page
     when "/step2", "/step3"
-      maze = display_maze()
+      window.maze = display_maze()
       
-      # load maze settings
-      maze.setting('images/corn.png')
-      maze.character('images/dog.png')
-      maze.goal('images/dogbowl.png')
-      
-      maze.load_map(map_array)
-      maze.place_draggable_goal()
-      maze.place_draggable_character()
-    else 
-      maze = display_maze()
+      setting_id = $("#maze_setting").val()
+      set_option_image(setting_id,"setting",page)
+
+  switch page
+    when "/step3"
+      blockly_panel = new BlocklyPanel("#blockly","#mazebuilder")
