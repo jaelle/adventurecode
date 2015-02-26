@@ -118,13 +118,13 @@
       y = cell.row * this.cell_size;
       this.drawing_context.strokeStyle = "rgba(0,0,0,1)";
       this.drawing_context.strokeRect(x, y, this.cell_size, this.cell_size);
-      if (cell.color === this.white) {
+      if (cell.color === this.white || (cell.image && this.is_map === false)) {
         this.drawing_context.fillStyle = "rgb(255,255,255)";
       } else {
         this.drawing_context.fillStyle = "rgb(0,0,0)";
       }
       this.drawing_context.fillRect(x, y, this.cell_size, this.cell_size);
-      if (cell.image != null) {
+      if (cell.image && this.is_map === false) {
         if (cell.color === this.black) {
           return this.drawing_context.drawImage(cell.image, 0, 0, this.cell_size, this.cell_size, x, y, this.cell_size, this.cell_size);
         }
@@ -176,22 +176,23 @@
       return this.goal_image = image;
     };
 
-    Maze.prototype.place_draggable_character = function() {
-      return console.log("Placing draggable character at first available blank space");
-    };
-
-    Maze.prototype.place_draggable_goal = function() {
-      return console.log("Placing draggable goal at last available blank space");
-    };
-
     return Maze;
 
   })();
 
   window.display_maze = function() {
-    var maze_map;
+    var maze_map, setting_image, setting_source;
     window.maze = new Maze("#mazebuilder", 5, 5, false);
     window.maze_canvas = maze.create();
+    if ($("#setting_piece" != null)) {
+      setting_source = $("#setting_piece");
+      setting_image = new Image();
+      setting_image.src = setting_source.attr("src");
+      setting_image.width = setting_source.attr("width");
+      setting_image.height = setting_source.attr("height");
+      console.log(setting_image);
+      window.maze.setting(setting_image);
+    }
     maze_map = $("#maze_map");
     maze_map.val("[" + maze.map + "]");
     maze_canvas.on("click", function(event) {
@@ -208,150 +209,74 @@
     }
   };
 
-  window.display_settings = function(container_id) {
-    return get_options('/settings_json', container_id);
-  };
-
-  window.display_goals = function(container_id) {
-    return get_options('/goals_json', container_id);
-  };
-
-  window.display_heroes = function(container_id) {
-    return get_options('/heroes_json', container_id);
-  };
-
-  window.get_options = function(url, container_id) {
-    return $.getJSON(url, function(data) {
-      return display_options_list(container_id, data);
-    });
-  };
-
-  window.display_options_list = function(container_id, data) {
-    var cell, container, image_path, img, link, new_height, p, row, title, x, _i, _ref;
-    console.log("Success");
-    console.log(data);
-    container = $(container_id);
-    new_height = container.width();
-    container.height(new_height + "px");
-    row = $("<tr>");
-    for (x = _i = 0, _ref = data.length; _i < _ref; x = _i += 1) {
-      cell = $("<td>");
-      cell.attr("class", "options-cell");
-      link = $("<a>");
-      link.attr("class", "list-group-item ");
-      link.attr("id", container_id.substring(1, container_id.length) + data[x].id);
-      link.attr("onclick", "javascript:select('" + container_id + "'," + data[x].id + ")");
-      p = $("<p>");
-      p.attr("class", "list-group-item-text");
-      img = $("<img>");
-      image_path = data[x].image_path;
-      img.attr("src", image_path);
-      img.attr("width", "50");
-      p.append(img);
-      link.append(p);
-      title = $("<h5>");
-      title.attr("class", "list-group-item-heading");
-      title.append(data[x].description);
-      cell.append(link);
-      row.append(cell);
-      if ((x + 1) % 3 === 0) {
-        container.append(row);
-        row = $("<tr>");
-      }
+  window.select = function(container_id, id) {
+    var container, image, option_id, save_setting, selected_image, selection;
+    $(container_id + " .list-group-item").removeClass("active");
+    option_id = container_id + id;
+    container = $(option_id);
+    container.addClass("active");
+    image = container_id + id + " img";
+    console.log(image);
+    selected_image = $(image).attr('src');
+    console.log(selected_image);
+    switch (container_id) {
+      case "#settings":
+        selection = $("#chosen_setting");
+        save_setting = $("#maze_setting");
+        break;
+      case "#heroes":
+        selection = $("#chosen_hero");
+        save_setting = $("#maze_hero");
+        break;
+      case "#goals":
+        selection = $("#chosen_goal");
+        save_setting = $("#maze_goal");
     }
-    container.append(row);
-    return window.select = function(container_id, id) {
-      var option_id, save_setting, selected_image, selection;
-      $(container_id + " .list-group-item").removeClass("active");
-      option_id = container_id + id;
-      container = $(option_id);
-      container.addClass("active");
-      selected_image = $("<img>");
-      selected_image.attr("src", container.children().children()[0].src);
-      selected_image.attr("width", "50");
-      switch (container_id) {
-        case "#settings":
-          selection = $("#chosen_setting");
-          save_setting = $("#maze_setting");
-          break;
-        case "#heroes":
-          selection = $("#chosen_hero");
-          save_setting = $("#maze_hero");
-          break;
-        case "#goals":
-          selection = $("#chosen_goal");
-          save_setting = $("#maze_goal");
-      }
-      selection.empty();
-      selection.append(selected_image);
-      save_setting.val(id);
-      return console.log(save_setting);
-    };
+    console.log(selection);
+    selection.attr('src', selected_image);
+    console.log(selection.attr('src'));
+    return save_setting.val(id);
   };
 
-  window.set_option_image = function(option_id, type, page) {
-    switch (type) {
-      case "setting":
-        return get_image_path('/settings_json', option_id, type, page);
-      case "hero":
-        return get_image_path('/heroes_json', option_id, type, page);
-      case "goal":
-        return get_image_path('/goals_json', option_id, type, page);
+  window.save_coordinates = function(event, ui) {
+    var col, maze_rect, row, x, y;
+    maze_rect = $("#mazebuilder canvas")[0].getBoundingClientRect();
+    x = event.clientX - maze_rect.left;
+    y = event.clientY - maze_rect.top;
+    col = Math.floor(x / 75);
+    row = Math.floor(y / 75);
+    console.log(col + "," + row);
+    console.log(event);
+    if (event.toElement.classList.contains("goal")) {
+      return $("#maze_start").val("[" + row + "," + col + "]");
+    } else {
+      return $("#maze_end").val("[" + row + "," + col + "]");
     }
-  };
-
-  window.get_image_path = function(url, id, type, page) {
-    return $.getJSON(url, function(data) {
-      var image_path, option_image, x, _i, _ref, _results;
-      _results = [];
-      for (x = _i = 0, _ref = data.length; _i < _ref; x = _i += 1) {
-        if (parseInt(data[x].id) === parseInt(id)) {
-          image_path = data[x].image_path;
-          option_image = new Image();
-          option_image.width = window.maze.cell_size;
-          option_image.height = window.maze.cell_size;
-          option_image.src = image_path;
-          _results.push(option_image.onload = function() {
-            console.log("loaded" + option_image);
-            switch (type) {
-              case "setting":
-                window.maze.setting(option_image);
-                break;
-              case "hero":
-                window.maze.hero(option_image);
-                break;
-              case "goal":
-                window.maze.goal(option_image);
-            }
-            console.log(page);
-            if (page === "/step2") {
-              return display_map_defaults("#mazebuilder_maps");
-            } else {
-              console.log($("#maze_map").val());
-              return window.maze.load_map($("#maze_map").val());
-            }
-          });
-        } else {
-          _results.push(void 0);
-        }
-      }
-      return _results;
-    });
   };
 
   window.init = function(page) {
     var blockly_panel, setting_id;
     switch (page) {
-      case "/":
-      case "/step1":
-        display_settings("#settings");
-        display_heroes("#heroes");
-        display_goals("#goals");
-        break;
       case "/step2":
         $(function() {
           $('[data-toggle="tooltip"]').tooltip();
           return $('#hero_piece').tooltip('show');
+        });
+    }
+    switch (page) {
+      case "/step2":
+      case "/step3":
+        window.maze = display_maze();
+        setting_id = $("#maze_setting").val();
+    }
+    switch (page) {
+      case "/step2":
+        window.maze.canvas.droppable({
+          accept: ".maze_piece",
+          drop: function(event, ui) {
+            console.log("dropped");
+            return window.save_coordinates(event, ui);
+          }
         });
         $('#hero_piece').draggable({
           stack: "#mazebuilder",
@@ -378,16 +303,7 @@
             return $(ui.helper).clone(true).removeClass('goal ui-draggable ui-draggable-dragging').addClass('goal-clone').css('top', clone.style.top).css('left', clone.style.left).appendTo('#mazebuilder').draggable({});
           }
         });
-        make_droppable('#mazebuilder');
-    }
-    switch (page) {
-      case "/step2":
-      case "/step3":
-        window.maze = display_maze();
-        setting_id = $("#maze_setting").val();
-        set_option_image(setting_id, "setting", page);
-    }
-    switch (page) {
+        return display_maze_maps("#mazebuilder_maps");
       case "/step3":
         return blockly_panel = new BlocklyPanel("#blockly", "#mazebuilder");
     }

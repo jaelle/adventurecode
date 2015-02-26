@@ -38,7 +38,12 @@
 .options-table
 {
     height:300px;
-    overflow:scroll;
+    overflow-y:scroll;
+}
+.options-table-cell
+{
+    float:left;
+    width:30%;
 }
 .maze_piece
 {

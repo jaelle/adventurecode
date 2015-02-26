@@ -16,12 +16,32 @@
 			to the grid below.
 		</h4>
 	</div>
-	<div class="row">
-		<div id="mazebuilder_maps" class="col-xs-7">
+	<div class="row" pwp:ask="db_connect(Connection)">
+		<ul id="mazebuilder_maps" class="col-xs-7 list-group">
 		  <!-- Default Maps //-->
-		</div>
+		  <li class="col-xs-4" pwp:ask="db_select_mazemaps(Connection,row(MapId,_Description,MazeMap))">
+		  	<a class="list-group-item" pwp:att="$" id="mazebuilder_map$(MapId)$" onclick="javascript:select_maze('#mazebuilder_map$(MapId)$')">
+		  		<input pwp:att="$" type="hidden" value="$(MazeMap)$" />
+		  	</a>
+		  </li>
+		</ul>
 		<div id="mazebuilder" class="col-xs-5">
 		  <!-- Maze //-->
 		</div>
+		<img 	id="setting_piece" class="setting"
+				pwp:ask="	http_session_data(maze_setting(Setting)),atom_number(Setting,SettingId),
+							db_get_setting_image(SettingId,SettingImage),!" 
+				pwp:att="$" src="$(SettingImage)$" style="display:none" />
+				
+		<input type="hidden" name="maze_start" id="maze_start" pwp:ask="??http_session_data(maze_start(MazeStart))" pwp:att="$" value="$(MazeStart)$" />
+    	<input type="hidden" name="maze_start" id="maze_start" pwp:ask="\+http_session_data(maze_start(MazeStart))" value="[0,0]" />
+    	
+    	<input type="hidden" name="maze_end" id="maze_end" pwp:ask="??http_session_data(maze_end(MazeEnd))" pwp:att="$" value="$(MazeEnd)$" />
+    	<input type="hidden" name="maze_end" id="maze_end" pwp:ask="\+http_session_data(maze_end(MazeEnd))" value="[0,0]" />
+  
+        	
+        	<input type="hidden" name="maze_map" id="maze_map" pwp:ask="??http_session_data(maze_map(MazeMap))" pwp:att="$" value="$(MazeMap)$" />
+        	<input type="hidden" name="maze_map" id="maze_map" pwp:ask="\+http_session_data(maze_map(MazeMap))" value="[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" />
+        	
 	</div>
 </div>

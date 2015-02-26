@@ -1,29 +1,35 @@
 <div class="panel-body">
 	<div class="options-page-header col-xs-12">
 			<h4 align="center">
-			<span id="chosen_hero"><img src="images/question.png" width="50" /></span>
-			begins a grand adventure to find a <span id="chosen_goal"><img src="images/question.png" width="50" /></span>
-			in the <span id="chosen_setting"><img src="images/question.png" width="50" /></span>.</h4>
+			<img id="chosen_hero" src="images/question.png" width="50" />
+			begins a grand adventure to find a <img id="chosen_goal" src="images/question.png" width="50" /></span>
+			in the <img id="chosen_setting" src="images/question.png" width="50" /></span>.</h4>
 	</div>
-	<div class="row">
+	<div class="row" pwp:ask="db_connect(Connection)">
 		<div class="col-xs-4 options-table">
 			<h5>Choose the Hero:</h5>
-			<table id="heroes" class-"list-group">
-				
-			</table>
+			<ul id="heroes" class="list-group">
+				<li class="options-table-cell" pwp:ask="db_select_heroes(Connection,row(HeroId,_Description,HeroImage))">
+					<a class="list-group-item" pwp:att="$" id="heroes$(HeroId)$" href="#" onclick="javascript:select('#heroes',$(HeroId)$)"><img pwp:att="$" src="$(HeroImage)$" width="50" /></a>
+				</li>
+			</ul>
 		</div>
 		<div class="col-xs-4 options-table">
 			<h5>Choose the Goal:</h5>
-			<table id="goals" class-"list-group">
-				
-			</table>
+			<ul id="goals" class="list-group">
+				<li class="options-table-cell" pwp:ask="db_select_goals(Connection,row(GoalId,_Description,GoalImage))">
+					<a class="list-group-item" pwp:att="$" id="goals$(GoalId)$" href="#" onclick="javascript:select('#goals',$(GoalId)$)"><img pwp:att="$" src="$(GoalImage)$" width="50" /></a>
+				</li>
+			</ul>
 		</div>
 		<div class="col-xs-4 options-table">
 			<h5>Choose the Setting:</h5>
 			
-			<table id="settings" class-"list-group">
-				
-			</table>
+			<ul id="settings" class="list-group">
+				<li class="options-table-cell" pwp:ask="db_select_settings(Connection,row(SettingId,_Description,SettingImage))">
+					<a class="list-group-item" pwp:att="$" id="settings$(SettingId)$" href="#" onclick="javascript:select('#settings',$(SettingId)$)"><img pwp:att="$" src="$(SettingImage)$" width="50" /></a>
+				</li>
+			</ul>
 		</div>
 	</div>
 </div>
