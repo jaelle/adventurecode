@@ -1,20 +1,29 @@
 <div class="panel-body">
-	<!-- Blockly //-->
-	<div class="col-md-7">
-		<iframe id="blockly" src="blockly.html" width="100%"></iframe>
-	</div>
-	<div id="mazebuilder" class="col-md-5" onclick="">
-	  <!-- Maze //-->
-	</div>
-	<input id="mazebuilder_map" type="hidden" value="">
+	<div class="options-page-header col-xs-12">
+		<h4 align="center">
+			Guide 
 		<img 	id="hero_piece" class="hero maze_piece"
 				pwp:ask="	http_session_data(maze_hero(Hero)),atom_number(Hero,HeroId),
 							db_get_hero_image(HeroId,HeroImage),!" 
-				pwp:att="$" src="$(HeroImage)$"  style="display:none" />
+				pwp:att="$" src="$(HeroImage)$" data-toggle="tooltip" data-placement="bottom" title="Click and drag me to the grid below." />
+			to the 
 		<img 	id="goal_piece" class="goal maze_piece"
 				pwp:ask="	http_session_data(maze_goal(Goal)),atom_number(Goal,GoalId),
 							db_get_goal_image(GoalId,GoalImage),!" 
-				pwp:att="$" src="$(GoalImage)$"  style="display:none" />
+				pwp:att="$" src="$(GoalImage)$" data-toggle="tooltip" data-placement="bottom" title="Don't forget to drag the goal too!" />
+			
+			by dragging and dropping code blocks below.
+		</h4>
+	</div>
+	<div class="row">
+	<!-- Blockly //-->
+		<div class="col-md-7">
+			<iframe id="blockly" src="blockly.html" width="100%"></iframe>
+		</div>
+		<div id="mazebuilder" class="col-md-5" onclick="">
+		  <!-- Maze //-->
+		</div>
+		<input id="mazebuilder_map" type="hidden" value="">
 				
 		<img 	id="setting_piece" class="setting"
 				pwp:ask="	http_session_data(maze_setting(Setting)),??atom_number(Setting,SettingId),
@@ -29,5 +38,5 @@
 
     	<input type="hidden" name="maze_map" id="maze_map" pwp:ask="??http_session_data(maze_map(MazeMap))" pwp:att="$" value="$(MazeMap)$" />
     	<input type="hidden" name="maze_map" id="maze_map" pwp:ask="\+http_session_data(maze_map(MazeMap))" value="[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" />
-    	
+    </div>	
 </div>
