@@ -6,28 +6,28 @@ goog.require('Blockly.JavaScript');
 
 Blockly.JavaScript['move_west'] = function(block) {
   // TODO: Assemble JavaScript into code variable.
-  var code = 'moveWest();\n';
+  var code = 'move_west();\n';
   return code;
 };
 
 
 Blockly.JavaScript['move_north'] = function(block) {
   // TODO: Assemble JavaScript into code variable.
-  var code = 'moveNorth();\n';
+  var code = 'move_north();\n';
   return code;
 };
 
 
 Blockly.JavaScript['move_east'] = function(block) {
   // TODO: Assemble JavaScript into code variable.
-  var code = 'moveEast();\n';
+  var code = 'move_east();\n';
   return code;
 };
 
 
 Blockly.JavaScript['move_south'] = function(block) {
   // TODO: Assemble JavaScript into code variable.
-  var code = 'moveSouth();\n';
+  var code = 'move_south();\n';
   return code;
 };
 

@@ -40,14 +40,50 @@
     return window.Blockly = blockly;
   };
 
+  window.instructions = [];
+
   window.run_code = function() {
-    var code;
+    var code, e, i, interval, step, _i, _ref, _results;
+    window.instructions = [];
     code = window.Blockly.JavaScript.workspaceToCode();
-    return console.log(code);
+    console.log(code);
+    try {
+      eval(code);
+    } catch (_error) {
+      e = _error;
+      if (e !== Infinity) {
+        console.log(e);
+      }
+    }
+    window.maze.reset('#maze_start', '#maze_end');
+    console.log(instructions);
+    _results = [];
+    for (i = _i = 0, _ref = instructions.length; _i < _ref; i = _i += 1) {
+      interval = 1000;
+      step = i + 1;
+      _results.push(setTimeout('eval(instructions[' + i + '])', interval * step));
+    }
+    return _results;
   };
 
   window.reset_code = function() {
-    return window.Blockly.mainWorkspace.clear();
+    return window.maze.reset("#maze_start", "#maze_end");
+  };
+
+  window.move_west = function() {
+    return instructions.push("window.maze.move_hero_west()");
+  };
+
+  window.move_east = function() {
+    return instructions.push("window.maze.move_hero_east()");
+  };
+
+  window.move_north = function() {
+    return instructions.push("window.maze.move_hero_north()");
+  };
+
+  window.move_south = function() {
+    return instructions.push("window.maze.move_hero_south()");
   };
 
 }).call(this);

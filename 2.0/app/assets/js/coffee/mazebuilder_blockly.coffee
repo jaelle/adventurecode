@@ -27,9 +27,37 @@ class window.BlocklyPanel
 window.blocklyLoaded = (blockly) ->
   window.Blockly = blockly
 
+
+window.instructions = []
+  
 window.run_code = ->
+  window.instructions = []
   code = window.Blockly.JavaScript.workspaceToCode()
   console.log(code)
+  try
+    eval(code)
+  catch e
+    if e != Infinity 
+      console.log(e);
+  
+  window.maze.reset('#maze_start','#maze_end')
+  console.log(instructions)
+
+  for i in [0...instructions.length] by 1
+    interval = 1000;
+    step = i+1;
+    setTimeout('eval(instructions[' + i + '])',interval*step)
 
 window.reset_code = ->
-  window.Blockly.mainWorkspace.clear()
+  #window.Blockly.mainWorkspace.clear()
+  window.maze.reset("#maze_start","#maze_end")
+  #window.instructions = []
+  
+window.move_west = ->
+  instructions.push("window.maze.move_hero_west()")
+window.move_east = ->
+  instructions.push("window.maze.move_hero_east()")
+window.move_north = ->
+  instructions.push("window.maze.move_hero_north()")
+window.move_south = ->
+  instructions.push("window.maze.move_hero_south()")

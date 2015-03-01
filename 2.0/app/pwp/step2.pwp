@@ -29,19 +29,15 @@
 		  <!-- Maze //-->
 		</div>
 		<img 	id="setting_piece" class="setting"
-				pwp:ask="	http_session_data(maze_setting(Setting)),atom_number(Setting,SettingId),
+				pwp:ask="	http_session_data(maze_setting(Setting)),??atom_number(Setting,SettingId),
 							db_get_setting_image(SettingId,SettingImage),!" 
 				pwp:att="$" src="$(SettingImage)$" style="display:none" />
 				
-		<input type="hidden" name="maze_start" id="maze_start" pwp:ask="??http_session_data(maze_start(MazeStart))" pwp:att="$" value="$(MazeStart)$" />
-    	<input type="hidden" name="maze_start" id="maze_start" pwp:ask="\+http_session_data(maze_start(MazeStart))" value="[0,0]" />
+    	<input type="hidden" name="maze_start" id="maze_start" value="[0,0]" />
     	
-    	<input type="hidden" name="maze_end" id="maze_end" pwp:ask="??http_session_data(maze_end(MazeEnd))" pwp:att="$" value="$(MazeEnd)$" />
-    	<input type="hidden" name="maze_end" id="maze_end" pwp:ask="\+http_session_data(maze_end(MazeEnd))" value="[0,0]" />
-  
+    	<input type="hidden" name="maze_end" id="maze_end" value="[0,0]" />
         	
-        	<input type="hidden" name="maze_map" id="maze_map" pwp:ask="??http_session_data(maze_map(MazeMap))" pwp:att="$" value="$(MazeMap)$" />
-        	<input type="hidden" name="maze_map" id="maze_map" pwp:ask="\+http_session_data(maze_map(MazeMap))" value="[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" />
+        	<input type="hidden" name="maze_map" id="maze_map" value="[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" />
         	
 	</div>
 </div>

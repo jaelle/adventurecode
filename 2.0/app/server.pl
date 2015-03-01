@@ -39,32 +39,26 @@ user:file_search_path(assets,'assets').
 server(Port):-
 	% start server on specified Port
 	http_server(http_dispatch, [port(Port)]).
+
+default_handler(Request):-
+
+	% Post data exists
+	??memberchk(method(post),Request),
+	catch(	
+		??http_read_data(Request, Parameters, []),
+		_E,
+		fail),
+	
+	set_sessions(Request,Parameters),
+		
+	load_template(Request).
 	
 default_handler(Request):-
 
-	memberchk(method(post),Request)
-	??step02_data(Request,Setting,Goal,Hero,MazeMap,MazeStart,MazeEnd),
-	
-	% Handle PWP
-	reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
+	% Post data doesn't exist
+		
+	load_template(Request).
 
-
-default_handler(Request):-
-	
-	% Check for step 1 POST data
-	memberchk(method(post), Request),
-	??step01_data(Request,Setting,Goal,Hero),
-	
-	% Handle PWP
-	reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
-	
-default_handler(Request):-
-	% no POST data
-	
-	% Handle PWP
-	reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
-
-	
 assets_handler(Request):-
 
 	% file is not PWP
@@ -125,7 +119,7 @@ mazemap_json_handler(Request):-
     
 settings_json_handler(Request):-
 
-	??db_connect(Connection),
+	db_connect(Connection),
 	findall(
 		setting{id:Id,description:Description,image_path:ImagePath},
 		db_select_settings(Connection,row(Id,Description,ImagePath)),
@@ -158,37 +152,72 @@ heroes_json_handler(Request):-
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
 	json_write(current_output,Heroes).
+
+set_sessions(Request,Parameters):-
+
+	% Check for step 0 POST data
+	memberchk(path_info(step1),Request),
+	step00_set_session(Parameters).
 	
-step01_data(Request,Settings,Goal,Hero):-
-	catch(	
-		??http_read_data(Request, [maze_setting=Setting,maze_goal=Goal,maze_hero=Hero], []),
-		_E,
-		fail),
+set_sessions(Request,Parameters):-
+
+	% Check for step 1 POST data
+	??memberchk(path_info(step2),Request),
+	step01_set_session(Parameters).
 	
-	http_session_retractall(maze_setting(Settings)),
-	http_session_retractall(maze_goal(Goals)),
-	http_session_retractall(maze_hero(Heroes)),
-	http_session_retractall(maze_map(MazeMaps)),
-	http_session_retractall(maze_start(MazeStart)),
-	http_session_retractall(maze_end(MazeEnd)),
+set_sessions(Request,Parameters):-
+
+	% Check for step 2 POST data
+	memberchk(path_info(step3),Request),
+	step02_set_session(Parameters).
 	
-	??http_session_assert(maze_setting(Setting)),
-	http_session_assert(maze_hero(Hero)),
-	http_session_assert(maze_goal(Goal)),
-	http_session_assert(maze_map(MazeMap)).
+load_template(Request):-
 	
-step02_data(Request,Settings,Goal,Hero,MazeMap,MazeStart,MazeEnd):-
-	catch(
-		??http_read_data(Request, [maze_setting=Setting,maze_goal=Goal,maze_hero=Hero,maze_map=MazeMap,maze_start=MazeStart,maze_end=MazeEnd], []),
-		_E,
-		fail),
+	% Handle PWP
+	reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
+
+/*step00_set_session(Parameters):-
+	
+	memberchk(reset=1,Parameters),
+	
+	http_session_retractall(maze_setting(_Settings)),
+	http_session_retractall(maze_goal(_Goals)),
+	http_session_retractall(maze_hero(_Heroes)),
+	http_session_retractall(maze_map(_MazeMaps)),
+	http_session_retractall(maze_start(_MazeStarts)),
+	http_session_retractall(maze_end(_MazeEnds)).*/
+	
+step00_set_session(_Parameters).
+
+step01_set_session(Parameters):-
 		
-	http_session_retractall(maze_setting(Settings)),
-	http_session_retractall(maze_goal(Goals)),
-	http_session_retractall(maze_hero(Heroes)),
-	http_session_retractall(maze_map(MazeMaps)),
-	http_session_retractall(maze_start(MazeStart)),
-	http_session_retractall(maze_end(MazeEnd)),
+	memberchk(maze_setting=Setting,Parameters),
+	memberchk(maze_goal=Goal,Parameters),
+	memberchk(maze_hero=Hero,Parameters),
+	
+	http_session_retractall(maze_setting(_Settings)),
+	http_session_retractall(maze_goal(_Goals)),
+	http_session_retractall(maze_hero(_Heroes)),
+	
+	http_session_assert(maze_setting(Setting)),
+	http_session_assert(maze_hero(Hero)),
+	http_session_assert(maze_goal(Goal)).
+	
+step02_set_session(Parameters):-
+
+	memberchk(maze_setting=Setting,Parameters),
+	memberchk(maze_goal=Goal,Parameters),
+	memberchk(maze_hero=Hero,Parameters),
+	memberchk(maze_map=MazeMap,Parameters),
+	memberchk(maze_start=MazeStart,Parameters),
+	memberchk(maze_end=MazeEnd,Parameters),
+
+	http_session_retractall(maze_setting(_Settings)),
+	http_session_retractall(maze_goal(_Goals)),
+	http_session_retractall(maze_hero(_Heroes)),
+	http_session_retractall(maze_map(_MazeMaps)),
+	http_session_retractall(maze_start(_MazeStarts)),
+	http_session_retractall(maze_end(_MazeEnds)),
 	
 	http_session_assert(maze_setting(Setting)),
 	http_session_assert(maze_hero(Hero)),
