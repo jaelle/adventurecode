@@ -91,24 +91,32 @@ class window.Maze
       
       for col in [0...@num_cols] by 1
         color = @map[count]
+        
+        console.log("goal info")
+        console.log(@goal_col + "," + @goal_row)
 
         if @hero_col? && @hero_row? && (@hero_col == col && @hero_row == row)
-          current_cell[row][col] = @create_cell @hero_col, @hero_row, @black, @hero_image
+          current_cell[row][col] = @create_cell @hero_col, @hero_row, @black, @hero_image, @hero_image.width, @hero_image.height
           console.log("hero: " + @hero_row + ":" + row + " - " + @hero_row + ":" + col)
         else if @goal_col? && @goal_row? && (@goal_col == col && @goal_row == row)
-          current_cell[row][col] = @create_cell @goal_col, @goal_row, @black, @goal_image
+          current_cell[row][col] = @create_cell @goal_col, @goal_row, @black, @goal_image, @goal_image.width, @goal_image.height
           console.log("goal: " + @goal_row + ":" + row + " - " + @goal_col + ":" + col)
         else
-          current_cell[row][col] = @create_cell col,row, @map[count], @setting_image
-        
+          if @setting_image?
+            current_cell[row][col] = @create_cell col,row, @map[count], @setting_image, @cell_size, @cell_size
+          else
+            current_cell[row][col] = @create_cell col,row,@map[count],null,null,null
+            
         @draw_cell current_cell[row][col]
         count++
 
-  create_cell: (col, row, color, image) ->
+  create_cell: (col, row, color, image, scale_width, scale_height) ->
     col: col
     row: row
     color: color
     image: image
+    scale_width: scale_width
+    scale_height: scale_height
     
   place_hero: (hero_coordinates_id) ->
     hero_coordinates = jQuery.parseJSON($(hero_coordinates_id).val())
@@ -138,7 +146,10 @@ class window.Maze
       if cell.color == @black
         @drawing_context.fillStyle = "rgb(255,255,255)"
         @drawing_context.fillRect x, y, @cell_size, @cell_size 
-        @drawing_context.drawImage cell.image, 0, 0, @cell_size, @cell_size, x, y, @cell_size, @cell_size
+        startx = x + (@cell_size - cell.scale_width) / 2
+        starty = y + (@cell_size - cell.scale_height) / 2
+        console.log("start at: " + startx + "," + starty)
+        @drawing_context.drawImage cell.image, 0, 0, cell.image.width, cell.image.height, startx, starty, cell.scale_width, cell.scale_height
 
   clear_canvas: ->
     @drawing_context.fillStyle = "rgb(255,255,255)"
@@ -179,6 +190,7 @@ class window.Maze
     
   setting: (image) ->
     @setting_image = image
+    
     
   hero: (image) ->
     @hero_image = image
@@ -238,8 +250,8 @@ window.display_maze = (page) ->
     setting_source = $("#setting_piece")
     setting_image = new Image()
     setting_image.src = setting_source.attr "src"
-    setting_image.width = setting_source.attr "width"
-    setting_image.height = setting_source.attr "height"
+    setting_image.width = setting_source.width()
+    setting_image.height = setting_source.height()
 
     window.maze.setting(setting_image)
     
@@ -248,8 +260,10 @@ window.display_maze = (page) ->
     goal_source = $("#goal_piece")
     goal_image = new Image()
     goal_image.src = goal_source.attr "src"
-    goal_image.width = goal_source.attr "width"
-    goal_image.height = goal_source.attr "height"
+    goal_image.width = goal_source.width()
+    goal_image.height = goal_source.height()
+    console.log("GOAL")
+    console.log(goal_image)
 
     window.maze.goal(goal_image)
     
@@ -258,8 +272,8 @@ window.display_maze = (page) ->
     hero_source = $("#hero_piece")
     hero_image = new Image()
     hero_image.src = hero_source.attr "src"
-    hero_image.width = hero_source.attr "width"
-    hero_image.height = hero_source.attr "height"
+    hero_image.width = hero_source.width()
+    hero_image.height = hero_source.height()
 
     window.maze.hero(hero_image)
 
@@ -331,6 +345,12 @@ window.save_coordinates = (event,ui) ->
     $("#maze_start").val("[" + row + "," + col + "]")
 
 window.init = (page) ->
+  
+  is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1
+  console.log(is_chrome)
+  console.log(navigator.userAgent)
+  if !is_chrome
+    $('#chrome_warning')[0].style.display = "block"
   
   #setup page specific settings
   switch page

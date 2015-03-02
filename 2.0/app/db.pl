@@ -68,14 +68,17 @@ db_select_settings(Connection,row(Id,Description,ImagePath)):-
 		
 db_get_hero_image(Id,ImagePath):-
 	db_connect(Connection),
-	db_select_heroes(Connection,row(Id,Description,ImagePath)),!.
+	db_select_heroes(Connection,row(Id,Description,ImagePath)),
+	odbc_disconnect(Connection),!.
 	
 	
 db_get_goal_image(Id,ImagePath):-
 	db_connect(Connection),
-	db_select_goals(Connection,row(Id,Description,ImagePath)),!.
+	db_select_goals(Connection,row(Id,Description,ImagePath)),
+	odbc_disconnect(Connection),!.
 
 
 db_get_setting_image(Id,ImagePath):-
 	db_connect(Connection),
-	db_select_settings(Connection,row(Id,Description,ImagePath)),!.
+	db_select_settings(Connection,row(Id,Description,ImagePath)),
+	odbc_disconnect(Connection),!.

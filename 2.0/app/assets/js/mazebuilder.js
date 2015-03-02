@@ -101,14 +101,20 @@
           _results1 = [];
           for (col = _j = 0, _ref1 = this.num_cols; _j < _ref1; col = _j += 1) {
             color = this.map[count];
+            console.log("goal info");
+            console.log(this.goal_col + "," + this.goal_row);
             if ((this.hero_col != null) && (this.hero_row != null) && (this.hero_col === col && this.hero_row === row)) {
-              current_cell[row][col] = this.create_cell(this.hero_col, this.hero_row, this.black, this.hero_image);
+              current_cell[row][col] = this.create_cell(this.hero_col, this.hero_row, this.black, this.hero_image, this.hero_image.width, this.hero_image.height);
               console.log("hero: " + this.hero_row + ":" + row + " - " + this.hero_row + ":" + col);
             } else if ((this.goal_col != null) && (this.goal_row != null) && (this.goal_col === col && this.goal_row === row)) {
-              current_cell[row][col] = this.create_cell(this.goal_col, this.goal_row, this.black, this.goal_image);
+              current_cell[row][col] = this.create_cell(this.goal_col, this.goal_row, this.black, this.goal_image, this.goal_image.width, this.goal_image.height);
               console.log("goal: " + this.goal_row + ":" + row + " - " + this.goal_col + ":" + col);
             } else {
-              current_cell[row][col] = this.create_cell(col, row, this.map[count], this.setting_image);
+              if (this.setting_image != null) {
+                current_cell[row][col] = this.create_cell(col, row, this.map[count], this.setting_image, this.cell_size, this.cell_size);
+              } else {
+                current_cell[row][col] = this.create_cell(col, row, this.map[count], null, null, null);
+              }
             }
             this.draw_cell(current_cell[row][col]);
             _results1.push(count++);
@@ -119,12 +125,14 @@
       return _results;
     };
 
-    Maze.prototype.create_cell = function(col, row, color, image) {
+    Maze.prototype.create_cell = function(col, row, color, image, scale_width, scale_height) {
       return {
         col: col,
         row: row,
         color: color,
-        image: image
+        image: image,
+        scale_width: scale_width,
+        scale_height: scale_height
       };
     };
 
@@ -143,7 +151,7 @@
     };
 
     Maze.prototype.draw_cell = function(cell) {
-      var x, y;
+      var startx, starty, x, y;
       x = cell.col * this.cell_size;
       y = cell.row * this.cell_size;
       this.drawing_context.strokeStyle = "rgba(0,0,0,1)";
@@ -158,7 +166,10 @@
         if (cell.color === this.black) {
           this.drawing_context.fillStyle = "rgb(255,255,255)";
           this.drawing_context.fillRect(x, y, this.cell_size, this.cell_size);
-          return this.drawing_context.drawImage(cell.image, 0, 0, this.cell_size, this.cell_size, x, y, this.cell_size, this.cell_size);
+          startx = x + (this.cell_size - cell.scale_width) / 2;
+          starty = y + (this.cell_size - cell.scale_height) / 2;
+          console.log("start at: " + startx + "," + starty);
+          return this.drawing_context.drawImage(cell.image, 0, 0, cell.image.width, cell.image.height, startx, starty, cell.scale_width, cell.scale_height);
         }
       }
     };
@@ -279,24 +290,26 @@
       setting_source = $("#setting_piece");
       setting_image = new Image();
       setting_image.src = setting_source.attr("src");
-      setting_image.width = setting_source.attr("width");
-      setting_image.height = setting_source.attr("height");
+      setting_image.width = setting_source.width();
+      setting_image.height = setting_source.height();
       window.maze.setting(setting_image);
     }
     if ($("#goal_piece" != null)) {
       goal_source = $("#goal_piece");
       goal_image = new Image();
       goal_image.src = goal_source.attr("src");
-      goal_image.width = goal_source.attr("width");
-      goal_image.height = goal_source.attr("height");
+      goal_image.width = goal_source.width();
+      goal_image.height = goal_source.height();
+      console.log("GOAL");
+      console.log(goal_image);
       window.maze.goal(goal_image);
     }
     if ($("#hero_piece" != null)) {
       hero_source = $("#hero_piece");
       hero_image = new Image();
       hero_image.src = hero_source.attr("src");
-      hero_image.width = hero_source.attr("width");
-      hero_image.height = hero_source.attr("height");
+      hero_image.width = hero_source.width();
+      hero_image.height = hero_source.height();
       window.maze.hero(hero_image);
     }
     if (page !== "/step3") {
@@ -370,7 +383,13 @@
   };
 
   window.init = function(page) {
-    var blockly_panel, map;
+    var blockly_panel, is_chrome, map;
+    is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+    console.log(is_chrome);
+    console.log(navigator.userAgent);
+    if (!is_chrome) {
+      $('#chrome_warning')[0].style.display = "block";
+    }
     switch (page) {
       case "/step2":
         $(function() {

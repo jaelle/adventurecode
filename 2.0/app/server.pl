@@ -93,6 +93,7 @@ upload_handler(Request):-
     
 	db_connect(Connection),
 	db_save(Connection,Description,WebPath,URLPath),
+	odbc_disconnect(Connection)
 	
     reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
     
@@ -102,6 +103,7 @@ mazemap_save_handler(Request):-
 	
 	db_connect(Connection),
 	db_insert_mazemap(Connection,Description,Map),
+	odbc_disconnect(Connection)
 	
     reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
     
@@ -112,6 +114,7 @@ mazemap_json_handler(Request):-
 		mazemap{description:Description,map:Map},
 		db_select_mazemaps(Connection,row(_Id,Description,Map)),
 		Maps),
+	odbc_disconnect(Connection)
 	
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
@@ -124,6 +127,7 @@ settings_json_handler(Request):-
 		setting{id:Id,description:Description,image_path:ImagePath},
 		db_select_settings(Connection,row(Id,Description,ImagePath)),
 		Settings),
+	odbc_disconnect(Connection)
 	
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
@@ -136,6 +140,7 @@ goals_json_handler(Request):-
 		goal{id:Id,description:Description,image_path:ImagePath},
 		db_select_goals(Connection,row(Id,Description,ImagePath)),
 		Goals),
+	odbc_disconnect(Connection)
 	
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
@@ -148,6 +153,7 @@ heroes_json_handler(Request):-
 		hero{id:Id,description:Description,image_path:ImagePath},
 		db_select_heroes(Connection,row(Id,Description,ImagePath)),
 		Heroes),
+	odbc_disconnect(Connection)
 	
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
@@ -176,7 +182,7 @@ load_template(Request):-
 	% Handle PWP
 	reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
 
-/*step00_set_session(Parameters):-
+step00_set_session(Parameters):-
 	
 	memberchk(reset=1,Parameters),
 	
@@ -185,7 +191,7 @@ load_template(Request):-
 	http_session_retractall(maze_hero(_Heroes)),
 	http_session_retractall(maze_map(_MazeMaps)),
 	http_session_retractall(maze_start(_MazeStarts)),
-	http_session_retractall(maze_end(_MazeEnds)).*/
+	http_session_retractall(maze_end(_MazeEnds)).
 	
 step00_set_session(_Parameters).
 
