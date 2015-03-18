@@ -38,6 +38,14 @@ db_insert_mazemap(Connection,Description,MazeMap):-
 		odbc_prepare(Connection,'INSERT INTO mazemaps (description, map) VALUES (?,?)',[varchar(255),varchar(255)],Insert),
 		odbc_execute(Insert,[Description,MazeMap],_Result),
 		odbc_free_statement(Insert)).
+
+
+db_insert_maze(Connection,UserId,Description,MazeMap,MazeStart,MazeEnd,MazeSetting,MazeGoal,MazeHero):-
+	
+	setup_call_cleanup(
+		odbc_prepare(Connection,'INSERT INTO mazes (user_id, description, maze, maze_start, maze_end, setting_id, goal_id, hero_id) VALUES (?,?,?,?,?,?,?,?)',[integer,varchar(255),varchar(255),varchar(255),varchar(255),integer,integer,integer],Insert),
+		odbc_execute(Insert,[UserId,Description,MazeMap,MazeStart,MazeEnd,MazeSetting,MazeGoal,MazeHero],_Result),
+		odbc_free_statement(Insert)).
 		
 db_select_mazemaps(Connection,row(Id,Description,Map)):-
 	setup_call_cleanup(

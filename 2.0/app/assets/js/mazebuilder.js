@@ -383,10 +383,12 @@
   };
 
   window.init = function(page) {
-    var blockly_panel, is_chrome, map;
-    is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+    var blockly_panel, is_chrome, map, user_agent;
+    user_agent = navigator.userAgent;
+    is_chrome = user_agent.toLowerCase().indexOf('chrome') > -1 || user_agent.toLowerCase().indexOf('crios') > -1;
+    $("#chrome_warning")[0].innerHTML += "<br />You are using: " + user_agent;
     console.log(is_chrome);
-    console.log(navigator.userAgent);
+    console.log("user agent: " + navigator.userAgent);
     if (!is_chrome) {
       $('#chrome_warning')[0].style.display = "block";
     }

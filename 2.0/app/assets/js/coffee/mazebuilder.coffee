@@ -304,7 +304,7 @@ window.reset_game = (form_id,path) ->
     reset_value.attr "value", "1"
     $(form_id).append reset_value
     
-    $(form_id).submit()
+    $(form_id).submit()  
   
 window.select = (container_id,id) ->
   $(container_id + " .list-group-item").removeClass("active")
@@ -345,10 +345,13 @@ window.save_coordinates = (event,ui) ->
     $("#maze_start").val("[" + row + "," + col + "]")
 
 window.init = (page) ->
-  
-  is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1
+
+  user_agent = navigator.userAgent
+  is_chrome = user_agent.toLowerCase().indexOf('chrome') > -1 || user_agent.toLowerCase().indexOf('crios') > -1
+
+  $("#chrome_warning")[0].innerHTML += "<br />You are using: " + user_agent
   console.log(is_chrome)
-  console.log(navigator.userAgent)
+  console.log("user agent: " + navigator.userAgent)
   if !is_chrome
     $('#chrome_warning')[0].style.display = "block"
   

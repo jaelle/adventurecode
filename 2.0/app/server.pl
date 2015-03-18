@@ -20,6 +20,7 @@ user:file_search_path(assets,'assets').
 :- http_handler('/settings_json', settings_json_handler, [priority(1)]).
 :- http_handler('/goals_json', goals_json_handler, [priority(1)]).
 :- http_handler('/heroes_json', heroes_json_handler, [priority(1)]).
+:- http_handler('/save',maze_save_handler,[priority(1)]).
 
 /*:- http_handler('/setting_save', upload_handler, [priority(1)]).
 :- http_handler('/goal_save', upload_handler, [priority(1)]).
@@ -97,13 +98,24 @@ upload_handler(Request):-
 	
     reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
     
+maze_save_handler(Request):-
+	memberchk(method(post), Request),
+	??http_read_data(Request, [maze_start=MazeStart,maze_end=MazeEnd,maze_map=MazeMap,maze_setting=MazeSetting,maze_goal=MazeGaol,maze_hero=MazeHero,reset=Reset], []),
+	
+	db_connect(Connection),
+	db_insert_maze(Connection,0,"",MazeMap,MazeStart,MazeEnd,MazeSetting,MazeGoal,MazeHero),
+	odbc_disconnect(Connection),
+	
+	% TODO: Figure out how to redirect.
+	??load_template(Request).
+    
 mazemap_save_handler(Request):-
 	memberchk(method(post), Request),
 	http_read_data(Request, [description=Description,mazebuilder_map=Map], []),
 	
 	db_connect(Connection),
 	db_insert_mazemap(Connection,Description,Map),
-	odbc_disconnect(Connection)
+	odbc_disconnect(Connection),
 	
     reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
     
@@ -114,7 +126,7 @@ mazemap_json_handler(Request):-
 		mazemap{description:Description,map:Map},
 		db_select_mazemaps(Connection,row(_Id,Description,Map)),
 		Maps),
-	odbc_disconnect(Connection)
+	odbc_disconnect(Connection),
 	
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
@@ -127,7 +139,7 @@ settings_json_handler(Request):-
 		setting{id:Id,description:Description,image_path:ImagePath},
 		db_select_settings(Connection,row(Id,Description,ImagePath)),
 		Settings),
-	odbc_disconnect(Connection)
+	odbc_disconnect(Connection),
 	
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
@@ -140,7 +152,7 @@ goals_json_handler(Request):-
 		goal{id:Id,description:Description,image_path:ImagePath},
 		db_select_goals(Connection,row(Id,Description,ImagePath)),
 		Goals),
-	odbc_disconnect(Connection)
+	odbc_disconnect(Connection),
 	
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
@@ -153,7 +165,7 @@ heroes_json_handler(Request):-
 		hero{id:Id,description:Description,image_path:ImagePath},
 		db_select_heroes(Connection,row(Id,Description,ImagePath)),
 		Heroes),
-	odbc_disconnect(Connection)
+	odbc_disconnect(Connection),
 	
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
