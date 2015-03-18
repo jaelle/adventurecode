@@ -10,6 +10,6 @@ v2.0 is written in SWI-Prolog & CoffeeScript. This version is more functional pr
 Players can drag and drop blocks to create mazes and then solve them using code blocks.
 
 
-# Coming Soon
+*Coming Soon*
  - Functionality to save mazes.
  - Tutorial levels to teach players about code blocks.
