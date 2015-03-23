@@ -10,6 +10,7 @@ view('/goal_new','pwp/goal_new.pwp','Create New Goal').
 view('/goal_save','pwp/save.pwp','New Goal Saved').
 view('/mazemap_new','pwp/mazemap_new.pwp','Create Maze Map').
 view('/mazemap_save','pwp/save.pwp','New Maze Map Saved').
+view('/save','pwp/save.pwp','Maze Saved').
 
 page('/',null,'/step2').
 page('/step1',null,'/step2').

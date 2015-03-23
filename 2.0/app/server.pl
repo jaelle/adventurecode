@@ -94,16 +94,26 @@ upload_handler(Request):-
     
 	db_connect(Connection),
 	db_save(Connection,Description,WebPath,URLPath),
-	odbc_disconnect(Connection)
+	odbc_disconnect(Connection),
 	
     reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
     
 maze_save_handler(Request):-
 	memberchk(method(post), Request),
-	??http_read_data(Request, [maze_start=MazeStart,maze_end=MazeEnd,maze_map=MazeMap,maze_setting=MazeSetting,maze_goal=MazeGaol,maze_hero=MazeHero,reset=Reset], []),
+	http_read_data(Request, [maze_start=MazeStart,
+							 maze_end=MazeEnd,
+							 maze_map=MazeMap,
+							 maze_setting=MazeSetting,
+							 maze_goal=MazeGoal,
+							 maze_hero=MazeHero,
+							 reset=Reset], []),
+	
+	atom_number(MazeSetting,SettingId),
+	atom_number(MazeGoal,GoalId),
+	atom_number(MazeHero,HeroId),
 	
 	db_connect(Connection),
-	db_insert_maze(Connection,0,"",MazeMap,MazeStart,MazeEnd,MazeSetting,MazeGoal,MazeHero),
+	db_insert_maze(Connection,0,"",MazeMap,MazeStart,MazeEnd,SettingId,GoalId,HeroId),
 	odbc_disconnect(Connection),
 	
 	% TODO: Figure out how to redirect.
@@ -189,6 +199,13 @@ set_sessions(Request,Parameters):-
 	memberchk(path_info(step3),Request),
 	step02_set_session(Parameters).
 	
+
+set_sessions(Request,Parameters):-
+
+	% Check for step 2 POST data
+	memberchk(path_info(save),Request),
+	step02_set_session(Parameters).
+	
 load_template(Request):-
 	
 	% Handle PWP
@@ -196,7 +213,7 @@ load_template(Request):-
 
 step00_set_session(Parameters):-
 	
-	memberchk(reset=1,Parameters),
+	??memberchk(reset=1,Parameters),
 	
 	http_session_retractall(maze_setting(_Settings)),
 	http_session_retractall(maze_goal(_Goals)),

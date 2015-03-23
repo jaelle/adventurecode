@@ -7,11 +7,16 @@ class window.Maze
 
   @white: null
   @black: null
+  
+  @west: null
+  @east: null
 
   @drawing_context: null
   @setting_image: null
   @goal_image: null
   @hero_image: null
+  
+  @hero_orientation: null
   
   @hero_row:null
   @hero_col:null
@@ -28,6 +33,11 @@ class window.Maze
 
     @white = 0
     @black = 1
+    @west = 0
+    @east = 1
+    
+    @previous_hero_orientation = @west
+    @hero_orientation = @west
 
     @map = [
       0,0,0,0,0,
@@ -149,8 +159,18 @@ class window.Maze
         startx = x + (@cell_size - cell.scale_width) / 2
         starty = y + (@cell_size - cell.scale_height) / 2
         console.log("start at: " + startx + "," + starty)
+        if cell.row == @hero_row && cell.col == @hero_col && @hero_orientation != @previous_hero_orientation
+          console.log("flipping image")
+          # @drawing_context.translate(cell.image.width,0)
+          #@drawing_context.scale(-1,1)
+          #cell.scale_width = -1 * cell.scale_width
+          #cell.image.width = -1 * cell.image.width
+          
         @drawing_context.drawImage cell.image, 0, 0, cell.image.width, cell.image.height, startx, starty, cell.scale_width, cell.scale_height
 
+        if cell.row == @hero_row && cell.col == @hero_col && @hero_orientation != @previous_hero_orientation
+          @drawing_context.scale(-1,1)
+          
   clear_canvas: ->
     @drawing_context.fillStyle = "rgb(255,255,255)"
     @drawing_context.fillRect 0, 0, @canvas[0].width, @canvas[0].height
@@ -194,6 +214,7 @@ class window.Maze
     
   hero: (image) ->
     @hero_image = image
+    @hero_orientation = @west
     
   goal: (image) ->
     @goal_image = image
@@ -207,6 +228,10 @@ class window.Maze
   
   move_hero_west: ->
     index = @index(@hero_row,@hero_col)
+    if @previous_hero_orientation != @west
+      @previous_hero_orientation = @east
+
+    @hero_orientation = @west
     
     if (@hero_col - 1) >= 0 && @map[index] == @white
       @hero_col--
@@ -216,6 +241,11 @@ class window.Maze
     
   move_hero_east: ->
     index = @index(@hero_row,@hero_col)
+    
+    if @previous_hero_orientation != @east
+      @previous_hero_orientation = @west
+      
+    @hero_orientation = @east
     
     if (@hero_col + 1) && @map[index] == @white
       @hero_col++
@@ -336,8 +366,10 @@ window.save_coordinates = (event,ui) ->
   x = event.clientX - maze_rect.left;
   y = event.clientY - maze_rect.top;
 
-  col = Math.floor(x / 75)
-  row = Math.floor(y / 75)
+  console.log("Cell width: " + maze_rect.width / 5)
+  console.log("Cell height: " + maze_rect.height / 5)
+  col = Math.floor(x / (maze_rect.width / 5))
+  row = Math.floor(y / (maze_rect.height / 5))
 	
   if event.toElement.classList.contains("goal")
     $("#maze_end").val("[" + row + "," + col + "]")
