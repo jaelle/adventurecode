@@ -337,7 +337,7 @@
       hero_image.height = hero_source.height();
       window.maze.hero(hero_image);
     }
-    if (page !== "/step3") {
+    if (page !== "/step3" && page !== "tutorial") {
       maze_map = $("#maze_map");
       maze_map.val("[" + maze.map + "]");
     }
@@ -420,6 +420,11 @@
       $('#chrome_warning')[0].style.display = "block";
     }
     switch (page) {
+      case "/tutorial":
+      case "/tutorial2":
+        page = "/tutorial";
+    }
+    switch (page) {
       case "/step2":
         $(function() {
           $('[data-toggle="tooltip"]').tooltip();
@@ -429,6 +434,7 @@
     switch (page) {
       case "/step2":
       case "/step3":
+      case "/tutorial":
         window.maze = display_maze(page);
     }
     switch (page) {
@@ -466,8 +472,10 @@
         });
         return display_maze_maps("#mazebuilder_maps");
       case "/step3":
+      case "/tutorial":
         console.log("/step3");
         map = $("#maze_map").val();
+        console.log(map);
         window.maze.load_map(map);
         window.maze.place_hero('#maze_start');
         window.maze.place_goal('#maze_end');

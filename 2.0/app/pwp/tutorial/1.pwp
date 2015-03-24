@@ -1,0 +1,33 @@
+<div class="panel-body" pwp:ask="tutorial(1,HeroImage,GoalImage,SettingImage,MazeStart,MazeEnd,MazeMap)">
+	<div class="options-page-header col-xs-12">
+		<h4 align="center">
+			Guide 
+		<img 	id="hero_piece" class="hero maze_piece"
+				pwp:att="$" src="$(HeroImage)$" data-toggle="tooltip" data-placement="bottom" title="Click and drag me to the grid below." />
+			to the 
+		<img 	id="goal_piece" class="goal maze_piece" 
+				pwp:att="$" src="$(GoalImage)$" data-toggle="tooltip" data-placement="bottom" title="Don't forget to drag the goal too!" />
+			
+			by dragging and dropping code blocks below.
+		</h4>
+	</div>
+	<div class="row">
+	<!-- Blockly //-->
+		<div class="col-md-7">
+			<iframe id="blockly" src="blockly.html" width="100%"></iframe>
+		</div>
+		<div id="mazebuilder" class="col-md-5" onclick="">
+		  <!-- Maze //-->
+		</div>
+		<input id="mazebuilder_map" type="hidden" value="">
+				
+		<img 	id="setting_piece" class="setting"
+				pwp:att="$" src="$(SettingImage)$" style="display:none" />
+	
+		<input type="hidden" name="maze_start" id="maze_start" pwp:att="$" value="$(MazeStart)$" />
+    	
+    	<input type="hidden" name="maze_end" id="maze_end" pwp:att="$" value="$(MazeEnd)$" />
+
+    	<input type="hidden" name="maze_map" id="maze_map" pwp:att="$" value="$(MazeMap)$" />
+    </div>	
+</div>

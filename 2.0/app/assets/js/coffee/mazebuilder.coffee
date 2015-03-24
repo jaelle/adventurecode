@@ -307,7 +307,7 @@ window.display_maze = (page) ->
 
     window.maze.hero(hero_image)
 
-  if page != "/step3"
+  if page != "/step3" and page != "tutorial"
     maze_map = $ "#maze_map"
     maze_map.val("[" + maze.map + "]")
 
@@ -377,7 +377,7 @@ window.save_coordinates = (event,ui) ->
     $("#maze_start").val("[" + row + "," + col + "]")
 
 window.init = (page) ->
-
+  
   user_agent = navigator.userAgent
   is_chrome = user_agent.toLowerCase().indexOf('chrome') > -1 || user_agent.toLowerCase().indexOf('crios') > -1
 
@@ -386,6 +386,10 @@ window.init = (page) ->
   console.log("user agent: " + navigator.userAgent)
   if !is_chrome
     $('#chrome_warning')[0].style.display = "block"
+    
+  switch page 
+    when "/tutorial","/tutorial2"
+      page = "/tutorial"
   
   #setup page specific settings
   switch page
@@ -395,7 +399,7 @@ window.init = (page) ->
         $('#hero_piece').tooltip('show')
   
   switch page
-    when "/step2", "/step3"
+    when "/step2", "/step3", "/tutorial"
       window.maze = display_maze(page)
       
 
@@ -428,9 +432,10 @@ window.init = (page) ->
           $(ui.helper).clone(true).removeClass('goal ui-draggable ui-draggable-dragging').addClass('goal-clone').css('top',clone.style.top).css('left',clone.style.left).appendTo('#mazebuilder').draggable({})
 
       display_maze_maps("#mazebuilder_maps")
-    when "/step3"
+    when "/step3", "/tutorial"
       console.log("/step3")
       map = $("#maze_map").val()
+      console.log(map)
       window.maze.load_map(map)
       
       window.maze.place_hero('#maze_start')

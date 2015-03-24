@@ -11,11 +11,16 @@ view('/goal_save','pwp/save.pwp','New Goal Saved').
 view('/mazemap_new','pwp/mazemap_new.pwp','Create Maze Map').
 view('/mazemap_save','pwp/save.pwp','New Maze Map Saved').
 view('/save','pwp/save.pwp','Maze Saved').
+view('/tutorial','pwp/tutorial/1.pwp','Tutorial: Introduction').
+view('/tutorial2','pwp/tutorial/2.pwp','Tutorial: What\'s Next').
 
 page('/',null,'/step2').
 page('/step1',null,'/step2').
 page('/step2','/step1','/step3').
 page('/step3','/step2',null).
+
+page('/tutorial',null,'/tutorial2').
+page('/tutorial2','/tutorial',null).
 
 display_view(ScriptName,View,Title):-
 	view(ScriptName,Template,Title),

@@ -44,9 +44,9 @@ server(Port):-
 default_handler(Request):-
 
 	% Post data exists
-	??memberchk(method(post),Request),
+	memberchk(method(post),Request),
 	catch(	
-		??http_read_data(Request, Parameters, []),
+		http_read_data(Request, Parameters, []),
 		_E,
 		fail),
 	
@@ -58,7 +58,7 @@ default_handler(Request):-
 
 	% Post data doesn't exist
 		
-	load_template(Request).
+	??load_template(Request).
 
 assets_handler(Request):-
 
@@ -209,7 +209,7 @@ set_sessions(Request,Parameters):-
 load_template(Request):-
 	
 	% Handle PWP
-	reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
+	??reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
 
 step00_set_session(Parameters):-
 	
