@@ -1,1 +1,27 @@
 Tutorial 2
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal_init" tabindex="-1" role="dialog" aria-labelledby="Welcome" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="Welcome">Great job!</h4>
+      </div>
+      <div class="modal-body">
+      	<div class="row">
+	      	<p class="col-md-8">
+	      		Now help me find a generator.
+	      	</p>
+	      	<div class="col-md-4">
+	        	<img src="images/robot_dog.png" alt="RXE1011" width="175" class="pull-right" />
+	        </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="clear:both">
+        <button type="button" class="btn btn-primary" onclick="$('#modal_init').modal('toggle')">Try it out!</button>
+      </div>
+    </div>
+  </div>
+</div>

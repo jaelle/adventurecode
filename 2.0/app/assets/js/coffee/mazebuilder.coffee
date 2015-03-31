@@ -101,16 +101,11 @@ class window.Maze
       
       for col in [0...@num_cols] by 1
         color = @map[count]
-        
-        console.log("goal info")
-        console.log(@goal_col + "," + @goal_row)
 
         if @hero_col? && @hero_row? && (@hero_col == col && @hero_row == row)
           current_cell[row][col] = @create_cell @hero_col, @hero_row, @black, @hero_image, @hero_image.width, @hero_image.height
-          console.log("hero: " + @hero_row + ":" + row + " - " + @hero_row + ":" + col)
         else if @goal_col? && @goal_row? && (@goal_col == col && @goal_row == row)
           current_cell[row][col] = @create_cell @goal_col, @goal_row, @black, @goal_image, @goal_image.width, @goal_image.height
-          console.log("goal: " + @goal_row + ":" + row + " - " + @goal_col + ":" + col)
         else
           if @setting_image?
             current_cell[row][col] = @create_cell col,row, @map[count], @setting_image, @cell_size, @cell_size
@@ -158,9 +153,8 @@ class window.Maze
         @drawing_context.fillRect x, y, @cell_size, @cell_size 
         startx = x + (@cell_size - cell.scale_width) / 2
         starty = y + (@cell_size - cell.scale_height) / 2
-        console.log("start at: " + startx + "," + starty)
-        if cell.row == @hero_row && cell.col == @hero_col && @hero_orientation != @previous_hero_orientation
-          console.log("flipping image")
+        #if cell.row == @hero_row && cell.col == @hero_col && @hero_orientation != @previous_hero_orientation
+          #console.log("flipping image")
           # @drawing_context.translate(cell.image.width,0)
           #@drawing_context.scale(-1,1)
           #cell.scale_width = -1 * cell.scale_width
@@ -242,11 +236,6 @@ class window.Maze
   move_hero_east: ->
     index = @index(@hero_row,@hero_col)
     
-    if @previous_hero_orientation != @east
-      @previous_hero_orientation = @west
-      
-    @hero_orientation = @east
-    
     if (@hero_col + 1) && @map[index] == @white
       @hero_col++
       @update()
@@ -292,8 +281,6 @@ window.display_maze = (page) ->
     goal_image.src = goal_source.attr "src"
     goal_image.width = goal_source.width()
     goal_image.height = goal_source.height()
-    console.log("GOAL")
-    console.log(goal_image)
 
     window.maze.goal(goal_image)
     
@@ -307,7 +294,7 @@ window.display_maze = (page) ->
 
     window.maze.hero(hero_image)
 
-  if page != "/step3" and page != "tutorial"
+  if page != "/step3" and page != "/tutorial"
     maze_map = $ "#maze_map"
     maze_map.val("[" + maze.map + "]")
 
@@ -366,8 +353,6 @@ window.save_coordinates = (event,ui) ->
   x = event.clientX - maze_rect.left;
   y = event.clientY - maze_rect.top;
 
-  console.log("Cell width: " + maze_rect.width / 5)
-  console.log("Cell height: " + maze_rect.height / 5)
   col = Math.floor(x / (maze_rect.width / 5))
   row = Math.floor(y / (maze_rect.height / 5))
 	
@@ -382,13 +367,15 @@ window.init = (page) ->
   is_chrome = user_agent.toLowerCase().indexOf('chrome') > -1 || user_agent.toLowerCase().indexOf('crios') > -1
 
   $("#chrome_warning")[0].innerHTML += "<br />You are using: " + user_agent
-  console.log(is_chrome)
-  console.log("user agent: " + navigator.userAgent)
   if !is_chrome
     $('#chrome_warning')[0].style.display = "block"
     
   switch page 
     when "/tutorial","/tutorial2"
+      $('#modal_init').modal('show')
+      $('#modal_init').data('message1','I need your help getting finding all the parts to my spaceship. Use code blocks to help me navigate to each piece.')
+      $('#modal_init').data('message2','Here is an example')
+      $('#modal_init #rxe_message').html($('#modal_init').data('message1'))
       page = "/tutorial"
   
   #setup page specific settings
@@ -433,9 +420,7 @@ window.init = (page) ->
 
       display_maze_maps("#mazebuilder_maps")
     when "/step3", "/tutorial"
-      console.log("/step3")
       map = $("#maze_map").val()
-      console.log(map)
       window.maze.load_map(map)
       
       window.maze.place_hero('#maze_start')

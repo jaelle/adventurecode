@@ -111,14 +111,10 @@
           _results1 = [];
           for (col = _j = 0, _ref1 = this.num_cols; _j < _ref1; col = _j += 1) {
             color = this.map[count];
-            console.log("goal info");
-            console.log(this.goal_col + "," + this.goal_row);
             if ((this.hero_col != null) && (this.hero_row != null) && (this.hero_col === col && this.hero_row === row)) {
               current_cell[row][col] = this.create_cell(this.hero_col, this.hero_row, this.black, this.hero_image, this.hero_image.width, this.hero_image.height);
-              console.log("hero: " + this.hero_row + ":" + row + " - " + this.hero_row + ":" + col);
             } else if ((this.goal_col != null) && (this.goal_row != null) && (this.goal_col === col && this.goal_row === row)) {
               current_cell[row][col] = this.create_cell(this.goal_col, this.goal_row, this.black, this.goal_image, this.goal_image.width, this.goal_image.height);
-              console.log("goal: " + this.goal_row + ":" + row + " - " + this.goal_col + ":" + col);
             } else {
               if (this.setting_image != null) {
                 current_cell[row][col] = this.create_cell(col, row, this.map[count], this.setting_image, this.cell_size, this.cell_size);
@@ -178,10 +174,6 @@
           this.drawing_context.fillRect(x, y, this.cell_size, this.cell_size);
           startx = x + (this.cell_size - cell.scale_width) / 2;
           starty = y + (this.cell_size - cell.scale_height) / 2;
-          console.log("start at: " + startx + "," + starty);
-          if (cell.row === this.hero_row && cell.col === this.hero_col && this.hero_orientation !== this.previous_hero_orientation) {
-            console.log("flipping image");
-          }
           this.drawing_context.drawImage(cell.image, 0, 0, cell.image.width, cell.image.height, startx, starty, cell.scale_width, cell.scale_height);
           if (cell.row === this.hero_row && cell.col === this.hero_col && this.hero_orientation !== this.previous_hero_orientation) {
             return this.drawing_context.scale(-1, 1);
@@ -269,10 +261,6 @@
     Maze.prototype.move_hero_east = function() {
       var index;
       index = this.index(this.hero_row, this.hero_col);
-      if (this.previous_hero_orientation !== this.east) {
-        this.previous_hero_orientation = this.west;
-      }
-      this.hero_orientation = this.east;
       if ((this.hero_col + 1) && this.map[index] === this.white) {
         this.hero_col++;
         return this.update();
@@ -325,8 +313,6 @@
       goal_image.src = goal_source.attr("src");
       goal_image.width = goal_source.width();
       goal_image.height = goal_source.height();
-      console.log("GOAL");
-      console.log(goal_image);
       window.maze.goal(goal_image);
     }
     if ($("#hero_piece" != null)) {
@@ -337,7 +323,7 @@
       hero_image.height = hero_source.height();
       window.maze.hero(hero_image);
     }
-    if (page !== "/step3" && page !== "tutorial") {
+    if (page !== "/step3" && page !== "/tutorial") {
       maze_map = $("#maze_map");
       maze_map.val("[" + maze.map + "]");
     }
@@ -398,8 +384,6 @@
     maze_rect = $("#mazebuilder canvas")[0].getBoundingClientRect();
     x = event.clientX - maze_rect.left;
     y = event.clientY - maze_rect.top;
-    console.log("Cell width: " + maze_rect.width / 5);
-    console.log("Cell height: " + maze_rect.height / 5);
     col = Math.floor(x / (maze_rect.width / 5));
     row = Math.floor(y / (maze_rect.height / 5));
     if (event.toElement.classList.contains("goal")) {
@@ -414,14 +398,16 @@
     user_agent = navigator.userAgent;
     is_chrome = user_agent.toLowerCase().indexOf('chrome') > -1 || user_agent.toLowerCase().indexOf('crios') > -1;
     $("#chrome_warning")[0].innerHTML += "<br />You are using: " + user_agent;
-    console.log(is_chrome);
-    console.log("user agent: " + navigator.userAgent);
     if (!is_chrome) {
       $('#chrome_warning')[0].style.display = "block";
     }
     switch (page) {
       case "/tutorial":
       case "/tutorial2":
+        $('#modal_init').modal('show');
+        $('#modal_init').data('message1', 'I need your help getting finding all the parts to my spaceship. Use code blocks to help me navigate to each piece.');
+        $('#modal_init').data('message2', 'Here is an example');
+        $('#modal_init #rxe_message').html($('#modal_init').data('message1'));
         page = "/tutorial";
     }
     switch (page) {
@@ -473,9 +459,7 @@
         return display_maze_maps("#mazebuilder_maps");
       case "/step3":
       case "/tutorial":
-        console.log("/step3");
         map = $("#maze_map").val();
-        console.log(map);
         window.maze.load_map(map);
         window.maze.place_hero('#maze_start');
         window.maze.place_goal('#maze_end');
