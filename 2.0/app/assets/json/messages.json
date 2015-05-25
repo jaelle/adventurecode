@@ -1,0 +1,43 @@
+{
+"tutorial" :
+    { 
+        "steps" : 
+        [
+            {
+                "messages" : 
+                [
+                    { 
+                        "title": "Hello...", 
+                        "message": "My name is RXE1011. You can call me \"Roxie\" for short. I need your help!",
+                        "tryit" : false
+                    },
+                    { 
+                        "title": "Please help..." , 
+                        "message" : "I’ve crash-landed my spaceship here and now it’s lost in these cornfields. Please help me find all the parts!",
+                        "tryit" : false
+                    },
+                    { 
+                        "title": "Drag and drop" , 
+                        "message" : "<p>To help me find part of my spaceship, drag an arrow on the left to the instruction stage.</p><iframe width=\"390\" height=\"293\" src=\"https://www.youtube.com/embed/oalCWh5WWJA\" frameborder=\"0\" allowfullscreen></iframe><p><br />Once you've arranged arrows the way you want, press the Green button and I will follow your instructions through the maze.</p>",
+                        "tryit" : true
+                    }
+                ]
+            },
+            {
+                "messages" : 
+                [
+                    { 
+                        "title": "Thanks!", 
+                        "message": "Great! Thank you for helping me find that. Let’s try and find another one.",
+                        "tryit" : false
+                    },
+                    { 
+                        "title": "North, South, East, West." , 
+                        "message" : "<p>Use more arrows to guide me to the next piece. If you make a mistake, you can drag an arrow off the stage.</p> <iframe width=\"390\" height=\"293\" src=\"https://www.youtube.com/embed/mC7olStemIg\" frameborder=\"0\" allowfullscreen></iframe>",
+                        "tryit" : true
+                    }
+                ]
+            }
+        ]
+    } 
+}

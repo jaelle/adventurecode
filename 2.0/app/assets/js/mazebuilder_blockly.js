@@ -46,7 +46,8 @@
     var code, e, i, interval, step, _i, _ref, _results;
     window.instructions = [];
     code = window.Blockly.JavaScript.workspaceToCode();
-    console.log(code);
+    code += 'the_end();';
+    console.log("Code" + code);
     try {
       eval(code);
     } catch (_error) {
@@ -84,6 +85,10 @@
 
   window.move_south = function() {
     return instructions.push("window.maze.move_hero_south()");
+  };
+
+  window.the_end = function() {
+    return instructions.push("window.maze.the_end()");
   };
 
 }).call(this);

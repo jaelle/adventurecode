@@ -23,8 +23,10 @@ class window.Maze
   
   @goal_row:null 
   @goal_col:null
+  
+  @page:null
 
-  constructor: (@container_id, @num_cols, @num_rows, @is_map) ->
+  constructor: (@container_id, @num_cols, @num_rows, @is_map, @page) ->
 
     @._initBehavior()
 
@@ -179,8 +181,21 @@ class window.Maze
   check_for_win: ->
     if @goal_row && @hero_row
       if @hero_row == @goal_row && @hero_col == @goal_col
-        alert("Congratulations! You reached the goal.")
-
+        
+        if window.Tutorial?
+          
+          if @page.substring(9) == ""
+            next_tutorial = 2
+          else
+            next_tutorial = parseInt(@page.substring(9)) + 1
+          console.log(next_tutorial)
+          
+          $('#modal_init').modal('show')
+          $('#rxe_message')[0].innerHTML = "Congratulations! You reached the goal."
+          $("#modal-init-footer")[0].innerHTML = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"window.open('/tutorial" + next_tutorial + "','_self')\">Next Tutorial</button>"
+        else
+          alert("Congratulations! You reached the goal.")
+          
   toggle_cell: (event) ->
     rect = @canvas[0].getBoundingClientRect()
 
@@ -260,9 +275,31 @@ class window.Maze
     else
       alert("Can't move south")
       
-window.display_maze = (page) ->
+  the_end: ->
+    console.log("The End")
+    if @goal_row && @hero_row
+      if @hero_row != @goal_row || @hero_col != @goal_col
+        
+        if window.Tutorial?
+          
+          if @page.substring(9) == ""
+            next_tutorial = 2
+          else
+            next_tutorial = parseInt(@page.substring(9)) + 1
+          console.log(next_tutorial)
+          
+          $('#modal_init').modal('show')
+          $('#Welcome')[0].innerHTML = "Uh oh!"
+          $('#rxe_message')[0].innerHTML = "Something went wrong."
+          $("#modal-init-footer")[0].innerHTML = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"reset_code();$('#modal_init').modal('toggle');\">Try Again</button>"
+        else
+          alert("Not quite! Choose reset to try again.")
+    
+    $("#blockly").contents().find(".btn-success").removeAttr("disabled")
+      
+window.display_maze = (page,original_page) ->
 
-  window.maze = new Maze "#mazebuilder", 5, 5, false
+  window.maze = new Maze "#mazebuilder", 5, 5, false, original_page
   window.maze_canvas = maze.create()
   
   if $ "#setting_piece"?
@@ -372,10 +409,20 @@ window.init = (page) ->
     
   switch page 
     when "/tutorial","/tutorial2"
-      $('#modal_init').modal('show')
-      $('#modal_init').data('message1','I need your help getting finding all the parts to my spaceship. Use code blocks to help me navigate to each piece.')
-      $('#modal_init').data('message2','Here is an example')
-      $('#modal_init #rxe_message').html($('#modal_init').data('message1'))
+      #$('#modal_init').modal('show')
+      #$('#modal_init').data('message1','I need your help getting finding all the parts to my spaceship. Use code blocks to help me navigate to each piece.')
+      #$('#modal_init').data('message2','Here is an example')
+      #$('#modal_init #rxe_message').html($('#modal_init').data('message1'))
+      tutorial_num = page.substring(9)
+      if tutorial_num == ""
+        tutorial_num = 0
+      else
+        tutorial_num = parseInt(tutorial_num) - 1
+        
+      console.log("Tutorial #: " + tutorial_num)
+      window.tutorial = new Tutorial(tutorial_num,0)
+      # tutorial.load()
+      original_page = page
       page = "/tutorial"
   
   #setup page specific settings
@@ -387,7 +434,7 @@ window.init = (page) ->
   
   switch page
     when "/step2", "/step3", "/tutorial"
-      window.maze = display_maze(page)
+      window.maze = display_maze(page,original_page)
       
 
   switch page

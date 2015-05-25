@@ -10,12 +10,15 @@
 
 :- ensure_loaded(debug).
 :- ensure_loaded(db).
+:- ensure_loaded(messages).
 
 user:file_search_path(pwp_root,'pwp').
 user:file_search_path(static,'static').
 user:file_search_path(assets,'assets').
 
 :- http_handler('/blockly.html', blockly_handler, [priority(1)]).
+:- http_handler('/blockly-tutorial1.html', blockly_handler, [priority(1)]).
+:- http_handler('/blockly-tutorial2.html', blockly_handler, [priority(1)]).
 :- http_handler('/mazemap_json', mazemap_json_handler, [priority(1)]).
 :- http_handler('/settings_json', settings_json_handler, [priority(1)]).
 :- http_handler('/goals_json', goals_json_handler, [priority(1)]).
@@ -32,6 +35,8 @@ user:file_search_path(assets,'assets').
 :- http_handler('/css', assets_handler, [prefix, priority(1)]).
 :- http_handler('/images', assets_handler, [prefix, priority(1)]).
 :- http_handler('/fonts', assets_handler, [prefix, priority(1)]).
+
+:- http_handler('/json',json_handler,[prefix, priority(1)]).
 
 :- http_handler('/favicon.ico', favicon_handler, [priority(2)]).
 
@@ -59,15 +64,20 @@ default_handler(Request):-
 	% Post data doesn't exist
 		
 	??load_template(Request).
+	
+json_handler(Request):-
+    format('Content-type: text/json~n~n'),	
+    assets_handler(Request).
 
 assets_handler(Request):-
 
 	% file is not PWP
 	memberchk(path(Path),Request),
-	http_reply_file(assets(Path),[cache(true),unsafe(false)],Request).
+	??http_reply_file(assets(Path),[cache(true),unsafe(false)],Request).
 
 blockly_handler(Request):-
-	reply_pwp_page(static('blockly.html'),[pwp_module(true)], Request).
+	memberchk(path(Path),Request),
+	reply_pwp_page(static(Path),[pwp_module(true)], Request).
 	
 favicon_handler(Request):-
 	http_404([],Request).
@@ -180,6 +190,20 @@ heroes_json_handler(Request):-
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
 	json_write(current_output,Heroes).
+	
+/*messages_json_handler(Request):-
+	
+	findall(
+		tutorial{{message:Message}},
+		tutorial(_,message(_,Message)),
+		Messages),
+	
+	format('Content-type:text/json~n~n'),
+	json_write(current_output,Messages).*/
+	
+json_handler(Request):-
+	http_reply_file(assets('messages.json'),[cache(true),unsafe(false)],Request).
+	
 
 set_sessions(Request,Parameters):-
 

@@ -35,11 +35,14 @@
 
     Maze.goal_col = null;
 
-    function Maze(_at_container_id, _at_num_cols, _at_num_rows, _at_is_map) {
+    Maze.page = null;
+
+    function Maze(_at_container_id, _at_num_cols, _at_num_rows, _at_is_map, _at_page) {
       this.container_id = _at_container_id;
       this.num_cols = _at_num_cols;
       this.num_rows = _at_num_rows;
       this.is_map = _at_is_map;
+      this.page = _at_page;
       this._initBehavior = __bind(this._initBehavior, this);
       this.resize_handler = __bind(this.resize_handler, this);
       this._initBehavior();
@@ -196,9 +199,22 @@
     };
 
     Maze.prototype.check_for_win = function() {
+      var next_tutorial;
       if (this.goal_row && this.hero_row) {
         if (this.hero_row === this.goal_row && this.hero_col === this.goal_col) {
-          return alert("Congratulations! You reached the goal.");
+          if (window.Tutorial != null) {
+            if (this.page.substring(9) === "") {
+              next_tutorial = 2;
+            } else {
+              next_tutorial = parseInt(this.page.substring(9)) + 1;
+            }
+            console.log(next_tutorial);
+            $('#modal_init').modal('show');
+            $('#rxe_message')[0].innerHTML = "Congratulations! You reached the goal.";
+            return $("#modal-init-footer")[0].innerHTML = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"window.open('/tutorial" + next_tutorial + "','_self')\">Next Tutorial</button>";
+          } else {
+            return alert("Congratulations! You reached the goal.");
+          }
         }
       }
     };
@@ -291,13 +307,37 @@
       }
     };
 
+    Maze.prototype.the_end = function() {
+      var next_tutorial;
+      console.log("The End");
+      if (this.goal_row && this.hero_row) {
+        if (this.hero_row !== this.goal_row || this.hero_col !== this.goal_col) {
+          if (window.Tutorial != null) {
+            if (this.page.substring(9) === "") {
+              next_tutorial = 2;
+            } else {
+              next_tutorial = parseInt(this.page.substring(9)) + 1;
+            }
+            console.log(next_tutorial);
+            $('#modal_init').modal('show');
+            $('#Welcome')[0].innerHTML = "Uh oh!";
+            $('#rxe_message')[0].innerHTML = "Something went wrong.";
+            $("#modal-init-footer")[0].innerHTML = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"reset_code();$('#modal_init').modal('toggle');\">Try Again</button>";
+          } else {
+            alert("Not quite! Choose reset to try again.");
+          }
+        }
+      }
+      return $("#blockly").contents().find(".btn-success").removeAttr("disabled");
+    };
+
     return Maze;
 
   })();
 
-  window.display_maze = function(page) {
+  window.display_maze = function(page, original_page) {
     var goal_image, goal_source, hero_image, hero_source, maze_map, setting_image, setting_source;
-    window.maze = new Maze("#mazebuilder", 5, 5, false);
+    window.maze = new Maze("#mazebuilder", 5, 5, false, original_page);
     window.maze_canvas = maze.create();
     if ($("#setting_piece" != null)) {
       setting_source = $("#setting_piece");
@@ -394,7 +434,7 @@
   };
 
   window.init = function(page) {
-    var blockly_panel, is_chrome, map, user_agent;
+    var blockly_panel, is_chrome, map, original_page, tutorial_num, user_agent;
     user_agent = navigator.userAgent;
     is_chrome = user_agent.toLowerCase().indexOf('chrome') > -1 || user_agent.toLowerCase().indexOf('crios') > -1;
     $("#chrome_warning")[0].innerHTML += "<br />You are using: " + user_agent;
@@ -404,10 +444,15 @@
     switch (page) {
       case "/tutorial":
       case "/tutorial2":
-        $('#modal_init').modal('show');
-        $('#modal_init').data('message1', 'I need your help getting finding all the parts to my spaceship. Use code blocks to help me navigate to each piece.');
-        $('#modal_init').data('message2', 'Here is an example');
-        $('#modal_init #rxe_message').html($('#modal_init').data('message1'));
+        tutorial_num = page.substring(9);
+        if (tutorial_num === "") {
+          tutorial_num = 0;
+        } else {
+          tutorial_num = parseInt(tutorial_num) - 1;
+        }
+        console.log("Tutorial #: " + tutorial_num);
+        window.tutorial = new Tutorial(tutorial_num, 0);
+        original_page = page;
         page = "/tutorial";
     }
     switch (page) {
@@ -421,7 +466,7 @@
       case "/step2":
       case "/step3":
       case "/tutorial":
-        window.maze = display_maze(page);
+        window.maze = display_maze(page, original_page);
     }
     switch (page) {
       case "/step2":
