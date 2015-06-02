@@ -290,7 +290,7 @@ class window.Maze
           
           $('#modal_init').modal('show')
           $('#Welcome')[0].innerHTML = "Uh oh!"
-          $('#rxe_message')[0].innerHTML = "Something went wrong."
+          $('#rxe_message')[0].innerHTML = "Something isn't right."
           $("#modal-init-footer")[0].innerHTML = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"reset_code();$('#modal_init').modal('toggle');\">Try Again</button>"
         else
           alert("Not quite! Choose reset to try again.")
@@ -407,23 +407,22 @@ window.init = (page) ->
   if !is_chrome
     $('#chrome_warning')[0].style.display = "block"
     
-  switch page 
-    when "/tutorial","/tutorial2"
-      #$('#modal_init').modal('show')
-      #$('#modal_init').data('message1','I need your help getting finding all the parts to my spaceship. Use code blocks to help me navigate to each piece.')
-      #$('#modal_init').data('message2','Here is an example')
-      #$('#modal_init #rxe_message').html($('#modal_init').data('message1'))
-      tutorial_num = page.substring(9)
-      if tutorial_num == ""
-        tutorial_num = 0
-      else
-        tutorial_num = parseInt(tutorial_num) - 1
-        
-      console.log("Tutorial #: " + tutorial_num)
-      window.tutorial = new Tutorial(tutorial_num,0)
-      # tutorial.load()
-      original_page = page
-      page = "/tutorial"
+  if page.substring(0,9) == "/tutorial"
+    #$('#modal_init').modal('show')
+    #$('#modal_init').data('message1','I need your help getting finding all the parts to my spaceship. Use code blocks to help me navigate to each piece.')
+    #$('#modal_init').data('message2','Here is an example')
+    #$('#modal_init #rxe_message').html($('#modal_init').data('message1'))
+    tutorial_num = page.substring(9)
+    if tutorial_num == ""
+      tutorial_num = 0
+    else
+      tutorial_num = parseInt(tutorial_num) - 1
+      
+    console.log("Tutorial #: " + tutorial_num)
+    window.tutorial = new Tutorial(tutorial_num,0)
+    # tutorial.load()
+    original_page = page
+    page = "/tutorial"
   
   #setup page specific settings
   switch page

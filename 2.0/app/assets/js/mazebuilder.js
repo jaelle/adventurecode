@@ -321,7 +321,7 @@
             console.log(next_tutorial);
             $('#modal_init').modal('show');
             $('#Welcome')[0].innerHTML = "Uh oh!";
-            $('#rxe_message')[0].innerHTML = "Something went wrong.";
+            $('#rxe_message')[0].innerHTML = "Something isn't right.";
             $("#modal-init-footer")[0].innerHTML = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"reset_code();$('#modal_init').modal('toggle');\">Try Again</button>";
           } else {
             alert("Not quite! Choose reset to try again.");
@@ -441,19 +441,17 @@
     if (!is_chrome) {
       $('#chrome_warning')[0].style.display = "block";
     }
-    switch (page) {
-      case "/tutorial":
-      case "/tutorial2":
-        tutorial_num = page.substring(9);
-        if (tutorial_num === "") {
-          tutorial_num = 0;
-        } else {
-          tutorial_num = parseInt(tutorial_num) - 1;
-        }
-        console.log("Tutorial #: " + tutorial_num);
-        window.tutorial = new Tutorial(tutorial_num, 0);
-        original_page = page;
-        page = "/tutorial";
+    if (page.substring(0, 9) === "/tutorial") {
+      tutorial_num = page.substring(9);
+      if (tutorial_num === "") {
+        tutorial_num = 0;
+      } else {
+        tutorial_num = parseInt(tutorial_num) - 1;
+      }
+      console.log("Tutorial #: " + tutorial_num);
+      window.tutorial = new Tutorial(tutorial_num, 0);
+      original_page = page;
+      page = "/tutorial";
     }
     switch (page) {
       case "/step2":
