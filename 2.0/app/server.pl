@@ -10,16 +10,20 @@
 
 :- ensure_loaded(debug).
 :- ensure_loaded(db).
+:- ensure_loaded(messages).
 
 user:file_search_path(pwp_root,'pwp').
 user:file_search_path(static,'static').
 user:file_search_path(assets,'assets').
 
 :- http_handler('/blockly.html', blockly_handler, [priority(1)]).
+:- http_handler('/blockly-tutorial1.html', blockly_handler, [priority(1)]).
+:- http_handler('/blockly-tutorial2.html', blockly_handler, [priority(1)]).
 :- http_handler('/mazemap_json', mazemap_json_handler, [priority(1)]).
 :- http_handler('/settings_json', settings_json_handler, [priority(1)]).
 :- http_handler('/goals_json', goals_json_handler, [priority(1)]).
 :- http_handler('/heroes_json', heroes_json_handler, [priority(1)]).
+:- http_handler('/save',maze_save_handler,[priority(1)]).
 
 /*:- http_handler('/setting_save', upload_handler, [priority(1)]).
 :- http_handler('/goal_save', upload_handler, [priority(1)]).
@@ -32,6 +36,8 @@ user:file_search_path(assets,'assets').
 :- http_handler('/images', assets_handler, [prefix, priority(1)]).
 :- http_handler('/fonts', assets_handler, [prefix, priority(1)]).
 
+:- http_handler('/json',json_handler,[prefix, priority(1)]).
+
 :- http_handler('/favicon.ico', favicon_handler, [priority(2)]).
 
 :- http_handler(/, default_handler, [prefix, priority(3)]).
@@ -43,9 +49,9 @@ server(Port):-
 default_handler(Request):-
 
 	% Post data exists
-	??memberchk(method(post),Request),
+	memberchk(method(post),Request),
 	catch(	
-		??http_read_data(Request, Parameters, []),
+		http_read_data(Request, Parameters, []),
 		_E,
 		fail),
 	
@@ -57,16 +63,21 @@ default_handler(Request):-
 
 	% Post data doesn't exist
 		
-	load_template(Request).
+	??load_template(Request).
+	
+json_handler(Request):-
+    format('Content-type: text/json~n~n'),	
+    assets_handler(Request).
 
 assets_handler(Request):-
 
 	% file is not PWP
 	memberchk(path(Path),Request),
-	http_reply_file(assets(Path),[cache(true),unsafe(false)],Request).
+	??http_reply_file(assets(Path),[cache(true),unsafe(false)],Request).
 
 blockly_handler(Request):-
-	reply_pwp_page(static('blockly.html'),[pwp_module(true)], Request).
+	memberchk(path(Path),Request),
+	reply_pwp_page(static(Path),[pwp_module(true)], Request).
 	
 favicon_handler(Request):-
 	http_404([],Request).
@@ -93,8 +104,30 @@ upload_handler(Request):-
     
 	db_connect(Connection),
 	db_save(Connection,Description,WebPath,URLPath),
+	odbc_disconnect(Connection),
 	
     reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
+    
+maze_save_handler(Request):-
+	memberchk(method(post), Request),
+	http_read_data(Request, [maze_start=MazeStart,
+							 maze_end=MazeEnd,
+							 maze_map=MazeMap,
+							 maze_setting=MazeSetting,
+							 maze_goal=MazeGoal,
+							 maze_hero=MazeHero,
+							 reset=Reset], []),
+	
+	atom_number(MazeSetting,SettingId),
+	atom_number(MazeGoal,GoalId),
+	atom_number(MazeHero,HeroId),
+	
+	db_connect(Connection),
+	db_insert_maze(Connection,0,"",MazeMap,MazeStart,MazeEnd,SettingId,GoalId,HeroId),
+	odbc_disconnect(Connection),
+	
+	% TODO: Figure out how to redirect.
+	??load_template(Request).
     
 mazemap_save_handler(Request):-
 	memberchk(method(post), Request),
@@ -102,6 +135,7 @@ mazemap_save_handler(Request):-
 	
 	db_connect(Connection),
 	db_insert_mazemap(Connection,Description,Map),
+	odbc_disconnect(Connection),
 	
     reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
     
@@ -112,6 +146,7 @@ mazemap_json_handler(Request):-
 		mazemap{description:Description,map:Map},
 		db_select_mazemaps(Connection,row(_Id,Description,Map)),
 		Maps),
+	odbc_disconnect(Connection),
 	
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
@@ -124,6 +159,7 @@ settings_json_handler(Request):-
 		setting{id:Id,description:Description,image_path:ImagePath},
 		db_select_settings(Connection,row(Id,Description,ImagePath)),
 		Settings),
+	odbc_disconnect(Connection),
 	
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
@@ -136,6 +172,7 @@ goals_json_handler(Request):-
 		goal{id:Id,description:Description,image_path:ImagePath},
 		db_select_goals(Connection,row(Id,Description,ImagePath)),
 		Goals),
+	odbc_disconnect(Connection),
 	
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
@@ -148,10 +185,25 @@ heroes_json_handler(Request):-
 		hero{id:Id,description:Description,image_path:ImagePath},
 		db_select_heroes(Connection,row(Id,Description,ImagePath)),
 		Heroes),
+	odbc_disconnect(Connection),
 	
 	% must output the header or json_write will hang
     format('Content-type: text/json~n~n'),	
 	json_write(current_output,Heroes).
+	
+/*messages_json_handler(Request):-
+	
+	findall(
+		tutorial{{message:Message}},
+		tutorial(_,message(_,Message)),
+		Messages),
+	
+	format('Content-type:text/json~n~n'),
+	json_write(current_output,Messages).*/
+	
+json_handler(Request):-
+	http_reply_file(assets('messages.json'),[cache(true),unsafe(false)],Request).
+	
 
 set_sessions(Request,Parameters):-
 
@@ -171,21 +223,28 @@ set_sessions(Request,Parameters):-
 	memberchk(path_info(step3),Request),
 	step02_set_session(Parameters).
 	
+
+set_sessions(Request,Parameters):-
+
+	% Check for step 2 POST data
+	memberchk(path_info(save),Request),
+	step02_set_session(Parameters).
+	
 load_template(Request):-
 	
 	% Handle PWP
-	reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
+	??reply_pwp_page(pwp_root('template.html'),[pwp_module(true)],Request).
 
-/*step00_set_session(Parameters):-
+step00_set_session(Parameters):-
 	
-	memberchk(reset=1,Parameters),
+	??memberchk(reset=1,Parameters),
 	
 	http_session_retractall(maze_setting(_Settings)),
 	http_session_retractall(maze_goal(_Goals)),
 	http_session_retractall(maze_hero(_Heroes)),
 	http_session_retractall(maze_map(_MazeMaps)),
 	http_session_retractall(maze_start(_MazeStarts)),
-	http_session_retractall(maze_end(_MazeEnds)).*/
+	http_session_retractall(maze_end(_MazeEnds)).
 	
 step00_set_session(_Parameters).
 

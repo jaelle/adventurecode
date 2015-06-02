@@ -1,15 +1,11 @@
-<div class="panel-body">
+<div class="panel-body" pwp:ask="tutorial(3,HeroImage,GoalImage,SettingImage,MazeStart,MazeEnd,MazeMap)">
 	<div class="options-page-header col-xs-12">
 		<h4 align="center">
 			Guide 
 		<img 	id="hero_piece" class="hero maze_piece"
-				pwp:ask="	http_session_data(maze_hero(Hero)),atom_number(Hero,HeroId),
-							db_get_hero_image(HeroId,HeroImage),!" 
 				pwp:att="$" src="$(HeroImage)$" data-toggle="tooltip" data-placement="bottom" title="Click and drag me to the grid below." />
 			to the 
-		<img 	id="goal_piece" class="goal maze_piece"
-				pwp:ask="	http_session_data(maze_goal(Goal)),atom_number(Goal,GoalId),
-							db_get_goal_image(GoalId,GoalImage),!" 
+		<img 	id="goal_piece" class="goal maze_piece" 
 				pwp:att="$" src="$(GoalImage)$" data-toggle="tooltip" data-placement="bottom" title="Don't forget to drag the goal too!" />
 			
 			by dragging and dropping code blocks below.
@@ -26,18 +22,13 @@
 		<input id="mazebuilder_map" type="hidden" value="">
 				
 		<img 	id="setting_piece" class="setting"
-				pwp:ask="	http_session_data(maze_setting(Setting)),??atom_number(Setting,SettingId),
-							db_get_setting_image(SettingId,SettingImage),!" 
 				pwp:att="$" src="$(SettingImage)$" style="display:none" />
 	
-		<input type="hidden" name="maze_start" id="maze_start" pwp:ask="??http_session_data(maze_start(MazeStart))" pwp:att="$" value="$(MazeStart)$" />
-    	<input type="hidden" name="maze_start" id="maze_start" pwp:ask="\+http_session_data(maze_start(MazeStart))" value="[0,0]" />
+		<input type="hidden" name="maze_start" id="maze_start" pwp:att="$" value="$(MazeStart)$" />
     	
-    	<input type="hidden" name="maze_end" id="maze_end" pwp:ask="??http_session_data(maze_end(MazeEnd))" pwp:att="$" value="$(MazeEnd)$" />
-    	<input type="hidden" name="maze_end" id="maze_end" pwp:ask="\+http_session_data(maze_end(MazeEnd))" value="[0,0]" />
+    	<input type="hidden" name="maze_end" id="maze_end" pwp:att="$" value="$(MazeEnd)$" />
 
-    	<input type="hidden" name="maze_map" id="maze_map" pwp:ask="??http_session_data(maze_map(MazeMap))" pwp:att="$" value="$(MazeMap)$" />
-    	<input type="hidden" name="maze_map" id="maze_map" pwp:ask="\+http_session_data(maze_map(MazeMap))" value="[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" />
+    	<input type="hidden" name="maze_map" id="maze_map" pwp:att="$" value="$(MazeMap)$" />
     </div>	
 </div>
 

@@ -1,0 +1,58 @@
+{
+"tutorial" :
+    { 
+        "steps" : 
+        [
+            {
+                "messages" : 
+                [
+                    { 
+                        "title": "Hello...", 
+                        "message": "My name is RXE1011. You can call me \"Roxie\" for short. I need your help!",
+                        "tryit" : false
+                    },
+                    { 
+                        "title": "Please help..." , 
+                        "message" : "I’ve crash-landed my spaceship here and now it’s lost in these cornfields. Please help me find all the parts!",
+                        "tryit" : false
+                    },
+                    { 
+                        "title": "Drag and drop" , 
+                        "message" : "<p>To help me find part of my spaceship, drag an arrow on the left to the instruction stage.</p><iframe width=\"390\" height=\"293\" src=\"https://www.youtube.com/embed/oalCWh5WWJA\" frameborder=\"0\" allowfullscreen></iframe><p><br />Once you've arranged arrows the way you want, press the <em>green</em> button    and I will follow your instructions through the maze.</p>",
+                        "tryit" : true
+                    }
+                ]
+            },
+            {
+                "messages" : 
+                [
+                    { 
+                        "title": "Thanks!", 
+                        "message": "Great! Thank you for helping me find that. Let’s try and find another one.",
+                        "tryit" : false
+                    },
+                    { 
+                        "title": "North, South, East, West." , 
+                        "message" : "<p>Use more arrows to guide me to the next piece. If you make a mistake, you can drag an arrow off the stage.</p> <iframe width=\"390\" height=\"293\" src=\"https://www.youtube.com/embed/mC7olStemIg\" frameborder=\"0\" allowfullscreen></iframe>",
+                        "tryit" : true
+                    }
+                ]
+            },
+            {
+                "messages" : 
+                [
+                    { 
+                        "title": "Thanks!", 
+                        "message": "Great! Thank you for helping me find another piece of my spaceship. Let's try to find one more!",
+                        "tryit" : false
+                    },
+                    { 
+                        "title": "Over and over again." , 
+                        "message" : "<p>Sometimes you might want to give me the same instruction over and over again. The easiest way to do this is to use a <em>loop</em> block.</p> <p>Change the number in this block to be the number of times I should complete this instruction.</p><iframe width=\"390\" height=\"293\" src=\"https://www.youtube.com/embed/BU8SZrjyWaM\" frameborder=\"0\" allowfullscreen></iframe> <p><br />Give it a try!</p>",
+                        "tryit" : true
+                    }
+                ]
+            }
+        ]
+    } 
+}

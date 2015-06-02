@@ -10,7 +10,7 @@
 			<h5>Choose the Hero:</h5>
 			<ul id="heroes" class="list-group">
 				<li class="options-table-cell" pwp:ask="db_select_heroes(Connection,row(HeroId,_Description,HeroImage))">
-					<a class="list-group-item" pwp:att="$" id="heroes$(HeroId)$" href="#" onclick="javascript:select('#heroes',$(HeroId)$)"><img pwp:att="$" src="$(HeroImage)$" width="50" /></a>
+					<a class="list-group-item" pwp:att="$" id="heroes$(HeroId)$" onclick="javascript:select('#heroes',$(HeroId)$)"><img pwp:att="$" src="$(HeroImage)$" width="50" /></a>
 				</li>
 			</ul>
 		</div>
@@ -18,7 +18,7 @@
 			<h5>Choose the Goal:</h5>
 			<ul id="goals" class="list-group">
 				<li class="options-table-cell" pwp:ask="db_select_goals(Connection,row(GoalId,_Description,GoalImage))">
-					<a class="list-group-item" pwp:att="$" id="goals$(GoalId)$" href="#" onclick="javascript:select('#goals',$(GoalId)$)"><img pwp:att="$" src="$(GoalImage)$" width="50" /></a>
+					<a class="list-group-item" pwp:att="$" id="goals$(GoalId)$" onclick="javascript:select('#goals',$(GoalId)$)"><img pwp:att="$" src="$(GoalImage)$" width="50" /></a>
 				</li>
 			</ul>
 		</div>
@@ -27,9 +27,10 @@
 			
 			<ul id="settings" class="list-group">
 				<li class="options-table-cell" pwp:ask="db_select_settings(Connection,row(SettingId,_Description,SettingImage))">
-					<a class="list-group-item" pwp:att="$" id="settings$(SettingId)$" href="#" onclick="javascript:select('#settings',$(SettingId)$)"><img pwp:att="$" src="$(SettingImage)$" width="50" /></a>
+					<a class="list-group-item" pwp:att="$" id="settings$(SettingId)$" onclick="javascript:select('#settings',$(SettingId)$)"><img pwp:att="$" src="$(SettingImage)$" width="50" /></a>
 				</li>
 			</ul>
+			<span pwp:ask="\+odbc_disconnect(Connection)">Could not disconnect from database.</span>
 		</div>
 	</div>
 </div>

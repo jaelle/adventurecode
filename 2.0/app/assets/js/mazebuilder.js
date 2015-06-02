@@ -13,6 +13,10 @@
 
     Maze.black = null;
 
+    Maze.west = null;
+
+    Maze.east = null;
+
     Maze.drawing_context = null;
 
     Maze.setting_image = null;
@@ -20,6 +24,8 @@
     Maze.goal_image = null;
 
     Maze.hero_image = null;
+
+    Maze.hero_orientation = null;
 
     Maze.hero_row = null;
 
@@ -29,11 +35,14 @@
 
     Maze.goal_col = null;
 
-    function Maze(_at_container_id, _at_num_cols, _at_num_rows, _at_is_map) {
+    Maze.page = null;
+
+    function Maze(_at_container_id, _at_num_cols, _at_num_rows, _at_is_map, _at_page) {
       this.container_id = _at_container_id;
       this.num_cols = _at_num_cols;
       this.num_rows = _at_num_rows;
       this.is_map = _at_is_map;
+      this.page = _at_page;
       this._initBehavior = __bind(this._initBehavior, this);
       this.resize_handler = __bind(this.resize_handler, this);
       this._initBehavior();
@@ -41,6 +50,10 @@
       this.cell_size = this.maze.width() / this.num_cols;
       this.white = 0;
       this.black = 1;
+      this.west = 0;
+      this.east = 1;
+      this.previous_hero_orientation = this.west;
+      this.hero_orientation = this.west;
       this.map = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       this.maze;
     }
@@ -102,13 +115,15 @@
           for (col = _j = 0, _ref1 = this.num_cols; _j < _ref1; col = _j += 1) {
             color = this.map[count];
             if ((this.hero_col != null) && (this.hero_row != null) && (this.hero_col === col && this.hero_row === row)) {
-              current_cell[row][col] = this.create_cell(this.hero_col, this.hero_row, this.black, this.hero_image);
-              console.log("hero: " + this.hero_row + ":" + row + " - " + this.hero_row + ":" + col);
+              current_cell[row][col] = this.create_cell(this.hero_col, this.hero_row, this.black, this.hero_image, this.hero_image.width, this.hero_image.height);
             } else if ((this.goal_col != null) && (this.goal_row != null) && (this.goal_col === col && this.goal_row === row)) {
-              current_cell[row][col] = this.create_cell(this.goal_col, this.goal_row, this.black, this.goal_image);
-              console.log("goal: " + this.goal_row + ":" + row + " - " + this.goal_col + ":" + col);
+              current_cell[row][col] = this.create_cell(this.goal_col, this.goal_row, this.black, this.goal_image, this.goal_image.width, this.goal_image.height);
             } else {
-              current_cell[row][col] = this.create_cell(col, row, this.map[count], this.setting_image);
+              if (this.setting_image != null) {
+                current_cell[row][col] = this.create_cell(col, row, this.map[count], this.setting_image, this.cell_size, this.cell_size);
+              } else {
+                current_cell[row][col] = this.create_cell(col, row, this.map[count], null, null, null);
+              }
             }
             this.draw_cell(current_cell[row][col]);
             _results1.push(count++);
@@ -119,12 +134,14 @@
       return _results;
     };
 
-    Maze.prototype.create_cell = function(col, row, color, image) {
+    Maze.prototype.create_cell = function(col, row, color, image, scale_width, scale_height) {
       return {
         col: col,
         row: row,
         color: color,
-        image: image
+        image: image,
+        scale_width: scale_width,
+        scale_height: scale_height
       };
     };
 
@@ -143,7 +160,7 @@
     };
 
     Maze.prototype.draw_cell = function(cell) {
-      var x, y;
+      var startx, starty, x, y;
       x = cell.col * this.cell_size;
       y = cell.row * this.cell_size;
       this.drawing_context.strokeStyle = "rgba(0,0,0,1)";
@@ -158,7 +175,12 @@
         if (cell.color === this.black) {
           this.drawing_context.fillStyle = "rgb(255,255,255)";
           this.drawing_context.fillRect(x, y, this.cell_size, this.cell_size);
-          return this.drawing_context.drawImage(cell.image, 0, 0, this.cell_size, this.cell_size, x, y, this.cell_size, this.cell_size);
+          startx = x + (this.cell_size - cell.scale_width) / 2;
+          starty = y + (this.cell_size - cell.scale_height) / 2;
+          this.drawing_context.drawImage(cell.image, 0, 0, cell.image.width, cell.image.height, startx, starty, cell.scale_width, cell.scale_height);
+          if (cell.row === this.hero_row && cell.col === this.hero_col && this.hero_orientation !== this.previous_hero_orientation) {
+            return this.drawing_context.scale(-1, 1);
+          }
         }
       }
     };
@@ -177,9 +199,22 @@
     };
 
     Maze.prototype.check_for_win = function() {
+      var next_tutorial;
       if (this.goal_row && this.hero_row) {
         if (this.hero_row === this.goal_row && this.hero_col === this.goal_col) {
-          return alert("Congratulations! You reached the goal.");
+          if (window.Tutorial != null) {
+            if (this.page.substring(9) === "") {
+              next_tutorial = 2;
+            } else {
+              next_tutorial = parseInt(this.page.substring(9)) + 1;
+            }
+            console.log(next_tutorial);
+            $('#modal_init').modal('show');
+            $('#rxe_message')[0].innerHTML = "Congratulations! You reached the goal.";
+            return $("#modal-init-footer")[0].innerHTML = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"window.open('/tutorial" + next_tutorial + "','_self')\">Next Tutorial</button>";
+          } else {
+            return alert("Congratulations! You reached the goal.");
+          }
         }
       }
     };
@@ -210,7 +245,8 @@
     };
 
     Maze.prototype.hero = function(image) {
-      return this.hero_image = image;
+      this.hero_image = image;
+      return this.hero_orientation = this.west;
     };
 
     Maze.prototype.goal = function(image) {
@@ -226,6 +262,10 @@
     Maze.prototype.move_hero_west = function() {
       var index;
       index = this.index(this.hero_row, this.hero_col);
+      if (this.previous_hero_orientation !== this.west) {
+        this.previous_hero_orientation = this.east;
+      }
+      this.hero_orientation = this.west;
       if ((this.hero_col - 1) >= 0 && this.map[index] === this.white) {
         this.hero_col--;
         return this.update();
@@ -267,39 +307,63 @@
       }
     };
 
+    Maze.prototype.the_end = function() {
+      var next_tutorial;
+      console.log("The End");
+      if (this.goal_row && this.hero_row) {
+        if (this.hero_row !== this.goal_row || this.hero_col !== this.goal_col) {
+          if (window.Tutorial != null) {
+            if (this.page.substring(9) === "") {
+              next_tutorial = 2;
+            } else {
+              next_tutorial = parseInt(this.page.substring(9)) + 1;
+            }
+            console.log(next_tutorial);
+            $('#modal_init').modal('show');
+            $('#Welcome')[0].innerHTML = "Uh oh!";
+            $('#rxe_message')[0].innerHTML = "Something isn't right.";
+            $("#modal-init-footer")[0].innerHTML = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"reset_code();$('#modal_init').modal('toggle');\">Try Again</button>";
+          } else {
+            alert("Not quite! Choose reset to try again.");
+          }
+        }
+      }
+      return $("#blockly").contents().find(".btn-success").removeAttr("disabled");
+    };
+
     return Maze;
 
   })();
 
-  window.display_maze = function(page) {
+  window.display_maze = function(page, original_page) {
     var goal_image, goal_source, hero_image, hero_source, maze_map, setting_image, setting_source;
-    window.maze = new Maze("#mazebuilder", 5, 5, false);
+    window.maze = new Maze("#mazebuilder", 5, 5, false, original_page);
     window.maze_canvas = maze.create();
     if ($("#setting_piece" != null)) {
       setting_source = $("#setting_piece");
       setting_image = new Image();
       setting_image.src = setting_source.attr("src");
-      setting_image.width = setting_source.attr("width");
-      setting_image.height = setting_source.attr("height");
+      setting_image.width = setting_source.width();
+      setting_image.height = setting_source.height();
       window.maze.setting(setting_image);
     }
     if ($("#goal_piece" != null)) {
       goal_source = $("#goal_piece");
       goal_image = new Image();
       goal_image.src = goal_source.attr("src");
-      goal_image.width = goal_source.attr("width");
-      goal_image.height = goal_source.attr("height");
+      goal_image.width = goal_source.width();
+      goal_image.height = goal_source.height();
       window.maze.goal(goal_image);
     }
     if ($("#hero_piece" != null)) {
       hero_source = $("#hero_piece");
       hero_image = new Image();
       hero_image.src = hero_source.attr("src");
-      hero_image.width = hero_source.attr("width");
-      hero_image.height = hero_source.attr("height");
+      hero_image.width = hero_source.width();
+      hero_image.height = hero_source.height();
       window.maze.hero(hero_image);
     }
-    if (page !== "/step3") {
+    if (page !== "/step3" && page !== "/tutorial") {
       maze_map = $("#maze_map");
       maze_map.val("[" + maze.map + "]");
     }
@@ -360,8 +424,8 @@
     maze_rect = $("#mazebuilder canvas")[0].getBoundingClientRect();
     x = event.clientX - maze_rect.left;
     y = event.clientY - maze_rect.top;
-    col = Math.floor(x / 75);
-    row = Math.floor(y / 75);
+    col = Math.floor(x / (maze_rect.width / 5));
+    row = Math.floor(y / (maze_rect.height / 5));
     if (event.toElement.classList.contains("goal")) {
       return $("#maze_end").val("[" + row + "," + col + "]");
     } else {
@@ -370,7 +434,25 @@
   };
 
   window.init = function(page) {
-    var blockly_panel, map;
+    var blockly_panel, is_chrome, map, original_page, tutorial_num, user_agent;
+    user_agent = navigator.userAgent;
+    is_chrome = user_agent.toLowerCase().indexOf('chrome') > -1 || user_agent.toLowerCase().indexOf('crios') > -1;
+    $("#chrome_warning")[0].innerHTML += "<br />You are using: " + user_agent;
+    if (!is_chrome) {
+      $('#chrome_warning')[0].style.display = "block";
+    }
+    if (page.substring(0, 9) === "/tutorial") {
+      tutorial_num = page.substring(9);
+      if (tutorial_num === "") {
+        tutorial_num = 0;
+      } else {
+        tutorial_num = parseInt(tutorial_num) - 1;
+      }
+      console.log("Tutorial #: " + tutorial_num);
+      window.tutorial = new Tutorial(tutorial_num, 0);
+      original_page = page;
+      page = "/tutorial";
+    }
     switch (page) {
       case "/step2":
         $(function() {
@@ -381,7 +463,8 @@
     switch (page) {
       case "/step2":
       case "/step3":
-        window.maze = display_maze(page);
+      case "/tutorial":
+        window.maze = display_maze(page, original_page);
     }
     switch (page) {
       case "/step2":
@@ -418,7 +501,7 @@
         });
         return display_maze_maps("#mazebuilder_maps");
       case "/step3":
-        console.log("/step3");
+      case "/tutorial":
         map = $("#maze_map").val();
         window.maze.load_map(map);
         window.maze.place_hero('#maze_start');

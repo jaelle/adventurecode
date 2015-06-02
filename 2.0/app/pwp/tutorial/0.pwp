@@ -1,0 +1,60 @@
+<div class="panel-body" pwp:ask="tutorial(1,HeroImage,GoalImage,SettingImage,MazeStart,MazeEnd,MazeMap)">
+	<div class="options-page-header col-xs-12">
+		<h4 align="center">
+			Guide 
+		<img 	id="hero_piece" class="hero maze_piece"
+				pwp:att="$" src="$(HeroImage)$" data-toggle="tooltip" data-placement="bottom" title="Click and drag me to the grid below." />
+			to the 
+		<img 	id="goal_piece" class="goal maze_piece" 
+				pwp:att="$" src="$(GoalImage)$" data-toggle="tooltip" data-placement="bottom" title="Don't forget to drag the goal too!" />
+			
+			by dragging and dropping code blocks below.
+		</h4>
+	</div>
+	<div class="row">
+	<!-- Blockly //-->
+		<div class="col-md-7">
+			<iframe id="blockly" src="blockly-tutorial1.html" width="100%"></iframe>
+		</div>
+		<div id="mazebuilder" class="col-md-5" onclick="">
+		  <!-- Maze //-->
+		</div>
+		<input id="mazebuilder_map" type="hidden" value="">
+				
+		<img 	id="setting_piece" class="setting"
+				pwp:att="$" src="$(SettingImage)$" style="display:none" />
+	
+		<input type="hidden" name="maze_start" id="maze_start" pwp:att="$" value="$(MazeStart)$" />
+    	
+    	<input type="hidden" name="maze_end" id="maze_end" pwp:att="$" value="$(MazeEnd)$" />
+
+    	<input type="hidden" name="maze_map" id="maze_map" pwp:att="$" value="$(MazeMap)$" />
+    </div>	
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal_init" tabindex="-1" role="dialog" aria-labelledby="Welcome" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" data-backdrop="static" data-keyboard="false" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="Welcome">Hello...</h4>
+      </div>
+      <div class="modal-body">
+      	<div class="row">
+	      	<p id="rxe_message" class="col-md-8">
+		      		<img id="loader" src="images/loader.gif" alt="Loading" width="20" height="20" />
+	      	</p>
+	      	<div class="col-md-4">
+	        	<img src="images/robot_dog.png" alt="RXE1011" width="175" class="pull-right" />
+	        </div>
+        </div>
+      </div>
+      <div id="modal-init-footer" class="modal-footer" style="clear:both">
+        <button id="modal-previous" type="button" class="btn btn-primary" onclick="window.tutorial.previous()">Previous</button>
+        <button id="modal-next" type="button" class="btn btn-primary" onclick="window.tutorial.next()">Next</button>
+        <button id="modal-tryit" type="button" class="btn btn-primary" onclick="$('#modal_init').modal('toggle')">Try it out!</button>
+      </div>
+    </div>
+  </div>
+</div>

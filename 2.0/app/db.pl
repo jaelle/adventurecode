@@ -38,6 +38,14 @@ db_insert_mazemap(Connection,Description,MazeMap):-
 		odbc_prepare(Connection,'INSERT INTO mazemaps (description, map) VALUES (?,?)',[varchar(255),varchar(255)],Insert),
 		odbc_execute(Insert,[Description,MazeMap],_Result),
 		odbc_free_statement(Insert)).
+
+
+db_insert_maze(Connection,UserId,Description,MazeMap,MazeStart,MazeEnd,MazeSetting,MazeGoal,MazeHero):-
+	
+	setup_call_cleanup(
+		odbc_prepare(Connection,'INSERT INTO mazes (user_id, description, maze, maze_start, maze_end, setting_id, goal_id, hero_id) VALUES (?,?,?,?,?,?,?,?)',[integer,varchar(255),varchar(255),varchar(255),varchar(255),integer,integer,integer],Insert),
+		odbc_execute(Insert,[UserId,Description,MazeMap,MazeStart,MazeEnd,MazeSetting,MazeGoal,MazeHero],_Result),
+		odbc_free_statement(Insert)).
 		
 db_select_mazemaps(Connection,row(Id,Description,Map)):-
 	setup_call_cleanup(
@@ -68,14 +76,26 @@ db_select_settings(Connection,row(Id,Description,ImagePath)):-
 		
 db_get_hero_image(Id,ImagePath):-
 	db_connect(Connection),
-	db_select_heroes(Connection,row(Id,Description,ImagePath)),!.
+	db_select_heroes(Connection,row(Id,Description,ImagePath)),
+	odbc_disconnect(Connection),!.
 	
 	
 db_get_goal_image(Id,ImagePath):-
 	db_connect(Connection),
-	db_select_goals(Connection,row(Id,Description,ImagePath)),!.
+	db_select_goals(Connection,row(Id,Description,ImagePath)),
+	odbc_disconnect(Connection),!.
 
 
 db_get_setting_image(Id,ImagePath):-
 	db_connect(Connection),
-	db_select_settings(Connection,row(Id,Description,ImagePath)),!.
+	db_select_settings(Connection,row(Id,Description,ImagePath)),
+	odbc_disconnect(Connection),!.
+
+db_select_tutorial(Level,Maze,Hero,Goal,Setting,MazeStart,MazeEnd):-
+	db_connect(Connection),
+	
+	setup_call_cleanup(
+		odbc_prepare(Connection,'SELECT level,maze,hero_id,goal_id,setting_id,maze_start,maze_end 
+								 FROM mazes JOIN tutorials ON mazes.id=tutorials.maze_id',[],Select),
+		odbc_execute(Select,[],row(Level,Maze,Hero,Goal,Setting,MazeStart,MazeEnd)),
+		odbc_free_statement(Select)).

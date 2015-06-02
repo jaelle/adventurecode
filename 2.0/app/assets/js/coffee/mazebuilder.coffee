@@ -7,19 +7,26 @@ class window.Maze
 
   @white: null
   @black: null
+  
+  @west: null
+  @east: null
 
   @drawing_context: null
   @setting_image: null
   @goal_image: null
   @hero_image: null
   
+  @hero_orientation: null
+  
   @hero_row:null
   @hero_col:null
   
   @goal_row:null 
   @goal_col:null
+  
+  @page:null
 
-  constructor: (@container_id, @num_cols, @num_rows, @is_map) ->
+  constructor: (@container_id, @num_cols, @num_rows, @is_map, @page) ->
 
     @._initBehavior()
 
@@ -28,6 +35,11 @@ class window.Maze
 
     @white = 0
     @black = 1
+    @west = 0
+    @east = 1
+    
+    @previous_hero_orientation = @west
+    @hero_orientation = @west
 
     @map = [
       0,0,0,0,0,
@@ -93,22 +105,25 @@ class window.Maze
         color = @map[count]
 
         if @hero_col? && @hero_row? && (@hero_col == col && @hero_row == row)
-          current_cell[row][col] = @create_cell @hero_col, @hero_row, @black, @hero_image
-          console.log("hero: " + @hero_row + ":" + row + " - " + @hero_row + ":" + col)
+          current_cell[row][col] = @create_cell @hero_col, @hero_row, @black, @hero_image, @hero_image.width, @hero_image.height
         else if @goal_col? && @goal_row? && (@goal_col == col && @goal_row == row)
-          current_cell[row][col] = @create_cell @goal_col, @goal_row, @black, @goal_image
-          console.log("goal: " + @goal_row + ":" + row + " - " + @goal_col + ":" + col)
+          current_cell[row][col] = @create_cell @goal_col, @goal_row, @black, @goal_image, @goal_image.width, @goal_image.height
         else
-          current_cell[row][col] = @create_cell col,row, @map[count], @setting_image
-        
+          if @setting_image?
+            current_cell[row][col] = @create_cell col,row, @map[count], @setting_image, @cell_size, @cell_size
+          else
+            current_cell[row][col] = @create_cell col,row,@map[count],null,null,null
+            
         @draw_cell current_cell[row][col]
         count++
 
-  create_cell: (col, row, color, image) ->
+  create_cell: (col, row, color, image, scale_width, scale_height) ->
     col: col
     row: row
     color: color
     image: image
+    scale_width: scale_width
+    scale_height: scale_height
     
   place_hero: (hero_coordinates_id) ->
     hero_coordinates = jQuery.parseJSON($(hero_coordinates_id).val())
@@ -138,8 +153,20 @@ class window.Maze
       if cell.color == @black
         @drawing_context.fillStyle = "rgb(255,255,255)"
         @drawing_context.fillRect x, y, @cell_size, @cell_size 
-        @drawing_context.drawImage cell.image, 0, 0, @cell_size, @cell_size, x, y, @cell_size, @cell_size
+        startx = x + (@cell_size - cell.scale_width) / 2
+        starty = y + (@cell_size - cell.scale_height) / 2
+        #if cell.row == @hero_row && cell.col == @hero_col && @hero_orientation != @previous_hero_orientation
+          #console.log("flipping image")
+          # @drawing_context.translate(cell.image.width,0)
+          #@drawing_context.scale(-1,1)
+          #cell.scale_width = -1 * cell.scale_width
+          #cell.image.width = -1 * cell.image.width
+          
+        @drawing_context.drawImage cell.image, 0, 0, cell.image.width, cell.image.height, startx, starty, cell.scale_width, cell.scale_height
 
+        if cell.row == @hero_row && cell.col == @hero_col && @hero_orientation != @previous_hero_orientation
+          @drawing_context.scale(-1,1)
+          
   clear_canvas: ->
     @drawing_context.fillStyle = "rgb(255,255,255)"
     @drawing_context.fillRect 0, 0, @canvas[0].width, @canvas[0].height
@@ -154,8 +181,21 @@ class window.Maze
   check_for_win: ->
     if @goal_row && @hero_row
       if @hero_row == @goal_row && @hero_col == @goal_col
-        alert("Congratulations! You reached the goal.")
-
+        
+        if window.Tutorial?
+          
+          if @page.substring(9) == ""
+            next_tutorial = 2
+          else
+            next_tutorial = parseInt(@page.substring(9)) + 1
+          console.log(next_tutorial)
+          
+          $('#modal_init').modal('show')
+          $('#rxe_message')[0].innerHTML = "Congratulations! You reached the goal."
+          $("#modal-init-footer")[0].innerHTML = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"window.open('/tutorial" + next_tutorial + "','_self')\">Next Tutorial</button>"
+        else
+          alert("Congratulations! You reached the goal.")
+          
   toggle_cell: (event) ->
     rect = @canvas[0].getBoundingClientRect()
 
@@ -180,8 +220,10 @@ class window.Maze
   setting: (image) ->
     @setting_image = image
     
+    
   hero: (image) ->
     @hero_image = image
+    @hero_orientation = @west
     
   goal: (image) ->
     @goal_image = image
@@ -195,6 +237,10 @@ class window.Maze
   
   move_hero_west: ->
     index = @index(@hero_row,@hero_col)
+    if @previous_hero_orientation != @west
+      @previous_hero_orientation = @east
+
+    @hero_orientation = @west
     
     if (@hero_col - 1) >= 0 && @map[index] == @white
       @hero_col--
@@ -229,17 +275,39 @@ class window.Maze
     else
       alert("Can't move south")
       
-window.display_maze = (page) ->
+  the_end: ->
+    console.log("The End")
+    if @goal_row && @hero_row
+      if @hero_row != @goal_row || @hero_col != @goal_col
+        
+        if window.Tutorial?
+          
+          if @page.substring(9) == ""
+            next_tutorial = 2
+          else
+            next_tutorial = parseInt(@page.substring(9)) + 1
+          console.log(next_tutorial)
+          
+          $('#modal_init').modal('show')
+          $('#Welcome')[0].innerHTML = "Uh oh!"
+          $('#rxe_message')[0].innerHTML = "Something isn't right."
+          $("#modal-init-footer")[0].innerHTML = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"reset_code();$('#modal_init').modal('toggle');\">Try Again</button>"
+        else
+          alert("Not quite! Choose reset to try again.")
+    
+    $("#blockly").contents().find(".btn-success").removeAttr("disabled")
+      
+window.display_maze = (page,original_page) ->
 
-  window.maze = new Maze "#mazebuilder", 5, 5, false
+  window.maze = new Maze "#mazebuilder", 5, 5, false, original_page
   window.maze_canvas = maze.create()
   
   if $ "#setting_piece"?
     setting_source = $("#setting_piece")
     setting_image = new Image()
     setting_image.src = setting_source.attr "src"
-    setting_image.width = setting_source.attr "width"
-    setting_image.height = setting_source.attr "height"
+    setting_image.width = setting_source.width()
+    setting_image.height = setting_source.height()
 
     window.maze.setting(setting_image)
     
@@ -248,8 +316,8 @@ window.display_maze = (page) ->
     goal_source = $("#goal_piece")
     goal_image = new Image()
     goal_image.src = goal_source.attr "src"
-    goal_image.width = goal_source.attr "width"
-    goal_image.height = goal_source.attr "height"
+    goal_image.width = goal_source.width()
+    goal_image.height = goal_source.height()
 
     window.maze.goal(goal_image)
     
@@ -258,12 +326,12 @@ window.display_maze = (page) ->
     hero_source = $("#hero_piece")
     hero_image = new Image()
     hero_image.src = hero_source.attr "src"
-    hero_image.width = hero_source.attr "width"
-    hero_image.height = hero_source.attr "height"
+    hero_image.width = hero_source.width()
+    hero_image.height = hero_source.height()
 
     window.maze.hero(hero_image)
 
-  if page != "/step3"
+  if page != "/step3" and page != "/tutorial"
     maze_map = $ "#maze_map"
     maze_map.val("[" + maze.map + "]")
 
@@ -290,7 +358,7 @@ window.reset_game = (form_id,path) ->
     reset_value.attr "value", "1"
     $(form_id).append reset_value
     
-    $(form_id).submit()
+    $(form_id).submit()  
   
 window.select = (container_id,id) ->
   $(container_id + " .list-group-item").removeClass("active")
@@ -322,8 +390,8 @@ window.save_coordinates = (event,ui) ->
   x = event.clientX - maze_rect.left;
   y = event.clientY - maze_rect.top;
 
-  col = Math.floor(x / 75)
-  row = Math.floor(y / 75)
+  col = Math.floor(x / (maze_rect.width / 5))
+  row = Math.floor(y / (maze_rect.height / 5))
 	
   if event.toElement.classList.contains("goal")
     $("#maze_end").val("[" + row + "," + col + "]")
@@ -331,6 +399,30 @@ window.save_coordinates = (event,ui) ->
     $("#maze_start").val("[" + row + "," + col + "]")
 
 window.init = (page) ->
+  
+  user_agent = navigator.userAgent
+  is_chrome = user_agent.toLowerCase().indexOf('chrome') > -1 || user_agent.toLowerCase().indexOf('crios') > -1
+
+  $("#chrome_warning")[0].innerHTML += "<br />You are using: " + user_agent
+  if !is_chrome
+    $('#chrome_warning')[0].style.display = "block"
+    
+  if page.substring(0,9) == "/tutorial"
+    #$('#modal_init').modal('show')
+    #$('#modal_init').data('message1','I need your help getting finding all the parts to my spaceship. Use code blocks to help me navigate to each piece.')
+    #$('#modal_init').data('message2','Here is an example')
+    #$('#modal_init #rxe_message').html($('#modal_init').data('message1'))
+    tutorial_num = page.substring(9)
+    if tutorial_num == ""
+      tutorial_num = 0
+    else
+      tutorial_num = parseInt(tutorial_num) - 1
+      
+    console.log("Tutorial #: " + tutorial_num)
+    window.tutorial = new Tutorial(tutorial_num,0)
+    # tutorial.load()
+    original_page = page
+    page = "/tutorial"
   
   #setup page specific settings
   switch page
@@ -340,8 +432,8 @@ window.init = (page) ->
         $('#hero_piece').tooltip('show')
   
   switch page
-    when "/step2", "/step3"
-      window.maze = display_maze(page)
+    when "/step2", "/step3", "/tutorial"
+      window.maze = display_maze(page,original_page)
       
 
   switch page
@@ -373,8 +465,7 @@ window.init = (page) ->
           $(ui.helper).clone(true).removeClass('goal ui-draggable ui-draggable-dragging').addClass('goal-clone').css('top',clone.style.top).css('left',clone.style.left).appendTo('#mazebuilder').draggable({})
 
       display_maze_maps("#mazebuilder_maps")
-    when "/step3"
-      console.log("/step3")
+    when "/step3", "/tutorial"
       map = $("#maze_map").val()
       window.maze.load_map(map)
       

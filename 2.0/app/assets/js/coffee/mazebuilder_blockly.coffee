@@ -33,7 +33,9 @@ window.instructions = []
 window.run_code = ->
   window.instructions = []
   code = window.Blockly.JavaScript.workspaceToCode()
-  console.log(code)
+  code += 'the_end();'
+  
+  console.log("Code" + code)
   try
     eval(code)
   catch e
@@ -61,3 +63,5 @@ window.move_north = ->
   instructions.push("window.maze.move_hero_north()")
 window.move_south = ->
   instructions.push("window.maze.move_hero_south()")
+window.the_end = ->
+  instructions.push("window.maze.the_end()")

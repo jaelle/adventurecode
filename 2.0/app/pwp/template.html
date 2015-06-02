@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:pwp="http://www.cs.otago.ac.nz/staffpriv/ok/pwp.pl" pwp:ask="use_module(library(http/http_session)),ensure_loaded(views)" lang="en">
+<html xmlns:pwp="http://www.cs.otago.ac.nz/staffpriv/ok/pwp.pl" pwp:ask="use_module(library(http/http_session)),ensure_loaded(views),??ensure_loaded(tutorial)" lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AdventureCode</title>
 
-    <!-- AdventureCode-specific styles//-->
-    <link href="css/adventurecode.css" rel="stylesheet" />
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/jquery-ui.min.css" rel="stylesheet" />
 
+    <!-- AdventureCode-specific styles//-->
+    <link href="css/adventurecode.css" rel="stylesheet" />
+    
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -26,14 +27,17 @@
     <script src="js/mazebuilder.js"></script>
     <script src="js/mazebuilder_maps.js"></script>
     <script src="js/mazebuilder_blockly.js"></script>
+    <script src="js/animate_text.js"></script>
 
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.ui.touch-punch.js"></script>
 
   </head>
   <body pwp:att="$" onload="init('$(SCRIPT_NAME)$')">
     <div class="container">
       <div class="row">
+        <div id="chrome_warning" class="alert alert-warning" role="alert" style="display:none">For best results, please use <a href="http://www.google.com/chrome/" target="_blank">Chrome</a> to view this prototype.</div>
 		<div class="col-xs-5">
 	  		<h1 class="logo"><a href="#"><img alt="AdventureCode" class="logo" src="images/logo.png" /></a></h1>
 		</div>
@@ -58,21 +62,26 @@
     	        <div class="panel-footer">
     	          <div class="row">
     		        <div class="col-xs-3">
-    		          <button class="btn btn-default" type="button" onclick="showHelp()">
+    		          <button class="btn btn-default" type="button"  data-toggle="modal" data-target="#modal_init">
     		            <img alt="Help" class="nav-icon" src="images/icon-help.png" />
     		          </button>
+
     		        </div>
     		        <div class="col-xs-9" pwp:ask="page(SCRIPT_NAME,Prev,Next)">
     		          
-    		          <button pwp:ask="SCRIPT_NAME='/step3'" class="btn btn-default pull-right" type="button" src="images/icon-reset.png" pwp:att="$"  onclick="reset_game('#mazebuilder_form','/step1')">
+    		          <button pwp:ask="SCRIPT_NAME='/step3'" class="btn btn-default pull-right" type="button" pwp:att="$"  onclick="reset_game('#mazebuilder_form','/step1')">
     		            <img alt="Next" class="nav-icon" src="images/icon-reset.png" />
     		          </button>
     		          
-    		          <button pwp:ask="\+SCRIPT_NAME='/step3'" class="btn btn-default pull-right" type="button" src="images/icon-next.png" pwp:att="$"  onclick="submit_form('#mazebuilder_form','$(Next)$')">
+    		          <button pwp:ask="SCRIPT_NAME='/step3'" class="btn btn-default pull-right" type="button" pwp:att="$"  onclick="reset_game('#mazebuilder_form','/save')">
+    		            <img alt="Next" class="nav-icon" src="images/icon-save.png" />
+    		          </button>
+    		          
+    		          <button pwp:ask="\+SCRIPT_NAME='/step3'" class="btn btn-default pull-right" type="button" pwp:att="$"  onclick="submit_form('#mazebuilder_form','$(Next)$')">
     		            <img alt="Next" class="nav-icon" src="images/icon-next.png" />
     		          </button>
     
-    		          <button pwp:ask="\+SCRIPT_NAME='/step1'" class="btn btn-default pull-right" type="button" src="images/icon-back.png" pwp:att="$" onclick="submit_form('#mazebuilder_form','$(Prev)$')">
+    		          <button pwp:ask="\+SCRIPT_NAME='/step1'" class="btn btn-default pull-right" type="button"  pwp:att="$" onclick="submit_form('#mazebuilder_form','$(Prev)$')">
     		              <img alt="Previous" class="nav-icon" src="images/icon-back.png" />
     		          </button>
     	        	</div><!--col-xs-9//-->
@@ -98,7 +107,7 @@
       
       <footer>
       	<p class="col-xs-6">&copy; <a href="http://www.jlcreations.com" target="_blank">JLCreations.com 2015</a></p>
-      	<div class="col-xs-6"><div class="pull-right">Powered by <a href="http://www.swi-prolog.org/" target="_blank">SWI-Prolog</a></p>
+      	<div class="col-xs-6"><!--div class="pull-right">Powered by <a href="http://www.swi-prolog.org/" target="_blank">SWI-Prolog</a></p//-->
       </footer>
     </div>
   </body>
