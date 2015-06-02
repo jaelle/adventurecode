@@ -40,3 +40,31 @@
     	<input type="hidden" name="maze_map" id="maze_map" pwp:ask="\+http_session_data(maze_map(MazeMap))" value="[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]" />
     </div>	
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal_init" tabindex="-1" role="dialog" aria-labelledby="Welcome" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" data-backdrop="static" data-keyboard="false"  aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="Welcome">Great job!</h4>
+      </div>
+      <div class="modal-body">
+      	<div class="row">
+	      	<p class="col-md-8">
+  	      	<p id="rxe_message" class="col-md-8">
+  		      		<img id="loader" src="images/loader.gif" alt="Loading" width="20" height="20" />
+  	      	</p>
+	      	</p>
+	      	<div class="col-md-4">
+	        	<img src="images/robot_dog.png" alt="RXE1011" width="175" class="pull-right" />
+	        </div>
+        </div>
+      </div>
+      <div id="modal-init-footer" class="modal-footer" style="clear:both">
+        <button id="modal-previous" type="button" class="btn btn-primary" onclick="window.tutorial.previous()">Previous</button>
+        <button id="modal-next" type="button" class="btn btn-primary" onclick="window.tutorial.next()">Next</button>
+        <button id="modal-tryit" type="button" class="btn btn-primary" onclick="$('#modal_init').modal('toggle')">Try it out!</button></div>
+    </div>
+  </div>
+</div>
